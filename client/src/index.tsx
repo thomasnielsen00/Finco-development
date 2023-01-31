@@ -1,67 +1,34 @@
 import ReactDOM from 'react-dom';
 import * as React from 'react';
-import { Component } from 'react-simplified';
-import { Card, Row, Column, Form, Button } from './widgets';
-import taskService, { Task } from './task-service';
+import { HashRouter, Route } from 'react-router-dom';
+import { NavBar, Card, Alert } from './widgets';
+import { TaskList, TaskDetails, TaskEdit, TaskNew } from './task-components';
 
-class TaskList extends Component {
-  tasks: Task[] = [];
-
+class Menu extends React.Component {
   render() {
     return (
-      <Card title="Tasks">
-        {this.tasks.map((task) => (
-          <Row key={task.id}>
-            <Column>{task.title}</Column>
-          </Row>
-        ))}
-      </Card>
+      <NavBar brand="Todo App">
+        <NavBar.Link to="/tasks">Tasks</NavBar.Link>
+      </NavBar>
     );
-  }
-
-  mounted() {
-    taskService.getAll().then((tasks) => (this.tasks = tasks));
   }
 }
 
-class TaskNew extends Component {
-  title = '';
-
+class Home extends React.Component {
   render() {
-    return (
-      <Card title="New task">
-        <Row>
-          <Column width={1}>
-            <Form.Label>Title:</Form.Label>
-          </Column>
-          <Column width={4}>
-            <Form.Input
-              type="text"
-              value={this.title}
-              onChange={(event) => (this.title = event.currentTarget.value)}
-            />
-          </Column>
-        </Row>
-        <Button.Success
-          onClick={() => {
-            taskService.create(this.title).then(() => {
-              // Reloads the tasks in the Tasks component
-              TaskList.instance()?.mounted(); // .? meaning: call TaskList.instance().mounted() if TaskList.instance() does not return null
-              this.title = '';
-            });
-          }}
-        >
-          Create
-        </Button.Success>
-      </Card>
-    );
+    return <Card title="Welcome">Finco homepage</Card>;
   }
 }
 
 ReactDOM.render(
-  <>
-    <TaskList />
-    <TaskNew />
-  </>,
+  <HashRouter>
+    <div>
+      <Route exact path="/" component={Home} />
+      <Route exact path="/tasks" component={TaskList} />
+      <Route exact path="/tasks/:id(\d+)" component={TaskDetails} />
+      <Route exact path="/tasks/:id(\d+)/edit" component={TaskEdit} />
+      <Route exact path="/tasks/new" component={TaskNew} />
+    </div>
+  </HashRouter>,
   document.getElementById('root')
 );
