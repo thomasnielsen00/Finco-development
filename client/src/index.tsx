@@ -1,8 +1,8 @@
-import ReactDOM from "react-dom";
-import * as React from "react";
-import { Component } from "react-simplified";
-import { Card, Row, Column, Form, Button } from "./widgets";
-import taskService, { Task } from "./task-service";
+import ReactDOM from 'react-dom';
+import * as React from 'react';
+import { Component } from 'react-simplified';
+import { Card, Row, Column, Form, Button } from './widgets';
+import taskService, { Task } from './task-service';
 
 class TaskList extends Component {
   tasks: Task[] = [];
@@ -25,7 +25,7 @@ class TaskList extends Component {
 }
 
 class TaskNew extends Component {
-  title = "";
+  title = '';
 
   render() {
     return (
@@ -47,7 +47,7 @@ class TaskNew extends Component {
             taskService.create(this.title).then(() => {
               // Reloads the tasks in the Tasks component
               TaskList.instance()?.mounted(); // .? meaning: call TaskList.instance().mounted() if TaskList.instance() does not return null
-              this.title = "";
+              this.title = '';
             });
           }}
         >
@@ -63,5 +63,5 @@ ReactDOM.render(
     <TaskList />
     <TaskNew />
   </>,
-  document.getElementById("root")
+  document.getElementById('root')
 );
