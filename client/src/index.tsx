@@ -1,34 +1,32 @@
 import ReactDOM from 'react-dom';
-import * as React from 'react';
-import { HashRouter, Route } from 'react-router-dom';
-import { NavBar, Card, Alert } from './widgets';
-import { TaskList, TaskDetails, TaskEdit, TaskNew } from './task-components';
+import React from 'react';
 
-class Menu extends React.Component {
-  render() {
-    return (
-      <NavBar brand="Todo App">
-        <NavBar.Link to="/tasks">Tasks</NavBar.Link>
-      </NavBar>
-    );
-  }
-}
+// import { HashRouter, Route } from 'react-router-dom';
+import { App } from './task-components';
 
-class Home extends React.Component {
-  render() {
-    return <Card title="Welcome">Finco homepage</Card>;
-  }
-}
+// class Menu extends React.Component {
+//   render() {
+//     return <div></div>;
+//   }
+// }
 
-ReactDOM.render(
-  <HashRouter>
-    <div>
-      <Route exact path="/" component={Home} />
-      <Route exact path="/tasks" component={TaskList} />
-      <Route exact path="/tasks/:id(\d+)" component={TaskDetails} />
-      <Route exact path="/tasks/:id(\d+)/edit" component={TaskEdit} />
-      <Route exact path="/tasks/new" component={TaskNew} />
-    </div>
-  </HashRouter>,
-  document.getElementById('root')
-);
+// class Home extends React.Component {
+//   render() {
+//     return <div title="Welcome">Finco homepage</div>;
+//   }
+// }
+
+ReactDOM.render(<App />, document.getElementById('root'));
+
+// ReactDOM.render(
+//   <HashRouter>
+//     <div>
+//       <Route exact path="/" component={Home} />
+//       <Route exact path="/tasks" component={TaskList} />
+//       <Route exact path="/tasks/:id(\d+)" component={TaskDetails} />
+//       <Route exact path="/tasks/:id(\d+)/edit" component={TaskEdit} />
+//       <Route exact path="/tasks/new" component={TaskNew} />
+//     </div>
+//   </HashRouter>,
+//   document.getElementById('root')
+// );
