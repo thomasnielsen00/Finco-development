@@ -1,6 +1,6 @@
 import * as React from 'react';
 // import { NavLink } from 'react-router-dom';
-// import taskService, { Task } from './task-service';
+// import companyService, { Company } from './company-service';
 import { createHashHistory } from 'history';
 import {
   Button,
@@ -14,10 +14,9 @@ import {
 } from '@mui/material';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
-
 const pages = ['Din portefølje', 'Marked', 'Om oss'];
 
-export function ResponsiveAppBar() {
+export default function NavBar() {
   return (
     <>
       <CssBaseline />
@@ -96,6 +95,5 @@ export class Home extends React.Component {
       </>
     );
   }
-
   mounted() {}
 }

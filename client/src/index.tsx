@@ -1,12 +1,13 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
 import { HashRouter, Route } from 'react-router-dom';
-import { ResponsiveAppBar, Home } from './finco-components';
+import { Home } from './finco-components';
+import NavBar from './finco-components';
 
 ReactDOM.render(
   <HashRouter>
     <div>
-      <ResponsiveAppBar />
+      <NavBar />
       {/* <App /> */}
       {/* <Route exact path="/" component={App} /> */}
       <Route exact path="/" component={Home} />
