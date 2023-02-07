@@ -13,30 +13,42 @@ export type User = {
 
 class UserService {
   /**
-   * Get task with given id.
+   * Get user with given id.
    */
-  get(id: number) {
-    return axios.get<Task>('/tasks/' + id).then((response) => response.data);
+  getUser(user_id: number) {
+    return axios.get<User>('/users/' + user_id).then((response) => response.data);
   }
 
   /**
-   * Get all tasks.
+   * Get all users.
    */
-  getAll() {
-    return axios.get<Task[]>('/tasks').then((response) => response.data);
+  getAllUsers() {
+    return axios.get<User[]>('/users').then((response) => response.data);
   }
 
   /**
-   * Create new task having the given title.
+   * Create new user having the given username, password, email, risk_willingness, monthly_savings_amount.
    *
-   * Resolves the newly created task id.
+   * Resolves the newly created user_id.
    */
-  create(title: string) {
+  createUser(
+    username: string,
+    password: string,
+    email: string,
+    risk_willingness: string,
+    monthly_savings_amount: string
+  ) {
     return axios
-      .post<{ id: number }>('/tasks', { title: title })
-      .then((response) => response.data.id);
+      .post<{ user_id: number }>('/users', {
+        username: username,
+        password: password,
+        email: email,
+        risk_willingness: risk_willingness,
+        monthly_savings_amount: monthly_savings_amount,
+      })
+      .then((response) => response.data.user_id);
   }
 }
 
-const taskService = new TaskService();
-export default taskService;
+const userService = new UserService();
+export default userService;
