@@ -15,8 +15,7 @@ import {
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
-
-const pages = ['Din portefølje', 'Selskaper', 'Om oss'];
+const pages = ['Din portefølje', 'Marked', 'Om oss'];
 
 export function ResponsiveAppBar() {
   return (
