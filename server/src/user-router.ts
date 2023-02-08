@@ -52,8 +52,39 @@ router.post('/users', (request, response) => {
     response
       .status(400)
       .send(
-        'Missing task one or more of the following attributes: username, password, email, risk_willingnes, monthly_savings_amount'
+        'Missing task one or more of the following attributes: username, password, email, risk_willingness, monthly_savings_amount'
       );
+});
+
+// Updates a user´s information
+router.put('/users', (request, response) => {
+  const data = request.body;
+  if (
+    typeof data.user_id == 'number' &&
+    data.user_id.length != 0 &&
+    typeof data.username == 'string' &&
+    data.username.length != 0 &&
+    typeof data.password == 'string' &&
+    data.password.length != 0 &&
+    typeof data.email == 'string' &&
+    data.email.length != 0 &&
+    typeof data.risk_willingness == 'string' &&
+    data.risk_willingness.length != 0 &&
+    typeof data.monthly_savings_amount == 'string' &&
+    data.monthly_savings_amount.length != 0
+  )
+    userService
+      .updateUser({
+        user_id: data.user_id,
+        username: data.username,
+        password: data.password,
+        email: data.email,
+        risk_willingness: data.risk_willingness,
+        monthly_savings_amount: data.monthly_savings_amount,
+      })
+      .then(() => response.send('User was updated'))
+      .catch((error) => response.status(500).send(error));
+  else response.status(400).send('Propperties are not valid');
 });
 
 router.delete('/users/:user_id', (request, response) => {
@@ -61,6 +92,118 @@ router.delete('/users/:user_id', (request, response) => {
     .deleteUser(Number(request.params.user_id))
     .then((_result) => response.send())
     .catch((error) => response.status(500).send(error));
+});
+
+//--------------------------------------------------------------------------------------------------------------------------------------
+//INVESTMENTS:
+//--------------------------------------------------------------------------------------------------------------------------------------
+
+//A path to a given user´s given investment
+router.get('/users/:user_id/investments/:investment_id', (request, response) => {
+  const user_id = Number(request.params.user_id);
+  const investment_id = Number(request.params.investment_id);
+  userService
+    .getUserInvestment(user_id, investment_id)
+    .then((userInvestment) =>
+      userInvestment
+        ? response.send(userInvestment)
+        : response.status(404).send('User-investment not found')
+    )
+    .catch((error) => response.status(500).send(error));
+});
+
+//A path to a given user´s investments
+router.get('/users/:user_id/investments', (request, response) => {
+  const user_id = Number(request.params.user_id);
+  userService
+    .getAllUserInvestments(user_id)
+    .then((userInvestments) =>
+      userInvestments
+        ? response.send(userInvestments)
+        : response.status(404).send('User-investments not found')
+    )
+    .catch((error) => response.status(500).send(error));
+});
+
+//A path that contributes to creating a new investment for a given user
+router.post('/users/:user_id/investments/', (request, response) => {
+  const data = request.body;
+  //Hvordan blir det med yield?
+  //Det trengs vel strengt tatt ikke å være nødvendig å pushe inn når et investering lages i utgangspunktet
+  if (
+    data &&
+    data.amount &&
+    data.amount.length != 0 &&
+    data.investment_date &&
+    data.investment_date.length != 0 &&
+    data.user_id &&
+    data.user_id.length != 0 &&
+    data.company_id &&
+    data.company_id.length != 0 &&
+    data.portfolio_id &&
+    data.portfolio_id.length != 0
+  )
+    userService
+      .createUserInvestment(
+        data.amount,
+        data.investment_date,
+        data.investment_yield,
+        data.user_id,
+        data.company_id,
+        data.portfolio_id
+      )
+      .then((investment_id) => response.send({ investment_id: investment_id }))
+      .catch((error) => response.status(500).send(error));
+  else
+    response
+      .status(400)
+      .send(
+        'Missing task one or more of the following attributes: amount, investment_date, user_id, company_id, portfolio_id'
+      );
+
+  //Updates a user-investment´s content
+  router.put('/users/:user_id/investments/:investment_id', (request, response) => {
+    const user_id = Number(request.params.user_id);
+    const investment_id = Number(request.params.investment_id);
+    const data = request.body;
+
+    if (
+      data &&
+      typeof user_id == 'number' &&
+      user_id != 0 &&
+      typeof investment_id == 'number' &&
+      investment_id != 0 &&
+      typeof data.amount == 'number' &&
+      data.amount != 0 &&
+      typeof data.investment_date == 'string' &&
+      data.investment_date.length != 0 &&
+      typeof data.company_id == 'number' &&
+      data.company_id.length != 0 &&
+      typeof data.portfolio_id == 'number' &&
+      data.portfolio_id != 0
+    )
+      userService
+        .updateUserInvestment({
+          amount: data.amount,
+          investment_date: data.investment_date,
+          investment_yield: data.investment_yield,
+          company_id: data.company_id,
+          portfolio_id: data.portfolio_id,
+          user_id: user_id,
+          investment_id: investment_id,
+        })
+        .then(() => response.send('user-investment was updated'))
+        .catch((error) => response.status(500).send(error));
+    else response.status(400).send('Propperties are not valid');
+  });
+
+  //A path that contributes ot deleting a given investment for a specific/given user:
+  router.delete('/users/:user_id/investments/:investment_id', (request, response) => {
+    userService
+      .deleteUserInvestment(Number(request.params.investment_id))
+      .then((_result) => response.send())
+      .catch((error) => response.status(500).send(error));
+  });
 });
 
 export default router;
