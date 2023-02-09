@@ -1,4 +1,3 @@
-import { Email } from '@mui/icons-material';
 import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
@@ -64,7 +63,7 @@ class UserService {
    * Updates given user
    */
   updateUser(user: User) {
-    return axios.put('/users', user).then((response) => response.data);
+    return axios.put(`/users/${user.user_id}`, user).then((response) => response.data);
   }
 
   /**

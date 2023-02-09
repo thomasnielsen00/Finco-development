@@ -171,7 +171,7 @@ class UserService {
   ) {
     return new Promise<number>((resolve, reject) => {
       pool.query(
-        'INSERT INTO investment SET amount=?, investment_date=?, investment_yield=?, user_id=? company_id=?, portfolio_id=?',
+        'INSERT INTO investment SET amount=?, investment_date=?, investment_yield=?, user_id=?, company_id=?, portfolio_id=?',
         [amount, investment_date, investment_yield, user_id, company_id, portfolio_id],
         (error, results: ResultSetHeader) => {
           if (error) return reject(error);
@@ -185,6 +185,7 @@ class UserService {
   /**
    * Updates a user-investment with given investment-id.
    */
+
   updateUserInvestment(investment: Investment) {
     return new Promise<void>((resolve, reject) => {
       pool.query(
@@ -225,6 +226,11 @@ class UserService {
     });
   }
 }
+
+//-----------------------------------------------------------------------------
+//           PORTFOLIO
+//  Nødvendig i det hele tatt?
+//------------------------------------------------------------------------------
 
 const userService = new UserService();
 export default userService;

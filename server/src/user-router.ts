@@ -57,11 +57,12 @@ router.post('/users', (request, response) => {
 });
 
 // Updates a user´s information
-router.put('/users', (request, response) => {
+router.put('/users/:user_id', (request, response) => {
+  const user_id = Number(request.params.user_id);
   const data = request.body;
   if (
     typeof data.user_id == 'number' &&
-    data.user_id.length != 0 &&
+    user_id != 0 &&
     typeof data.username == 'string' &&
     data.username.length != 0 &&
     typeof data.password == 'string' &&
@@ -75,12 +76,12 @@ router.put('/users', (request, response) => {
   )
     userService
       .updateUser({
-        user_id: data.user_id,
         username: data.username,
         password: data.password,
         email: data.email,
         risk_willingness: data.risk_willingness,
         monthly_savings_amount: data.monthly_savings_amount,
+        user_id: user_id,
       })
       .then(() => response.send('User was updated'))
       .catch((error) => response.status(500).send(error));
@@ -126,6 +127,8 @@ router.get('/users/:user_id/investments', (request, response) => {
 });
 
 //A path that contributes to creating a new investment for a given user
+//SKAL DET VÆRE PARANTES ETETR INVESTMENTS HER PÅ POST?
+//--------------------------------------------------------
 router.post('/users/:user_id/investments/', (request, response) => {
   const data = request.body;
   //Hvordan blir det med yield?
@@ -162,13 +165,13 @@ router.post('/users/:user_id/investments/', (request, response) => {
       );
 
   //Updates a user-investment´s content
-  router.put('/users/:user_id/investments/:investment_id', (request, response) => {
-    const user_id = Number(request.params.user_id);
-    const investment_id = Number(request.params.investment_id);
-    const data = request.body;
 
+  // Updates a user´s information
+  router.put('/users/:user_id/investments/:investment_id', (request, response) => {
+    const investment_id = Number(request.params.investment_id);
+    const user_id = Number(request.params.user_id);
+    const data = request.body;
     if (
-      data &&
       typeof user_id == 'number' &&
       user_id != 0 &&
       typeof investment_id == 'number' &&
@@ -177,8 +180,10 @@ router.post('/users/:user_id/investments/', (request, response) => {
       data.amount != 0 &&
       typeof data.investment_date == 'string' &&
       data.investment_date.length != 0 &&
+      typeof data.investment_yield == 'string' &&
+      data.investment_yield.length != 0 &&
       typeof data.company_id == 'number' &&
-      data.company_id.length != 0 &&
+      data.company_id != 0 &&
       typeof data.portfolio_id == 'number' &&
       data.portfolio_id != 0
     )
@@ -192,12 +197,11 @@ router.post('/users/:user_id/investments/', (request, response) => {
           user_id: user_id,
           investment_id: investment_id,
         })
-        .then(() => response.send('user-investment was updated'))
+        .then(() => response.send('User-investment was updated'))
         .catch((error) => response.status(500).send(error));
     else response.status(400).send('Propperties are not valid');
   });
 
-  //A path that contributes ot deleting a given investment for a specific/given user:
   router.delete('/users/:user_id/investments/:investment_id', (request, response) => {
     userService
       .deleteUserInvestment(Number(request.params.investment_id))
@@ -205,5 +209,16 @@ router.post('/users/:user_id/investments/', (request, response) => {
       .catch((error) => response.status(500).send(error));
   });
 });
+
+//-----------------------------------------------------------------------------
+//           PORTFOLIO
+//------------------------------------------------------------------------------
+
+// router.getuSER('/users', (_request, response) => {
+//     userService
+//       .getAllUsers()
+//       .then((rows) => response.send(rows))
+//       .catch((error) => response.status(500).send(error));
+//   });
 
 export default router;
