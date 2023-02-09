@@ -36,8 +36,8 @@ export default function MarkedPage() {
         setCompanies(companies);
       })
       .catch((error) => {
-        // setOpenAlert(true);
-        // setErrorMessage(error.message);
+        setOpenAlert(true);
+        setErrorMessage(error.message);
         // av en eller annen grunn tar siden mye lenger tid å laste inn med disse useState
       });
   }, []);
@@ -78,9 +78,9 @@ export default function MarkedPage() {
                       {company.company_name}
                     </Typography>
                     <Typography>
-                      This is the card to show the information about the different companies This is
-                      the card to show the information about the different companies This is the
-                      card to This is the card to show the information about the different companies
+                      This is the card to show the information about the different companies. This
+                      is the card to show the information about the different companies. This is the
+                      card to show the information about the different companies...
                     </Typography>
                     <Card sx={{ bgcolor: '#b6e3c0', m: 1 }}>
                       {/* Midlertidig løsning, her må man legge inn en state som sjekke forskjell mellom
@@ -88,7 +88,7 @@ export default function MarkedPage() {
                       <CardContent>
                         <Typography align="center">Kalkulert akjseverdi</Typography>
                         <Typography align="center" variant="h4">
-                          {company.calculated_value_per_share}
+                          {company.calculated_value_per_share} kr
                         </Typography>
                       </CardContent>
                     </Card>
@@ -96,7 +96,8 @@ export default function MarkedPage() {
                       <CardContent>
                         <Typography align="center">Sanntids akjsekurs</Typography>
                         <Typography align="center" variant="h4">
-                          1
+                          {Number(company.calculated_value_per_share) + 2.12} kr
+                          {/* Midlertidig løsning */}
                         </Typography>
                       </CardContent>
                     </Card>
