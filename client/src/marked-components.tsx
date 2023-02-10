@@ -103,7 +103,12 @@ export default function MarkedPage() {
                     </Card>
                   </CardContent>
                   <CardActions>
-                    <Button size="large" variant="contained" color="secondary">
+                    <Button
+                      size="large"
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => history.push('/company/' + company.company_id)}
+                    >
                       Utforsk selskapet
                     </Button>
                   </CardActions>
