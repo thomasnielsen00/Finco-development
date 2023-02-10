@@ -1,4 +1,5 @@
-import { createTheme, createStyles } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
+import { makeStyles } from '@material-ui/styles';
 
 export const MidlertidigTheme = createTheme({
   palette: {
@@ -21,8 +22,8 @@ export const MidlertidigTheme = createTheme({
   },
 });
 
-export const useStyles = createStyles({
+export const useStyles = makeStyles({
   container: {
-    backgroundColor: 'red',
+    backgroundColor: '#faa7a7',
   },
 });

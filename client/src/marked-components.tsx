@@ -23,7 +23,7 @@ import { MidlertidigTheme, useStyles } from './styles';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
 export default function MarkedPage() {
-  const classes = useStyles;
+  const classes = useStyles();
 
   const [companies, setCompanies] = useState<Company[]>([]);
   const [openAlert, setOpenAlert] = useState<boolean>(false);
@@ -92,7 +92,7 @@ export default function MarkedPage() {
                         </Typography>
                       </CardContent>
                     </Card>
-                    <Card sx={{ bgcolor: '#fa9d9d', m: 1 }}>
+                    <Card className={classes.container} sx={{ m: 1 }}>
                       <CardContent>
                         <Typography align="center">Sanntids akjsekurs</Typography>
                         <Typography align="center" variant="h4">
