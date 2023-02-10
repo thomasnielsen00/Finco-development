@@ -1,6 +1,6 @@
 import * as React from 'react';
 // import { NavLink } from 'react-router-dom';
-// import taskService, { Task } from './task-service';
+// import companyService, { Company } from './company-service';
 import { createHashHistory } from 'history';
 import {
   Button,
@@ -12,50 +12,53 @@ import {
   Container,
   Grid,
 } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
+import { MidlertidigTheme } from './styles';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
+const pages = ['Din portefølje', 'Marked', 'Om oss', 'Log inn'];
 
-const pages = ['Din portefølje', 'Marked', 'Om oss'];
-
-export function ResponsiveAppBar() {
+export default function NavBar() {
   return (
     <>
-      <CssBaseline />
-      <AppBar position="static" color="secondary" sx={{ boxShadow: 20 }}>
-        <Container maxWidth="xl">
-          <Toolbar disableGutters>
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              href="/"
-              sx={{
-                mr: 2,
-                display: { xs: 'none', md: 'flex' },
-                fontFamily: 'monospace',
-                fontWeight: 700,
-                letterSpacing: '.3rem',
-                color: 'inherit',
-                textDecoration: 'none',
-              }}
-            >
-              FINCO
-            </Typography>
-            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {pages.map((page) => (
-                <Button
-                  key={page}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
-                  component="a"
-                  href={'/#' + page}
-                >
-                  {page}
-                </Button>
-              ))}
-            </Box>
-          </Toolbar>
-        </Container>
-      </AppBar>
+      <ThemeProvider theme={MidlertidigTheme}>
+        <CssBaseline />
+        <AppBar position="static" color="secondary" sx={{ boxShadow: 20 }}>
+          <Container maxWidth="xl">
+            <Toolbar disableGutters>
+              <Typography
+                variant="h6"
+                noWrap
+                component="a"
+                href="/"
+                sx={{
+                  mr: 2,
+                  display: { xs: 'none', md: 'flex' },
+                  fontFamily: 'monospace',
+                  fontWeight: 700,
+                  letterSpacing: '.3rem',
+                  color: 'inherit',
+                  textDecoration: 'none',
+                }}
+              >
+                FINCO
+              </Typography>
+              <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                {pages.map((page) => (
+                  <Button
+                    key={page}
+                    sx={{ my: 2, color: 'white', display: 'block' }}
+                    component="a"
+                    href={'/#' + page}
+                  >
+                    {page}
+                  </Button>
+                ))}
+              </Box>
+            </Toolbar>
+          </Container>
+        </AppBar>
+      </ThemeProvider>
     </>
   );
 }
@@ -96,6 +99,5 @@ export class Home extends React.Component {
       </>
     );
   }
-
   mounted() {}
 }
