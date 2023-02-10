@@ -16,7 +16,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { MidlertidigTheme } from './styles';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
-const pages = ['Din portefølje', 'Marked', 'Om oss'];
+const pages = ['Din portefølje', 'Marked', 'Om oss', 'Log inn'];
 
 export default function NavBar() {
   return (
