@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { request } from 'express';
 import userService from './user-service';
 
 /**
@@ -89,15 +89,32 @@ router.put('/users/:user_id', (request, response) => {
 });
 
 router.delete('/users/:user_id', (request, response) => {
-  userService
-    .deleteUser(Number(request.params.user_id))
-    .then((_result) => response.send())
-    .catch((error) => response.status(500).send(error));
+  const user_id = Number(request.params.user_id);
+  if (typeof user_id == 'number' && user_id != 0) {
+    userService
+      .deleteUser(user_id)
+      .then((_result) => response.send())
+      .catch((error) => response.status(500).send(error));
+  } else {
+    response.status(400).send('Propperties are not valid');
+  }
 });
-
 //--------------------------------------------------------------------------------------------------------------------------------------
 //INVESTMENTS:
 //--------------------------------------------------------------------------------------------------------------------------------------
+
+//A path to a given user´s investments
+router.get('/users/:user_id/investments', (request, response) => {
+  const user_id = Number(request.params.user_id);
+  userService
+    .getAllUserInvestments(user_id)
+    .then((userInvestments) =>
+      userInvestments
+        ? response.send(userInvestments)
+        : response.status(404).send('User-investments not found')
+    )
+    .catch((error) => response.status(500).send(error));
+});
 
 //A path to a given user´s given investment
 router.get('/users/:user_id/investments/:investment_id', (request, response) => {
@@ -109,19 +126,6 @@ router.get('/users/:user_id/investments/:investment_id', (request, response) => 
       userInvestment
         ? response.send(userInvestment)
         : response.status(404).send('User-investment not found')
-    )
-    .catch((error) => response.status(500).send(error));
-});
-
-//A path to a given user´s investments
-router.get('/users/:user_id/investments', (request, response) => {
-  const user_id = Number(request.params.user_id);
-  userService
-    .getAllUserInvestments(user_id)
-    .then((userInvestments) =>
-      userInvestments
-        ? response.send(userInvestments)
-        : response.status(404).send('User-investments not found')
     )
     .catch((error) => response.status(500).send(error));
 });
@@ -163,62 +167,77 @@ router.post('/users/:user_id/investments/', (request, response) => {
       .send(
         'Missing task one or more of the following attributes: amount, investment_date, user_id, company_id, portfolio_id'
       );
-
-  //Updates a user-investment´s content
-
-  // Updates a user´s information
-  router.put('/users/:user_id/investments/:investment_id', (request, response) => {
-    const investment_id = Number(request.params.investment_id);
-    const user_id = Number(request.params.user_id);
-    const data = request.body;
-    if (
-      typeof user_id == 'number' &&
-      user_id != 0 &&
-      typeof investment_id == 'number' &&
-      investment_id != 0 &&
-      typeof data.amount == 'number' &&
-      data.amount != 0 &&
-      typeof data.investment_date == 'string' &&
-      data.investment_date.length != 0 &&
-      typeof data.investment_yield == 'string' &&
-      data.investment_yield.length != 0 &&
-      typeof data.company_id == 'number' &&
-      data.company_id != 0 &&
-      typeof data.portfolio_id == 'number' &&
-      data.portfolio_id != 0
-    )
-      userService
-        .updateUserInvestment({
-          amount: data.amount,
-          investment_date: data.investment_date,
-          investment_yield: data.investment_yield,
-          company_id: data.company_id,
-          portfolio_id: data.portfolio_id,
-          user_id: user_id,
-          investment_id: investment_id,
-        })
-        .then(() => response.send('User-investment was updated'))
-        .catch((error) => response.status(500).send(error));
-    else response.status(400).send('Propperties are not valid');
-  });
-
-  router.delete('/users/:user_id/investments/:investment_id', (request, response) => {
-    userService
-      .deleteUserInvestment(Number(request.params.investment_id))
-      .then((_result) => response.send())
-      .catch((error) => response.status(500).send(error));
-  });
 });
 
-//-----------------------------------------------------------------------------
-//           PORTFOLIO
-//------------------------------------------------------------------------------
+//Updates a user-investment´s content
 
-// router.getuSER('/users', (_request, response) => {
-//     userService
-//       .getAllUsers()
-//       .then((rows) => response.send(rows))
-//       .catch((error) => response.status(500).send(error));
-//   });
+// Updates a user´s information
+router.put('/users/:user_id/investments/:investment_id', (request, response) => {
+  const investment_id = Number(request.params.investment_id);
+  const user_id = Number(request.params.user_id);
+  const data = request.body;
+  if (
+    typeof user_id == 'number' &&
+    user_id != 0 &&
+    typeof investment_id == 'number' &&
+    investment_id != 0 &&
+    typeof data.amount == 'number' &&
+    data.amount != 0 &&
+    typeof data.investment_date == 'string' &&
+    data.investment_date.length != 0 &&
+    typeof data.investment_yield == 'string' &&
+    data.investment_yield.length != 0 &&
+    typeof data.company_id == 'number' &&
+    data.company_id != 0 &&
+    typeof data.portfolio_id == 'number' &&
+    data.portfolio_id != 0
+  )
+    userService
+      .updateUserInvestment({
+        amount: data.amount,
+        investment_date: data.investment_date,
+        investment_yield: data.investment_yield,
+        company_id: data.company_id,
+        portfolio_id: data.portfolio_id,
+        user_id: user_id,
+        investment_id: investment_id,
+      })
+      .then(() => response.send('User-investment was updated'))
+      .catch((error) => response.status(500).send(error));
+  else response.status(400).send('Propperties are not valid');
+});
+
+router.delete('/users/:user_id/investments/:investment_id', (request, response) => {
+  const investment_id = Number(request.params.investment_id);
+  if (typeof investment_id == 'number' && investment_id != 0) {
+    userService
+      .deleteUserInvestment(investment_id)
+      .then((_result) => response.send())
+      .catch((error) => response.status(500).send(error));
+  } else {
+    response.status(400).send('Propperties are not valid');
+  }
+});
+
+//------------------------------------------------------------------------------------------------------------------
+//           PREFERED-INDUSTRY FOR USER
+//------------------------------------------------------------------------------------------------------------------
+
+router.get('/users/:user_id/industries', (request, response) => {
+  const user_id = Number(request.params.user_id);
+  userService
+    .getAllPreferedIndustries(user_id)
+    .then((rows) => response.send(rows))
+    .catch((error) => response.status(500).send(error));
+});
+
+router.get('/users/:user_id/industries/:industry_id', (request, response) => {
+  const user_id = Number(request.params.user_id);
+  const industry_id = Number(request.params.industry_id);
+  userService
+    .getPreferedIndustry(user_id, industry_id)
+    .then((rows) => response.send(rows))
+    .catch((error) => response.status(500).send(error));
+});
 
 export default router;

@@ -20,7 +20,25 @@ export type Investment = {
   portfolio_id: number;
 };
 
+export type Industry = {
+  user_id: number;
+  industry_id: number;
+  name: string;
+};
+
 class UserService {
+  /**
+   * Get all users.
+   */
+  getAllUsers() {
+    return new Promise<User[]>((resolve, reject) => {
+      pool.query('SELECT * FROM user', [], (error, results: RowDataPacket[]) => {
+        if (error) return reject(error);
+
+        resolve(results as User[]);
+      });
+    });
+  }
   /**
    * Get user with given id.
    */
@@ -35,19 +53,6 @@ class UserService {
           resolve(results[0] as User);
         }
       );
-    });
-  }
-
-  /**
-   * Get all users.
-   */
-  getAllUsers() {
-    return new Promise<User[]>((resolve, reject) => {
-      pool.query('SELECT * FROM user', [], (error, results: RowDataPacket[]) => {
-        if (error) return reject(error);
-
-        resolve(results as User[]);
-      });
     });
   }
 
@@ -123,23 +128,6 @@ class UserService {
   //--------------------------------------------------------------------------------------------------------------------------------------
 
   /**
-   * Get an investment for a given user with a given investment_id.
-   */
-  getUserInvestment(user_id: number, investment_id: number) {
-    return new Promise<Investment | undefined>((resolve, reject) => {
-      pool.query(
-        'SELECT * FROM investment WHERE user_id=? AND investment_id=?',
-        [user_id, investment_id],
-        (error, results: RowDataPacket[]) => {
-          if (error) return reject(error);
-
-          resolve(results[0] as Investment);
-        }
-      );
-    });
-  }
-
-  /**
    * Get all investments for a given user.
    */
   getAllUserInvestments(user_id: number) {
@@ -151,6 +139,23 @@ class UserService {
           if (error) return reject(error);
 
           resolve(results as Investment[]);
+        }
+      );
+    });
+  }
+
+  /**
+   * Get an investment for a given user with a given investment_id.
+   */
+  getUserInvestment(user_id: number, investment_id: number) {
+    return new Promise<Investment | undefined>((resolve, reject) => {
+      pool.query(
+        'SELECT * FROM investment WHERE user_id=? AND investment_id=?',
+        [user_id, investment_id],
+        (error, results: RowDataPacket[]) => {
+          if (error) return reject(error);
+
+          resolve(results[0] as Investment);
         }
       );
     });
@@ -225,12 +230,45 @@ class UserService {
       );
     });
   }
-}
 
-//-----------------------------------------------------------------------------
-//           PORTFOLIO
-//  Nødvendig i det hele tatt?
-//------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------
+  //         USER-PREFERED-INDUSTRY
+  //------------------------------------------------------------------------------
+
+  /**
+   * Get all users.
+   */
+  getAllPreferedIndustries(user_id: number) {
+    return new Promise<Industry[]>((resolve, reject) => {
+      pool.query(
+        'SELECT * FROM prefered_industry WHERE user_id=? ',
+        [user_id],
+        (error, results: RowDataPacket[]) => {
+          if (error) return reject(error);
+
+          resolve(results as Industry[]);
+        }
+      );
+    });
+  }
+
+  /**
+   * Get a prefered industry for a given user.
+   */
+  getPreferedIndustry(user_id: number, industry_id: number) {
+    return new Promise<Industry | undefined>((resolve, reject) => {
+      pool.query(
+        'SELECT * FROM prefered_industry, industry WHERE prefered_industry.industry_id = industry.industry_id AND prefered_industry.user_id = ? AND prefered_industry.industry_id=?',
+        [user_id, industry_id],
+        (error, results: RowDataPacket[]) => {
+          if (error) return reject(error);
+
+          resolve(results[0] as Industry);
+        }
+      );
+    });
+  }
+}
 
 const userService = new UserService();
 export default userService;

@@ -21,19 +21,24 @@ export type Investment = {
   portfolio_id: number;
 };
 
-class UserService {
-  /**
-   * Get user with given id.
-   */
-  getUser(user_id: number) {
-    return axios.get<User>('/users/' + user_id).then((response) => response.data);
-  }
+export type Industry = {
+  industry_id: number;
+  name: string;
+};
 
+class UserService {
   /**
    * Get all users.
    */
   getAllUsers() {
     return axios.get<User[]>('/users').then((response) => response.data);
+  }
+
+  /**
+   * Get user with given id.
+   */
+  getUser(user_id: number) {
+    return axios.get<User>('/users/' + user_id).then((response) => response.data);
   }
 
   /**
@@ -132,6 +137,23 @@ class UserService {
   deleteUserInvestment(user_id: number, investment_id: number) {
     return axios
       .delete(`/users/:${user_id}/investments/${investment_id}`)
+      .then((response) => response.data);
+  }
+
+  //------------------------------------------------------------------------------------------------------------------
+  //           PREFERED-INDUSTRY FOR USER
+  //------------------------------------------------------------------------------------------------------------------
+
+  getAllPreferedIndustries(user_id: number) {
+    return axios.get<Industry[]>(`/users/:${user_id}/industries`).then((response) => response.data);
+  }
+
+  /**
+   * Get investment for a given user with a given investment_id.
+   */
+  getPreferedIndustry(user_id: number, industry_id: number) {
+    return axios
+      .get<Industry>(`/users/:${user_id}/industries/:${industry_id}`)
       .then((response) => response.data);
   }
 }
