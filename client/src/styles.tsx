@@ -24,6 +24,9 @@ export const MidlertidigTheme = createTheme({
 
 export const useStyles = makeStyles({
   container: {
-    backgroundColor: '#faa7a7',
+    // backgroundColor: '#faa7a7',
+    backgroundImage: 'linear-gradient(to right, lightblue, lightgreen)',
   },
 });
+
+

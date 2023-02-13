@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 // import { NavLink } from 'react-router-dom';
 // import companyService, { Company } from './company-service';
 import { createHashHistory } from 'history';
@@ -14,11 +14,24 @@ import {
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { MidlertidigTheme } from './styles';
+import { languageText, LanguageTextInfo, selectedLanguage } from './language';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 const pages = ['Din portefølje', 'Marked', 'Om oss', 'Log inn'];
 
 export default function NavBar() {
+  let test = selectedLanguage;
+  //Sets Norwegian as standard
+  const [language, setLanguage] = useState<LanguageTextInfo>(languageText.norwegian);
+  const { portfolio, marked, about, log_in, choose_language } = language;
+
+  function updateLanguage(newLanguage: LanguageTextInfo) {
+    console.log(newLanguage);
+    setLanguage(newLanguage);
+    newLanguage == test;
+    console.log(test);
+  }
+
   return (
     <>
       <ThemeProvider theme={MidlertidigTheme}>
@@ -55,6 +68,13 @@ export default function NavBar() {
                   </Button>
                 ))}
               </Box>
+              <Box>
+                <Button>{marked} test</Button>
+                <Button>{portfolio}</Button>
+                <Button onClick={() => updateLanguage(languageText.english)}>
+                  {choose_language}
+                </Button>
+              </Box>
             </Toolbar>
           </Container>
         </AppBar>
@@ -63,41 +83,46 @@ export default function NavBar() {
   );
 }
 
-export class Home extends React.Component {
-  render() {
-    return (
-      <>
-        <div>
-          <Container
-            maxWidth="sm"
-            sx={{ boxShadow: 10, borderRadius: 2, marginTop: '100px', padding: '50px' }}
+export function Home() {
+  // const [language, setLanguage] = useState<LanguageTextInfo>(selectedLanguage);
+
+  // function updateLanguage(newLanguage: LanguageTextInfo) {
+  //   setLanguage(newLanguage);
+  //   selectedLanguage == newLanguage;
+  //   console.log(selectedLanguage);
+  // }
+
+  return (
+    <>
+      <div>
+        <Container
+          maxWidth="sm"
+          sx={{ boxShadow: 10, borderRadius: 2, marginTop: '100px', padding: '50px' }}
+        >
+          <Typography variant="h2" align="center" color="textPrimary" gutterBottom>
+            FINCO
+          </Typography>
+          <Typography
+            variant="h5"
+            align="center"
+            color="textSecondary"
+            paragraph
+            // sx={{ color: 'pink' }}
           >
-            <Typography variant="h2" align="center" color="textPrimary" gutterBottom>
-              FINCO
-            </Typography>
-            <Typography
-              variant="h5"
-              align="center"
-              color="textSecondary"
-              paragraph
-              // sx={{ color: 'pink' }}
-            >
-              Velkommen til Finco investement, ikke la drømmene dine vente!
-            </Typography>
-            <div>
-              <Grid container spacing={2} justifyContent="center">
-                <Grid item>
-                  <Button className="button" variant="contained" color="secondary">
-                    KOM I GANG NÅ
-                  </Button>
-                </Grid>
+            {selectedLanguage.welcome_text}
+          </Typography>
+          <div>
+            <Grid container spacing={2} justifyContent="center">
+              <Grid item>
+                <Button className="button" variant="contained" color="secondary">
+                  KOM I GANG NÅ
+                </Button>
               </Grid>
-            </div>
-          </Container>
-        </div>
-        <Container maxWidth="lg"></Container>
-      </>
-    );
-  }
-  mounted() {}
+            </Grid>
+          </div>
+        </Container>
+      </div>
+      <Container maxWidth="lg"></Container>
+    </>
+  );
 }

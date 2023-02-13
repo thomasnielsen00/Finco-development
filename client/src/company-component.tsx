@@ -22,7 +22,7 @@ import { MidlertidigTheme, useStyles } from './styles';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
-export default function CompanyPage() {
+export default function Company() {
   const classes = useStyles();
   //denne må ses over
   //@ts-ignore

@@ -12,8 +12,9 @@ ReactDOM.render(
       <NavBar />
       {/* <App /> */}
       <Route exact path="/" component={Home} />
-      <Route exact path="/Marked" component={MarkedPage} />
-      <Route exact path="/company/:company_id" component={CompanyPage} />
+      <Route exact path="/Marked" component={Marked} />
+      <Route exact path="/company/:company_id" component={Company} />
+      <Route exact path="/login" component={LogIn} />
       {/* <Route exact path="/tasks/:id(\d+)/edit" component={TaskEdit} /> id must be number */}
       {/* <Route exact path="/tasks/new" component={TaskNew} /> */}
     </div>
