@@ -166,6 +166,12 @@ class UserService {
       )
       .then((response) => response.data);
   }
+
+  deleteUserIndustry(industry_id: number, user_id: number) {
+    return axios
+      .delete(`/users/:${user_id}/industries/${industry_id}`)
+      .then((response) => response.data);
+  }
 }
 const userService = new UserService();
 export default userService;

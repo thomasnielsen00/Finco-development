@@ -240,11 +240,12 @@ router.put('/users/:user_id/industries/:industry_id', (request, response) => {
   const user_id = Number(request.params.user_id);
   const data = request.body;
   if (
+    typeof data.industry_name == 'string' &&
+    data.industry_name.length != 0 &&
     typeof user_id == 'number' &&
-    user_id != 0
-    //&&
-    // typeof data.industry_name == 'string' &&
-    // data.industry_name.length != 0
+    user_id != 0 &&
+    typeof industry_id == 'number' &&
+    industry_id != 0
   )
     userService
       .updatePreferedIndustry({
@@ -255,6 +256,26 @@ router.put('/users/:user_id/industries/:industry_id', (request, response) => {
       .then(() => response.send('User-investment was updated'))
       .catch((error) => response.status(500).send(error));
   else response.status(400).send('Propperties are not valid');
+});
+
+//Delete a prefered industry for a given user:
+router.delete('/users/:user_id/industries/:industry_id', (request, response) => {
+  const industry_id = Number(request.params.industry_id);
+  const user_id = Number(request.params.user_id);
+
+  if (
+    typeof industry_id == 'number' &&
+    industry_id != 0 &&
+    typeof user_id == 'number' &&
+    user_id != 0
+  ) {
+    userService
+      .deletePreferedIndustry(industry_id, user_id)
+      .then((_result) => response.send())
+      .catch((error) => response.status(500).send(error));
+  } else {
+    response.status(400).send('Propperties are not valid');
+  }
 });
 
 export default router;

@@ -266,26 +266,6 @@ class UserService {
     });
   }
 
-  //Å SKRIVE EN createIndustry-funksjon hører vel egt ikke til å user-service siden en bruker i prinsippet kun oppdaterer prefered-industry-tabellen
-  /**
-   * Create new prefered industry for a given user having the following attributes:
-   *
-   * Resolves the newly created users id.
-   */
-  //   createUserInvestment(industry_name: string) {
-  //     return new Promise<number>((resolve, reject) => {
-  //       pool.query(
-  //         'INSERT INTO industry SET industry_name=?',
-  //         [industry_name],
-  //         (error, results: ResultSetHeader) => {
-  //           if (error) return reject(error);
-
-  //           resolve(results.insertId);
-  //         }
-  //       );
-  //     });
-  //   }
-
   /**
    * Update a prefered industry for a given user.
    */
@@ -296,6 +276,25 @@ class UserService {
         [industry.industry_name, industry.user_id, industry.industry_id],
         (error, _results) => {
           if (error) return reject(error);
+
+          resolve();
+        }
+      );
+    });
+  }
+
+  /**
+   * Delete a prefered industry for a given user.
+   */
+  deletePreferedIndustry(industry_id: number, user_id: number) {
+    return new Promise<void>((resolve, reject) => {
+      pool.query(
+        'DELETE FROM prefered_industry WHERE prefered_industry.industry_id=? AND prefered_industry.user_id=?',
+        //'DELETE FROM prefered_industry WHERE prefered_industry.industry_id=(SELECT industry_id FROM industry WHERE industry_name=?) AND prefered_industry.user_id=?',
+        [industry_id, user_id],
+        (error, results: ResultSetHeader) => {
+          if (error) return reject(error);
+          if (results.affectedRows == 0) reject(new Error('No row deleted'));
 
           resolve();
         }
