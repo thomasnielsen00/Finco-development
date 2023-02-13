@@ -258,6 +258,7 @@ router.put('/users/:user_id/industries/:industry_id', (request, response) => {
   else response.status(400).send('Propperties are not valid');
 });
 
+//BURDEN DENNE SKRIVES OM SLIK AT MAN KAN SLETTE PÅ BAKGRUNN AV INDUSTRY_NAME?
 //Delete a prefered industry for a given user:
 router.delete('/users/:user_id/industries/:industry_id', (request, response) => {
   const industry_id = Number(request.params.industry_id);

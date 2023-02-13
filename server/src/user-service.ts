@@ -283,6 +283,7 @@ class UserService {
     });
   }
 
+  //BURDEN DENNE SKRIVES OM SLIK AT MAN KAN SLETTE PÅ BAKGRUNN AV INDUSTRY_NAME PÅ SAMME MÅTE SOM DEN OVER?
   /**
    * Delete a prefered industry for a given user.
    */
