@@ -18,12 +18,12 @@ export type Investment = {
   investment_yield: string;
   user_id: number;
   company_id: number;
-  portfolio_id: number;
 };
 
 export type Industry = {
+  user_id: number;
   industry_id: number;
-  name: string;
+  industry_name: string;
 };
 
 class UserService {
@@ -110,8 +110,7 @@ class UserService {
     date: Date,
     investment_yield: string,
     user_id: number,
-    company_id: number,
-    portfolio_id: number
+    company_id: number
   ) {
     return axios
       .post<{ investment_id: number }>(`/users/:user_id/investments`, {
@@ -120,7 +119,6 @@ class UserService {
         investment_yield: investment_yield,
         user_id: user_id,
         company_id: company_id,
-        portfolio_id: portfolio_id,
       })
       .then((response) => response.data.investment_id);
   }
@@ -154,6 +152,18 @@ class UserService {
   getPreferedIndustry(user_id: number, industry_id: number) {
     return axios
       .get<Industry>(`/users/:${user_id}/industries/:${industry_id}`)
+      .then((response) => response.data);
+  }
+
+  /**
+   * Updates a given user´s prefered industry:
+   */
+  updatePreferedIndustry(industry: Industry) {
+    return axios
+      .put(
+        `/users/${industry.industry_id}/industries/${industry.industry_id}`,
+        industry.industry_name
+      )
       .then((response) => response.data);
   }
 }

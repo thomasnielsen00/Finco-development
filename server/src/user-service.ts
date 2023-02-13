@@ -17,13 +17,12 @@ export type Investment = {
   investment_yield: string;
   user_id: number;
   company_id: number;
-  portfolio_id: number;
 };
 
 export type Industry = {
   user_id: number;
   industry_id: number;
-  name: string;
+  industry_name: string;
 };
 
 class UserService {
@@ -171,13 +170,12 @@ class UserService {
     investment_date: Date,
     investment_yield: string,
     user_id: number,
-    company_id: number,
-    portfolio_id: number
+    company_id: number
   ) {
     return new Promise<number>((resolve, reject) => {
       pool.query(
-        'INSERT INTO investment SET amount=?, investment_date=?, investment_yield=?, user_id=?, company_id=?, portfolio_id=?',
-        [amount, investment_date, investment_yield, user_id, company_id, portfolio_id],
+        'INSERT INTO investment SET amount=?, investment_date=?, investment_yield=?, user_id=?, company_id=?',
+        [amount, investment_date, investment_yield, user_id, company_id],
         (error, results: ResultSetHeader) => {
           if (error) return reject(error);
 
@@ -194,13 +192,12 @@ class UserService {
   updateUserInvestment(investment: Investment) {
     return new Promise<void>((resolve, reject) => {
       pool.query(
-        'UPDATE investment SET amount=?, investment_date=?, investment_yield=?, company_id=?, portfolio_id=? WHERE user_id=? AND investment_id=?',
+        'UPDATE investment SET amount=?, investment_date=?, investment_yield=?, company_id=? WHERE user_id=? AND investment_id=?',
         [
           investment.amount,
           investment.investment_date,
           investment.investment_yield,
           investment.company_id,
-          investment.portfolio_id,
           investment.user_id,
           investment.investment_id,
         ],
@@ -241,7 +238,7 @@ class UserService {
   getAllPreferedIndustries(user_id: number) {
     return new Promise<Industry[]>((resolve, reject) => {
       pool.query(
-        'SELECT * FROM prefered_industry WHERE user_id=? ',
+        'SELECT * FROM prefered_industry, industry WHERE prefered_industry.industry_id = industry.industry_id AND user_id=? ',
         [user_id],
         (error, results: RowDataPacket[]) => {
           if (error) return reject(error);
@@ -264,6 +261,43 @@ class UserService {
           if (error) return reject(error);
 
           resolve(results[0] as Industry);
+        }
+      );
+    });
+  }
+
+  //Å SKRIVE EN createIndustry-funksjon hører vel egt ikke til å user-service siden en bruker i prinsippet kun oppdaterer prefered-industry-tabellen
+  /**
+   * Create new prefered industry for a given user having the following attributes:
+   *
+   * Resolves the newly created users id.
+   */
+  //   createUserInvestment(industry_name: string) {
+  //     return new Promise<number>((resolve, reject) => {
+  //       pool.query(
+  //         'INSERT INTO industry SET industry_name=?',
+  //         [industry_name],
+  //         (error, results: ResultSetHeader) => {
+  //           if (error) return reject(error);
+
+  //           resolve(results.insertId);
+  //         }
+  //       );
+  //     });
+  //   }
+
+  /**
+   * Update a prefered industry for a given user.
+   */
+  updatePreferedIndustry(industry: Industry) {
+    return new Promise<void>((resolve, reject) => {
+      pool.query(
+        'UPDATE prefered_industry SET prefered_industry.industry_id=(SELECT industry_id FROM industry WHERE industry_name=?) WHERE prefered_industry.user_id=? AND prefered_industry.industry_id=?',
+        [industry.industry_name, industry.user_id, industry.industry_id],
+        (error, _results) => {
+          if (error) return reject(error);
+
+          resolve();
         }
       );
     });

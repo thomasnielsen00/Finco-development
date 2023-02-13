@@ -146,9 +146,7 @@ router.post('/users/:user_id/investments/', (request, response) => {
     data.user_id &&
     data.user_id.length != 0 &&
     data.company_id &&
-    data.company_id.length != 0 &&
-    data.portfolio_id &&
-    data.portfolio_id.length != 0
+    data.company_id.length != 0
   )
     userService
       .createUserInvestment(
@@ -156,8 +154,7 @@ router.post('/users/:user_id/investments/', (request, response) => {
         data.investment_date,
         data.investment_yield,
         data.user_id,
-        data.company_id,
-        data.portfolio_id
+        data.company_id
       )
       .then((investment_id) => response.send({ investment_id: investment_id }))
       .catch((error) => response.status(500).send(error));
@@ -165,7 +162,7 @@ router.post('/users/:user_id/investments/', (request, response) => {
     response
       .status(400)
       .send(
-        'Missing task one or more of the following attributes: amount, investment_date, user_id, company_id, portfolio_id'
+        'Missing task one or more of the following attributes: amount, investment_date, user_id, company_id'
       );
 });
 
@@ -188,9 +185,7 @@ router.put('/users/:user_id/investments/:investment_id', (request, response) => 
     typeof data.investment_yield == 'string' &&
     data.investment_yield.length != 0 &&
     typeof data.company_id == 'number' &&
-    data.company_id != 0 &&
-    typeof data.portfolio_id == 'number' &&
-    data.portfolio_id != 0
+    data.company_id != 0
   )
     userService
       .updateUserInvestment({
@@ -198,7 +193,6 @@ router.put('/users/:user_id/investments/:investment_id', (request, response) => 
         investment_date: data.investment_date,
         investment_yield: data.investment_yield,
         company_id: data.company_id,
-        portfolio_id: data.portfolio_id,
         user_id: user_id,
         investment_id: investment_id,
       })
@@ -238,6 +232,29 @@ router.get('/users/:user_id/industries/:industry_id', (request, response) => {
     .getPreferedIndustry(user_id, industry_id)
     .then((rows) => response.send(rows))
     .catch((error) => response.status(500).send(error));
+});
+
+// Updates a given user´s prefered industry
+router.put('/users/:user_id/industries/:industry_id', (request, response) => {
+  const industry_id = Number(request.params.industry_id);
+  const user_id = Number(request.params.user_id);
+  const data = request.body;
+  if (
+    typeof user_id == 'number' &&
+    user_id != 0
+    //&&
+    // typeof data.industry_name == 'string' &&
+    // data.industry_name.length != 0
+  )
+    userService
+      .updatePreferedIndustry({
+        industry_name: data.industry_name,
+        user_id: user_id,
+        industry_id: industry_id,
+      })
+      .then(() => response.send('User-investment was updated'))
+      .catch((error) => response.status(500).send(error));
+  else response.status(400).send('Propperties are not valid');
 });
 
 export default router;
