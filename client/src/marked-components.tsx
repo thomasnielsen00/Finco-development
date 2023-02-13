@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+// import { NavLink } from 'react-router-dom';
 import companyService, { Company } from './company-service';
 import { createHashHistory } from 'history';
 import {
@@ -14,17 +14,20 @@ import {
   Alert,
   IconButton,
   Collapse,
-  Stack,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { ThemeProvider } from '@emotion/react';
 import { MidlertidigTheme, useStyles } from './styles';
+import { LanguageContext, UserContext } from './context';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
-export default function MarkedPage() {
+export default function Marked() {
   const classes = useStyles();
 
+  const { user } = useContext(UserContext);
+  const { language } = useContext(LanguageContext);
+  const { calculated_stock_value, live_stock_value, explore_company } = language;
   const [companies, setCompanies] = useState<Company[]>([]);
   const [openAlert, setOpenAlert] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -86,7 +89,7 @@ export default function MarkedPage() {
                       {/* Midlertidig løsning, her må man legge inn en state som sjekke forskjell mellom
                     de to verdiene og gir farge deretter */}
                       <CardContent>
-                        <Typography align="center">Kalkulert akjseverdi</Typography>
+                        <Typography align="center"> {calculated_stock_value}</Typography>
                         <Typography align="center" variant="h4">
                           {company.calculated_value_per_share} kr
                         </Typography>
@@ -94,7 +97,7 @@ export default function MarkedPage() {
                     </Card>
                     <Card className={classes.container} sx={{ m: 1 }}>
                       <CardContent>
-                        <Typography align="center">Sanntids akjsekurs</Typography>
+                        <Typography align="center">{live_stock_value}</Typography>
                         <Typography align="center" variant="h4">
                           {Number(company.calculated_value_per_share) + 2.12} kr
                           {/* Midlertidig løsning */}
@@ -103,8 +106,13 @@ export default function MarkedPage() {
                     </Card>
                   </CardContent>
                   <CardActions>
-                    <Button size="large" variant="contained" color="secondary">
-                      Utforsk selskapet
+                    <Button
+                      size="large"
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => history.push('/company/' + company.company_id)}
+                    >
+                      {explore_company}
                     </Button>
                   </CardActions>
                 </Card>

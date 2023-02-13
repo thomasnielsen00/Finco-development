@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useContext } from 'react';
 // import { NavLink } from 'react-router-dom';
 // import companyService, { Company } from './company-service';
 import { createHashHistory } from 'history';
@@ -14,11 +14,24 @@ import {
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { MidlertidigTheme } from './styles';
+import { languageText, LanguageTextInfo } from './language';
+import { LanguageContext, UserContext } from './context';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
-const pages = ['Din portefølje', 'Marked', 'Om oss', 'Log inn'];
+const pages = ['Din portefølje', 'Marked', 'Om oss', 'Logg inn'];
 
 export default function NavBar() {
+  //@ts-ignore
+  const { language, setLanguage } = useContext(LanguageContext);
+  const { change_language, property } = language;
+
+  function updateLanguage() {
+    if (property == 'norwegian') {
+      setLanguage(languageText.english);
+    } else {
+      setLanguage(languageText.norwegian);
+    }
+  }
   return (
     <>
       <ThemeProvider theme={MidlertidigTheme}>
@@ -55,6 +68,9 @@ export default function NavBar() {
                   </Button>
                 ))}
               </Box>
+              <Box>
+                <Button onClick={() => updateLanguage()}>{change_language}</Button>
+              </Box>
             </Toolbar>
           </Container>
         </AppBar>
@@ -63,41 +79,42 @@ export default function NavBar() {
   );
 }
 
-export class Home extends React.Component {
-  render() {
-    return (
-      <>
-        <div>
-          <Container
-            maxWidth="sm"
-            sx={{ boxShadow: 10, borderRadius: 2, marginTop: '100px', padding: '50px' }}
+export function Home() {
+  //@ts-ignore
+  const { language } = useContext(LanguageContext);
+  const { get_started, welcome_text } = language;
+
+  return (
+    <>
+      <div>
+        <Container
+          maxWidth="sm"
+          sx={{ boxShadow: 10, borderRadius: 2, marginTop: '100px', padding: '50px' }}
+        >
+          <Typography variant="h2" align="center" color="textPrimary" gutterBottom>
+            FINCO
+          </Typography>
+          <Typography
+            variant="h5"
+            align="center"
+            color="textSecondary"
+            paragraph
+            // sx={{ color: 'pink' }}
           >
-            <Typography variant="h2" align="center" color="textPrimary" gutterBottom>
-              FINCO
-            </Typography>
-            <Typography
-              variant="h5"
-              align="center"
-              color="textSecondary"
-              paragraph
-              // sx={{ color: 'pink' }}
-            >
-              Velkommen til Finco investement, ikke la drømmene dine vente!
-            </Typography>
-            <div>
-              <Grid container spacing={2} justifyContent="center">
-                <Grid item>
-                  <Button className="button" variant="contained" color="secondary">
-                    KOM I GANG NÅ
-                  </Button>
-                </Grid>
+            {welcome_text}
+          </Typography>
+          <div>
+            <Grid container spacing={2} justifyContent="center">
+              <Grid item>
+                <Button className="button" variant="contained" color="secondary">
+                  {get_started}
+                </Button>
               </Grid>
-            </div>
-          </Container>
-        </div>
-        <Container maxWidth="lg"></Container>
-      </>
-    );
-  }
-  mounted() {}
+            </Grid>
+          </div>
+        </Container>
+      </div>
+      <Container maxWidth="lg"></Container>
+    </>
+  );
 }
