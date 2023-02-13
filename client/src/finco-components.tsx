@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 // import { NavLink } from 'react-router-dom';
 // import companyService, { Company } from './company-service';
 import { createHashHistory } from 'history';
@@ -14,24 +14,24 @@ import {
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { MidlertidigTheme } from './styles';
-import { languageText, LanguageTextInfo, selectedLanguage } from './language';
+import { languageText, LanguageTextInfo } from './language';
+import { LanguageContext, UserContext } from './context';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
-const pages = ['Din portefølje', 'Marked', 'Om oss', 'Log inn'];
+const pages = ['Din portefølje', 'Marked', 'Om oss', 'Logg inn'];
 
 export default function NavBar() {
-  let test = selectedLanguage;
-  //Sets Norwegian as standard
-  const [language, setLanguage] = useState<LanguageTextInfo>(languageText.norwegian);
-  const { portfolio, marked, about, log_in, choose_language } = language;
+  //@ts-ignore
+  const { language, setLanguage } = useContext(LanguageContext);
+  const { change_language, property } = language;
 
-  function updateLanguage(newLanguage: LanguageTextInfo) {
-    console.log(newLanguage);
-    setLanguage(newLanguage);
-    newLanguage == test;
-    console.log(test);
+  function updateLanguage() {
+    if (property == 'norwegian') {
+      setLanguage(languageText.english);
+    } else {
+      setLanguage(languageText.norwegian);
+    }
   }
-
   return (
     <>
       <ThemeProvider theme={MidlertidigTheme}>
@@ -69,11 +69,7 @@ export default function NavBar() {
                 ))}
               </Box>
               <Box>
-                <Button>{marked} test</Button>
-                <Button>{portfolio}</Button>
-                <Button onClick={() => updateLanguage(languageText.english)}>
-                  {choose_language}
-                </Button>
+                <Button onClick={() => updateLanguage()}>{change_language}</Button>
               </Box>
             </Toolbar>
           </Container>
@@ -84,13 +80,9 @@ export default function NavBar() {
 }
 
 export function Home() {
-  // const [language, setLanguage] = useState<LanguageTextInfo>(selectedLanguage);
-
-  // function updateLanguage(newLanguage: LanguageTextInfo) {
-  //   setLanguage(newLanguage);
-  //   selectedLanguage == newLanguage;
-  //   console.log(selectedLanguage);
-  // }
+  //@ts-ignore
+  const { language } = useContext(LanguageContext);
+  const { get_started, welcome_text } = language;
 
   return (
     <>
@@ -109,13 +101,13 @@ export function Home() {
             paragraph
             // sx={{ color: 'pink' }}
           >
-            {selectedLanguage.welcome_text}
+            {welcome_text}
           </Typography>
           <div>
             <Grid container spacing={2} justifyContent="center">
               <Grid item>
                 <Button className="button" variant="contained" color="secondary">
-                  KOM I GANG NÅ
+                  {get_started}
                 </Button>
               </Grid>
             </Grid>

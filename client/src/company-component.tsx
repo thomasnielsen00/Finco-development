@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import companyService, { Company } from './company-service';
 import { createHashHistory } from 'history';
@@ -19,14 +19,18 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import { ThemeProvider } from '@emotion/react';
 import { MidlertidigTheme, useStyles } from './styles';
+import { LanguageContext } from './context';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
-export default function Company() {
+export default function CompanyDetails() {
   const classes = useStyles();
   //denne må ses over
-  //@ts-ignore
+  // @ts-ignore
   const { company_id } = useParams();
+  //@ts-ignore
+  const { language } = useContext(LanguageContext);
+  const { calculated_stock_value, live_stock_value, difference } = language;
 
   const [company, setCompany] = useState<Company>();
   const [openAlert, setOpenAlert] = useState<boolean>(false);
@@ -48,7 +52,7 @@ export default function Company() {
   const companyShort = '(GGL)';
   const currentStock: number = 0.34214;
 
-  function difference(cal_val: number | undefined, cur_stc: number) {
+  function calculateDifference(cal_val: number | undefined, cur_stc: number) {
     if (cal_val) {
       return (((cal_val - cur_stc) / cur_stc) * 100).toFixed(2);
     }
@@ -98,7 +102,7 @@ export default function Company() {
                       <Card>
                         <CardContent>
                           <Typography variant="h6" gutterBottom textAlign="center">
-                            Kalkulert aksjeverdi
+                            {calculated_stock_value}
                           </Typography>
                           <Typography variant="h3" gutterBottom textAlign="center">
                             {company?.calculated_value_per_share},-
@@ -110,7 +114,7 @@ export default function Company() {
                       <Card>
                         <CardContent>
                           <Typography variant="h6" gutterBottom textAlign="center">
-                            Sanntids aksjekurs
+                            {live_stock_value}
                           </Typography>
                           <Typography variant="h3" gutterBottom textAlign="center">
                             {currentStock},-
@@ -121,7 +125,8 @@ export default function Company() {
                   </Grid>
                   {/* NEDENFOR kommer differanse */}
                   <Typography variant="h5">
-                    DIFFERANSE: {difference(company?.calculated_value_per_share, currentStock)}%
+                    {difference}:
+                    {calculateDifference(company?.calculated_value_per_share, currentStock)}%
                   </Typography>
                   <hr></hr>
                 </CardContent>
