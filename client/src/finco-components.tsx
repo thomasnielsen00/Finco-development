@@ -13,7 +13,7 @@ import {
   Grid,
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
-import { MidlertidigTheme } from './styles';
+import { MidlertidigTheme, useStyles } from './styles';
 import { languageText, LanguageTextInfo } from './language';
 import { LanguageContext, UserContext } from './context';
 
@@ -69,7 +69,9 @@ export default function NavBar() {
                 ))}
               </Box>
               <Box>
-                <Button onClick={() => updateLanguage()}>{change_language}</Button>
+                <Button sx={{ color: 'inherit' }} onClick={() => updateLanguage()}>
+                  {change_language}
+                </Button>
               </Box>
             </Toolbar>
           </Container>
@@ -83,38 +85,40 @@ export function Home() {
   //@ts-ignore
   const { language } = useContext(LanguageContext);
   const { get_started, welcome_text } = language;
+  const classes = useStyles();
 
   return (
-    <>
-      <div>
-        <Container
-          maxWidth="sm"
-          sx={{ boxShadow: 10, borderRadius: 2, marginTop: '100px', padding: '50px' }}
+    <ThemeProvider theme={MidlertidigTheme}>
+      <Container
+        maxWidth="sm"
+        sx={{
+          boxShadow: 10,
+          borderRadius: 2,
+          padding: '50px',
+          bgcolor: 'white',
+          mt: 10,
+        }}
+      >
+        <Typography variant="h2" align="center" color="textPrimary" gutterBottom>
+          FINCO
+        </Typography>
+        <Typography
+          variant="h5"
+          align="center"
+          color="textSecondary"
+          paragraph
+          // sx={{ color: 'pink' }}
         >
-          <Typography variant="h2" align="center" color="textPrimary" gutterBottom>
-            FINCO
-          </Typography>
-          <Typography
-            variant="h5"
-            align="center"
-            color="textSecondary"
-            paragraph
-            // sx={{ color: 'pink' }}
-          >
-            {welcome_text}
-          </Typography>
-          <div>
-            <Grid container spacing={2} justifyContent="center">
-              <Grid item>
-                <Button className="button" variant="contained" color="secondary">
-                  {get_started}
-                </Button>
-              </Grid>
-            </Grid>
-          </div>
-        </Container>
-      </div>
-      <Container maxWidth="lg"></Container>
-    </>
+          {welcome_text}
+        </Typography>
+        <Grid container spacing={2} justifyContent="center">
+          <Grid item>
+            <Button className="button" variant="contained" color="secondary">
+              {get_started}
+            </Button>
+          </Grid>
+        </Grid>
+      </Container>
+    </ThemeProvider>
   );
 }

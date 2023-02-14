@@ -23,6 +23,11 @@ export const MidlertidigTheme = createTheme({
 });
 
 export const useStyles = makeStyles({
+  home_page_container: {
+    backgroundImage: 'linear-gradient(to right, lightgreen, white)',
+    width: '100vw',
+    height: '100vh',
+  },
   container: {
     // backgroundColor: '#faa7a7',
     backgroundImage: 'linear-gradient(to bottom right, lightblue, lightgreen)',
