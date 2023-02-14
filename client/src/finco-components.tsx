@@ -18,7 +18,7 @@ import { languageText, LanguageTextInfo } from './language';
 import { LanguageContext, UserContext } from './context';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
-const pages = ['Din portefølje', 'Marked', 'Om oss', 'Logg inn'];
+const pages = ['Din portefølje', 'Marked', 'Logg inn'];
 
 export default function NavBar() {
   //@ts-ignore
