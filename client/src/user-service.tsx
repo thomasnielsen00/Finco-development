@@ -18,6 +18,7 @@ export type Investment = {
   investment_yield: string;
   user_id: number;
   company_id: number;
+  company_name: string;
 };
 
 export type Industry = {
@@ -38,7 +39,7 @@ class UserService {
    * Get user with given id.
    */
   getUser(user_id: number) {
-    return axios.get<User>('/users/' + user_id).then((response) => response.data);
+    return axios.get<User>(`/users/${user_id}`).then((response) => response.data);
   }
 
   /**
@@ -75,7 +76,7 @@ class UserService {
    * Delete user with given id
    */
   deleteUser(user_id: number) {
-    return axios.delete(`/users/:${user_id}`).then((response) => response.data);
+    return axios.delete(`/users/${user_id}`).then((response) => response.data);
   }
 
   //--------------------------------------------------------------------------------------------------------------------------------------
@@ -87,7 +88,7 @@ class UserService {
    */
   getAllUserInvestments(user_id: number) {
     return axios
-      .get<Investment[]>(`/users/:${user_id}/investments`)
+      .get<Investment[]>(`/users/${user_id}/investments`)
       .then((response) => response.data);
   }
 
@@ -96,7 +97,7 @@ class UserService {
    */
   getUserInvestment(user_id: number, investment_id: number) {
     return axios
-      .get<Investment>(`/users/:${user_id}/investments/:${investment_id}`)
+      .get<Investment>(`/users/${user_id}/investments/:${investment_id}`)
       .then((response) => response.data);
   }
 
@@ -134,7 +135,7 @@ class UserService {
 
   deleteUserInvestment(user_id: number, investment_id: number) {
     return axios
-      .delete(`/users/:${user_id}/investments/${investment_id}`)
+      .delete(`/users/${user_id}/investments/${investment_id}`)
       .then((response) => response.data);
   }
 
@@ -143,7 +144,7 @@ class UserService {
   //------------------------------------------------------------------------------------------------------------------
 
   getAllPreferedIndustries(user_id: number) {
-    return axios.get<Industry[]>(`/users/:${user_id}/industries`).then((response) => response.data);
+    return axios.get<Industry[]>(`/users/${user_id}/industries`).then((response) => response.data);
   }
 
   /**
@@ -151,7 +152,7 @@ class UserService {
    */
   getPreferedIndustry(user_id: number, industry_id: number) {
     return axios
-      .get<Industry>(`/users/:${user_id}/industries/:${industry_id}`)
+      .get<Industry>(`/users/${user_id}/industries/:${industry_id}`)
       .then((response) => response.data);
   }
 
@@ -169,7 +170,7 @@ class UserService {
 
   deleteUserIndustry(industry_id: number, user_id: number) {
     return axios
-      .delete(`/users/:${user_id}/industries/${industry_id}`)
+      .delete(`/users/${user_id}/industries/${industry_id}`)
       .then((response) => response.data);
   }
 }

@@ -6,6 +6,7 @@ import LogIn from './login-component';
 import Marked from './marked-components';
 import CompanyDetails from './company-component';
 import { Home } from './finco-components';
+import Portfolio from './portfolio-component';
 import { languageText, LanguageTextInfo } from './language';
 
 export default function App() {
@@ -19,6 +20,8 @@ export default function App() {
       <UserContext.Provider value={{ user, setUser }}>
         <NavBar />
         <Route exact path="/" component={Home} />
+        {/* Må kanskje være :user_id, men funker ikke ends mtp teststien i finco-components */}
+        <Route exact path="/users/:user_id/investments" component={Portfolio} />
         <Route exact path="/Logg inn" component={LogIn} />
         <Route exact path="/Marked" component={Marked} />
         <Route exact path="/company/:company_id" component={CompanyDetails} />

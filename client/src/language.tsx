@@ -15,6 +15,8 @@ export type LanguageTextInfo = {
   live_stock_value: string;
   explore_company: string;
   difference: string;
+  //PORTFOLIO
+  show_details: string;
 };
 
 export const languageText = {
@@ -36,6 +38,8 @@ export const languageText = {
     live_stock_value: 'Sanntids aksjekurs',
     explore_company: 'Utforsk selskapet',
     difference: 'Differanse',
+    //PORTFOLIO
+    show_details: 'Vis detaljer',
   },
   english: {
     property: 'english',
@@ -54,5 +58,7 @@ export const languageText = {
     live_stock_value: 'Live stock value',
     explore_company: 'Explore the company',
     difference: 'Difference',
+    //PORTFOLIO
+    show_details: 'Show details',
   },
 };

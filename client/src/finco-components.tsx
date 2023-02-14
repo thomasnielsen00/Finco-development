@@ -24,6 +24,7 @@ export default function NavBar() {
   //@ts-ignore
   const { language, setLanguage } = useContext(LanguageContext);
   const { change_language, property } = language;
+  const { num } = 1;
 
   function updateLanguage() {
     if (property == 'norwegian') {
@@ -67,6 +68,17 @@ export default function NavBar() {
                     {page}
                   </Button>
                 ))}
+              </Box>
+
+              <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                <Button
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                  component="a"
+                  // SKAL ENDRES TIL Å VÆRE :user_id, ikke 1
+                  href={'/#' + '/users/' + { num } + '/investments'}
+                >
+                  Portfolio
+                </Button>
               </Box>
               <Box>
                 <Button onClick={() => updateLanguage()}>{change_language}</Button>

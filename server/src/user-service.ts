@@ -17,6 +17,7 @@ export type Investment = {
   investment_yield: string;
   user_id: number;
   company_id: number;
+  company_name: string;
 };
 
 export type Industry = {
@@ -126,13 +127,16 @@ class UserService {
   //INVESTMENTS:
   //--------------------------------------------------------------------------------------------------------------------------------------
 
+  //I BEGGE GET-METODENE UNDER BØR JEG KANSKJE OGSÅ HENTE UT
+  //SELVE NAVNET PÅ INVESTERINGSVIRKSOMHETEN GJENNOM EN JOIN:
+
   /**
    * Get all investments for a given user.
    */
   getAllUserInvestments(user_id: number) {
     return new Promise<Investment[]>((resolve, reject) => {
       pool.query(
-        'SELECT * FROM investment WHERE user_id=?',
+        'SELECT * FROM investment, company WHERE company.company_id = investment.company_id AND user_id=?',
         [user_id],
         (error, results: RowDataPacket[]) => {
           if (error) return reject(error);
