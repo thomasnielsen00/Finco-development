@@ -19,12 +19,15 @@ import { LanguageContext, UserContext } from './context';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 const pages = ['Din portefølje', 'Marked', 'Om oss', 'Logg inn'];
+//HVORDAN SKAL VI EGT SETTE DENNE IDEN ETTERHVERT. KANSKJE BRUKER_ID-EN TIL VEDKOMMENDE SOM LOGGER INNE MÅ EKSPORTERES TIL DENNE FILEN?
+//MIDLERTIDIG HARKODET VERDI FOR TEST:
+const user_id = 2;
 
 export default function NavBar() {
   //@ts-ignore
   const { language, setLanguage } = useContext(LanguageContext);
-  const { change_language, property } = language;
-  const { num } = 1;
+  const { change_language, property, my_account, portfolio_right } = language;
+  const num = 1;
 
   function updateLanguage() {
     if (property == 'norwegian') {
@@ -77,9 +80,21 @@ export default function NavBar() {
                   // SKAL ENDRES TIL Å VÆRE :user_id, ikke 1
                   href={'/#' + '/users/' + { num } + '/investments'}
                 >
-                  Portfolio
+                  {portfolio_right}
                 </Button>
               </Box>
+
+              <Box sx={{ flexGrow: 3, display: { xs: 'none', md: 'flex' } }}>
+                <Button
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                  component="a"
+                  // SKAL ENDRES TIL Å VÆRE :user_id, ikke 1
+                  href={'/#' + '/users/' + user_id}
+                >
+                  {my_account}
+                </Button>
+              </Box>
+
               <Box>
                 <Button onClick={() => updateLanguage()}>{change_language}</Button>
               </Box>

@@ -17,6 +17,9 @@ export type LanguageTextInfo = {
   difference: string;
   //PORTFOLIO
   show_details: string;
+  portfolio_right: string;
+  //USER-ACCOUNT
+  my_account: string;
 };
 
 export const languageText = {
@@ -40,6 +43,9 @@ export const languageText = {
     difference: 'Differanse',
     //PORTFOLIO
     show_details: 'Vis detaljer',
+    portfolio_right: 'Porteføljeoversikt',
+    //USER-ACCOUNT
+    my_account: 'Min profil',
   },
   english: {
     property: 'english',
@@ -60,5 +66,8 @@ export const languageText = {
     difference: 'Difference',
     //PORTFOLIO
     show_details: 'Show details',
+    portfolio_right: 'Portfolio overview',
+    //PROFILE
+    my_account: 'My account',
   },
 };
