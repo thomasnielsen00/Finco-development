@@ -25,6 +25,7 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 
 export default function CompanyDetails() {
   const classes = useStyles();
+
   //denne må ses over
   // @ts-ignore
   const { company_id } = useParams();

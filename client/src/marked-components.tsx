@@ -25,7 +25,9 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 export default function Marked() {
   const classes = useStyles();
 
+  //@ts-ignore
   const { user } = useContext(UserContext);
+  //@ts-ignore
   const { language } = useContext(LanguageContext);
   const { calculated_stock_value, live_stock_value, explore_company } = language;
   const [companies, setCompanies] = useState<Company[]>([]);

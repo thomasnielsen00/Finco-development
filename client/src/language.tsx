@@ -42,7 +42,7 @@ export const languageText = {
     portfolio: 'Portfoilo',
     marked: 'Market',
     about: 'About us',
-    log_in: 'Log in',
+    log_in: 'Sign in',
     change_language: 'Change language',
     username: 'Username',
     password: 'Password',
