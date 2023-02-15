@@ -6,7 +6,7 @@ import LogIn from './components/login-form';
 import Marked from './components/marked';
 import CompanyDetails from './components/company-details';
 import Home from './components/homepage';
-import Portfolio from './portfolio-component';
+import Portfolio from './components/portfolio';
 import { languageText, LanguageTextInfo } from './language';
 
 export default function App() {
