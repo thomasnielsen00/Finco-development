@@ -19,6 +19,8 @@ export type LanguageTextInfo = {
   show_details: string;
   //REGISTER
   register_text: string;
+  sign_up: string;
+  create_user: string;
 };
 
 export const languageText = {
@@ -44,6 +46,8 @@ export const languageText = {
     show_details: 'Vis detaljer',
     //REGISTER
     register_text: 'Har du ingen bruker? Registrer deg her',
+    sign_up: 'Registrer deg her',
+    create_user: 'Lag bruker',
   },
   english: {
     property: 'english',
@@ -66,5 +70,7 @@ export const languageText = {
     show_details: 'Show details',
     //REGISTER
     register_text: 'No user? Sign up here',
+    sign_up: 'Sign up',
+    create_user: 'Create user',
   },
 };
