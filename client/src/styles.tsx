@@ -49,6 +49,7 @@ export const useStyles = makeStyles((MidlertidigTheme) => ({
   log_in_avatar: {
     backgroundColor: '#092d0d',
     //vet ikke hvorfor denne over ikke fungerer,
+    
     margin: '20px',
   },
   logo: {
