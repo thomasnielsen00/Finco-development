@@ -9,7 +9,7 @@ export const MidlertidigTheme = createTheme({
       main: '#3f51b5',
     },
     secondary: {
-      main: '#092d0d',
+      main: '#173828',
     },
     background: {
       default: '#cdf5e2',
@@ -50,5 +50,10 @@ export const useStyles = makeStyles({
     margin: '20px',
     backgroundColor: '#092d0d',
     //sjekke om man kan få inn secondary color her...
+  },
+  logo: {
+    maxWidth: '160',
+    height: '45px',
+    margin: '0px 40px',
   },
 });

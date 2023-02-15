@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import companyService, { Company } from './company-service';
+import companyService, { Company } from '../company-service';
 import { createHashHistory } from 'history';
 import {
   Button,
@@ -18,8 +18,8 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { ThemeProvider } from '@emotion/react';
-import { MidlertidigTheme, useStyles } from './styles';
-import { LanguageContext } from './context';
+import { MidlertidigTheme, useStyles } from '../styles';
+import { LanguageContext } from '../context';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 

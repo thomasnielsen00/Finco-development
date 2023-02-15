@@ -3,8 +3,8 @@ import { createHashHistory } from 'history';
 import { Button, CssBaseline, Container, TextField, Box, Typography, Avatar } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { ThemeProvider } from '@emotion/react';
-import { MidlertidigTheme, useStyles } from './styles';
-import { LanguageContext, UserContext } from './context';
+import { MidlertidigTheme, useStyles } from '../styles';
+import { LanguageContext, UserContext } from '../context';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
