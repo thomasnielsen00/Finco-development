@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-// import { NavLink } from 'react-router-dom';
-import companyService, { Company } from './company-service';
 import { createHashHistory } from 'history';
 import { Button, CssBaseline, Container, TextField, Box, Typography, Avatar } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -38,6 +36,8 @@ export default function LogIn() {
     // kode under vil kobles til backend og sjekke om passord og brukernavn stemmer overens.
     //videre skal man kjøre denne med all data som trengs å lagres for hver bruker ;D
     setUser({ username: username, password: password });
+    //videre skal man pushes til hjemside eller brukerside
+    history.push('/');
   };
 
   return (
