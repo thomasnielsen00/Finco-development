@@ -3,8 +3,8 @@ import { createHashHistory } from 'history';
 import { Button, CssBaseline, Container, TextField, Box, Typography, Avatar } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { ThemeProvider } from '@emotion/react';
-import { MidlertidigTheme, useStyles } from './styles';
-import { LanguageContext, UserContext } from './context';
+import { MidlertidigTheme, useStyles } from '../styles';
+import { LanguageContext, UserContext } from '../context';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
@@ -45,6 +45,7 @@ export default function LogIn() {
       <CssBaseline />
       <Container maxWidth="sm" className={classes.log_in_container}>
         <Box className={classes.log_in_box}>
+          {/* denne fungerer ikke  */}
           <Avatar className={classes.log_in_avatar}>
             <LockOutlinedIcon />
           </Avatar>

@@ -9,7 +9,7 @@ export const MidlertidigTheme = createTheme({
       main: '#3f51b5',
     },
     secondary: {
-      main: '#092d0d',
+      main: '#173828',
     },
     background: {
       default: '#cdf5e2',
@@ -22,7 +22,7 @@ export const MidlertidigTheme = createTheme({
   },
 });
 
-export const useStyles = makeStyles({
+export const useStyles = makeStyles((MidlertidigTheme) => ({
   home_page_container: {
     backgroundImage: 'linear-gradient(to right, lightgreen, white)',
     width: '100vw',
@@ -47,8 +47,18 @@ export const useStyles = makeStyles({
     marginTop: '20px',
   },
   log_in_avatar: {
-    margin: '20px',
     backgroundColor: '#092d0d',
-    //sjekke om man kan få inn secondary color her...
+    //vet ikke hvorfor denne over ikke fungerer,
+    
+    margin: '20px',
   },
-});
+  logo: {
+    maxWidth: '160',
+    height: '45px',
+    margin: '0px 30px',
+  },
+  navbar_button: {
+    display: 'block',
+    margin: '0px 20px',
+  },
+}));
