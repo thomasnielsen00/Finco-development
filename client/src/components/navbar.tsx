@@ -40,9 +40,9 @@ export default function NavBar() {
     <>
       <ThemeProvider theme={MidlertidigTheme}>
         <CssBaseline />
-        <AppBar position="static" color="secondary" sx={{ boxShadow: 20 }}>
+        <AppBar position="static" color="secondary">
           <Container maxWidth="xl">
-            <Toolbar disableGutters>
+            <Toolbar>
               <NavLink to={'/'}>
                 <Box
                   className={classes.logo}
@@ -54,27 +54,29 @@ export default function NavBar() {
                   src="images/logo.png"
                 />
               </NavLink>
-
               <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                 <Button
+                  className={classes.navbar_button}
                   key={marked}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
+                  color="inherit"
                   component="a"
                   href={'/#/marked'}
                 >
                   {marked}
                 </Button>
                 <Button
+                  className={classes.navbar_button}
                   key={portfolio}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
+                  color="inherit"
                   component="a"
                   href={'/#/portfolio'}
                 >
                   {portfolio}
                 </Button>
                 <Button
+                  className={classes.navbar_button}
                   key={about}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
+                  color="inherit"
                   component="a"
                   href={'/#/about'}
                 >
@@ -83,15 +85,17 @@ export default function NavBar() {
               </Box>
               <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                 <Button
+                  className={classes.navbar_button}
+                  color="inherit"
                   key={log_in}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
                   component="a"
                   href={'/#/log_in'}
                 >
                   {log_in}
                 </Button>
                 <Button
-                  sx={{ color: 'inherit', display: 'block' }}
+                  className={classes.navbar_button}
+                  color="inherit"
                   onClick={() => updateLanguage()}
                 >
                   {change_language}

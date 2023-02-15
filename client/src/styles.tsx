@@ -54,6 +54,10 @@ export const useStyles = makeStyles({
   logo: {
     maxWidth: '160',
     height: '45px',
-    margin: '0px 40px',
+    margin: '0px 30px',
+  },
+  navbar_button: {
+    display: 'block',
+    margin: '0px 20px',
   },
 });
