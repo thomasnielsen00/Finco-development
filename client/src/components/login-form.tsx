@@ -45,6 +45,7 @@ export default function LogIn() {
       <CssBaseline />
       <Container maxWidth="sm" className={classes.log_in_container}>
         <Box className={classes.log_in_box}>
+          {/* denne fungerer ikke  */}
           <Avatar className={classes.log_in_avatar}>
             <LockOutlinedIcon />
           </Avatar>
