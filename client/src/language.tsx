@@ -17,6 +17,8 @@ export type LanguageTextInfo = {
   difference: string;
   //PORTFOLIO
   show_details: string;
+  //REGISTER
+  register_text: string;
 };
 
 export const languageText = {
@@ -40,6 +42,8 @@ export const languageText = {
     difference: 'Differanse',
     //PORTFOLIO
     show_details: 'Vis detaljer',
+    //REGISTER
+    register_text: 'Har du ingen bruker? Registrer deg her',
   },
   english: {
     property: 'english',
@@ -60,5 +64,7 @@ export const languageText = {
     difference: 'Difference',
     //PORTFOLIO
     show_details: 'Show details',
+    //REGISTER
+    register_text: 'No user? Sign up here',
   },
 };

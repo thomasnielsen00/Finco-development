@@ -1,6 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { createHashHistory } from 'history';
-import { Button, CssBaseline, Container, TextField, Box, Typography, Avatar } from '@mui/material';
+import {
+  Button,
+  CssBaseline,
+  Container,
+  TextField,
+  Box,
+  Typography,
+  Avatar,
+  Grid,
+  Link,
+} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { ThemeProvider } from '@emotion/react';
 import { MidlertidigTheme, useStyles } from '../styles';
@@ -23,7 +33,7 @@ export default function LogIn() {
   const { user, setUser } = useContext(UserContext);
   //@ts-ignore
   const { language } = useContext(LanguageContext);
-  const { log_in } = language;
+  const { log_in, register_text } = language;
 
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setLogInFormInput((prevState) => ({
@@ -40,10 +50,14 @@ export default function LogIn() {
     history.push('/');
   };
 
+  const register = () => {
+    history.push('/register');
+  };
+
   return (
     <ThemeProvider theme={MidlertidigTheme}>
       <CssBaseline />
-      <Container maxWidth="sm" className={classes.log_in_container}>
+      <Container maxWidth="xs" className={classes.log_in_container}>
         <Box className={classes.log_in_box}>
           {/* denne fungerer ikke  */}
           {/* <Avatar className={classes.log_in_avatar}> */}
@@ -73,14 +87,24 @@ export default function LogIn() {
             onChange={onInputChange}
           />
           <Button
+            className={classes.log_in_button}
+            //hvorfor vil ikke denne endre marginTop
             color="secondary"
             fullWidth
-            className={classes.log_in_button}
             variant="contained"
             onClick={logInSubmit}
+            //midlertidig
+            sx={{ mt: 2 }}
           >
-            {language.log_in}
+            {log_in}
           </Button>
+          <Grid container>
+            <Grid item className={classes.register_link}>
+              <Link href="#/register" variant="body2">
+                {register_text}
+              </Link>
+            </Grid>
+          </Grid>
         </Box>
       </Container>
     </ThemeProvider>
