@@ -12,12 +12,12 @@ export const MidlertidigTheme = createTheme({
       main: '#173828',
     },
     background: {
-      default: '#cdf5e2',
+      default: '#dfe8e4',
     },
   },
   props: {
     MuiAppBar: {
-      color: 'secondary',
+      color: 'primary',
     },
   },
 });
@@ -36,7 +36,6 @@ export const useStyles = makeStyles((MidlertidigTheme) => ({
     marginTop: '75px',
   },
   log_in_box: {
-    backgroundColor: 'white',
     marginTop: '8px',
     padding: '25px 50px',
     display: 'flex',
@@ -49,7 +48,7 @@ export const useStyles = makeStyles((MidlertidigTheme) => ({
   log_in_avatar: {
     backgroundColor: '#092d0d',
     //vet ikke hvorfor denne over ikke fungerer,
-    
+
     margin: '20px',
   },
   logo: {

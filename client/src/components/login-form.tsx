@@ -46,7 +46,8 @@ export default function LogIn() {
       <Container maxWidth="sm" className={classes.log_in_container}>
         <Box className={classes.log_in_box}>
           {/* denne fungerer ikke  */}
-          <Avatar className={classes.log_in_avatar}>
+          {/* <Avatar className={classes.log_in_avatar}> */}
+          <Avatar sx={{ bgcolor: '#173828' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
