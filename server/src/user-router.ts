@@ -1,4 +1,4 @@
-import express, { request } from 'express';
+import express, { request, response } from 'express';
 import userService from './user-service';
 
 /**
@@ -18,6 +18,18 @@ router.get('/users/:user_id', (request, response) => {
   userService
     .getUser(user_id)
     .then((user) => (user ? response.send(user) : response.status(404).send('User not found')))
+    .catch((error) => response.status(500).send(error));
+});
+
+// login
+router.get('/users/:email/:password', (request, response) => {
+  const email = request.params.email;
+  const password = request.params.password;
+  userService
+    .signInUser(email, password)
+    .then((user) =>
+      user ? response.send(user) : response.status(404).send('Wrong email or password')
+    )
     .catch((error) => response.status(500).send(error));
 });
 
@@ -169,37 +181,37 @@ router.post('/users/:user_id/investments/', (request, response) => {
 //Updates a user-investment´s content
 
 // Updates a user´s information
-router.put('/users/:user_id/investments/:investment_id', (request, response) => {
-  const investment_id = Number(request.params.investment_id);
-  const user_id = Number(request.params.user_id);
-  const data = request.body;
-  if (
-    typeof user_id == 'number' &&
-    user_id != 0 &&
-    typeof investment_id == 'number' &&
-    investment_id != 0 &&
-    typeof data.amount == 'number' &&
-    data.amount != 0 &&
-    typeof data.investment_date == 'string' &&
-    data.investment_date.length != 0 &&
-    typeof data.investment_yield == 'string' &&
-    data.investment_yield.length != 0 &&
-    typeof data.company_id == 'number' &&
-    data.company_id != 0
-  )
-    userService
-      .updateUserInvestment({
-        amount: data.amount,
-        investment_date: data.investment_date,
-        investment_yield: data.investment_yield,
-        company_id: data.company_id,
-        user_id: user_id,
-        investment_id: investment_id,
-      })
-      .then(() => response.send('User-investment was updated'))
-      .catch((error) => response.status(500).send(error));
-  else response.status(400).send('Propperties are not valid');
-});
+// router.put('/users/:user_id/investments/:investment_id', (request, response) => {
+//   const investment_id = Number(request.params.investment_id);
+//   const user_id = Number(request.params.user_id);
+//   const data = request.body;
+//   if (
+//     typeof user_id == 'number' &&
+//     user_id != 0 &&
+//     typeof investment_id == 'number' &&
+//     investment_id != 0 &&
+//     typeof data.amount == 'number' &&
+//     data.amount != 0 &&
+//     typeof data.investment_date == 'string' &&
+//     data.investment_date.length != 0 &&
+//     typeof data.investment_yield == 'string' &&
+//     data.investment_yield.length != 0 &&
+//     typeof data.company_id == 'number' &&
+//     data.company_id != 0
+//   )
+//     userService
+//       .updateUserInvestment({
+//         amount: data.amount,
+//         investment_date: data.investment_date,
+//         investment_yield: data.investment_yield,
+//         company_id: data.company_id,
+//         user_id: user_id,
+//         investment_id: investment_id,
+//       })
+//       .then(() => response.send('User-investment was updated'))
+//       .catch((error) => response.status(500).send(error));
+//   else response.status(400).send('Propperties are not valid');
+// });
 
 router.delete('/users/:user_id/investments/:investment_id', (request, response) => {
   const investment_id = Number(request.params.investment_id);

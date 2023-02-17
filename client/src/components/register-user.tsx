@@ -15,46 +15,69 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { ThemeProvider } from '@emotion/react';
 import { MidlertidigTheme, useStyles } from '../styles';
 import { LanguageContext, UserContext } from '../context';
+import userService from '../user-service';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
 export default function Register() {
-  const defaultLogInFormInput = {
-    username: '',
-    password: '',
-  };
-
-  const [logInFormInput, setLogInFormInput] = useState(defaultLogInFormInput);
-  const { username, password } = logInFormInput;
   const classes = useStyles();
-
   // context, må lage en type for brukere
   //@ts-ignore
   const { user, setUser } = useContext(UserContext);
   //@ts-ignore
   const { language } = useContext(LanguageContext);
-  const { sign_up, create_user } = language;
+  const { sign_up, create_user, full_name, mail, password, confirm_password, cancel } = language;
 
-  const onInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setLogInFormInput((prevState) => ({
-      ...prevState,
-      [event.target.id]: event.target.value,
-    }));
+  const defaultSignUpFormValues = {
+    full_name: '',
+    mail: '',
+    password: '',
+    confirm_password: '',
   };
 
-  const logInSubmit = () => {
-    // kode under vil kobles til backend og sjekke om passord og brukernavn stemmer overens.
-    //videre skal man kjøre denne med all data som trengs å lagres for hver bruker ;D
-    setUser({ username: username, password: password });
-    //videre skal man pushes til hjemside eller brukerside
-    history.push('/');
+  const [signUpFormValues, setSignUpFormValues] = useState(defaultSignUpFormValues);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSignUpFormValues({
+      ...signUpFormValues,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  //@ts-ignore
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    userService
+      .createUser(
+        signUpFormValues.full_name,
+        signUpFormValues.password,
+        signUpFormValues.mail,
+        'Medium',
+        100
+      )
+      .then((user_id) => {
+        console.log(user_id);
+        userService
+          .getUser(user_id)
+          .then((user) => {
+            setUser(user);
+          })
+          .then(() => history.push('/profile/' + user_id))
+          .catch((error) => {
+            console.error(error.message);
+          });
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+    setSignUpFormValues(defaultSignUpFormValues);
   };
 
   return (
     <ThemeProvider theme={MidlertidigTheme}>
       <CssBaseline />
       <Container maxWidth="xs" className={classes.log_in_container}>
-        <Box className={classes.log_in_box}>
+        <Box component="form" onSubmit={handleSubmit} className={classes.log_in_box}>
           {/* denne fungerer ikke  */}
           {/* <Avatar className={classes.log_in_avatar}> */}
           <Avatar sx={{ bgcolor: MidlertidigTheme.palette.secondary.main }}>
@@ -68,46 +91,50 @@ export default function Register() {
             fullWidth
             color="secondary"
             margin="normal"
-            id="password2"
-            label={'Full name'}
-            onChange={onInputChange}
+            name="full_name"
+            value={signUpFormValues.full_name}
+            label={full_name}
+            onChange={handleChange}
           />
           <TextField
             required
             fullWidth
             color="secondary"
             margin="normal"
-            id="username"
-            label={language.username}
-            onChange={onInputChange}
+            name="mail"
+            value={signUpFormValues.mail}
+            label={mail}
+            onChange={handleChange}
           />
           <TextField
             required
             fullWidth
             color="secondary"
             margin="normal"
-            id="password"
-            label={language.password}
+            name="password"
+            value={signUpFormValues.password}
+            label={password}
             type="password"
-            onChange={onInputChange}
+            onChange={handleChange}
           />
           <TextField
             required
             fullWidth
             color="secondary"
             margin="normal"
-            id="password2"
-            label={'Rewrite ' + language.password}
+            name="confirm_password"
+            value={signUpFormValues.confirm_password}
+            label={confirm_password}
             type="password"
-            onChange={onInputChange}
+            onChange={handleChange}
           />
           <Button
             className={classes.log_in_button}
+            type="submit"
             //hvorfor vil ikke denne endre marginTop
             color="secondary"
             fullWidth
             variant="contained"
-            onClick={logInSubmit}
             //midlertidig
             sx={{ mt: 2 }}
           >
@@ -116,7 +143,7 @@ export default function Register() {
           <Grid container>
             <Grid item className={classes.register_link}>
               <Link href="#" variant="body2">
-                Cancel
+                {cancel}
               </Link>
             </Grid>
           </Grid>

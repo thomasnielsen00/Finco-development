@@ -4,8 +4,9 @@ export type LanguageTextInfo = {
   marked: string;
   about: string;
   log_in: string;
+  profile: string;
   change_language: string;
-  username: string;
+  mail: string;
   password: string;
   //HOME
   get_started: string;
@@ -21,6 +22,9 @@ export type LanguageTextInfo = {
   register_text: string;
   sign_up: string;
   create_user: string;
+  full_name: string;
+  confirm_password: string;
+  cancel: string;
 };
 
 export const languageText = {
@@ -30,8 +34,9 @@ export const languageText = {
     marked: 'Marked',
     about: 'Om oss',
     log_in: 'Logg inn',
+    profile: 'Min profil',
     change_language: 'Endre språk',
-    username: 'Brukernavn',
+    mail: 'E-post',
     password: 'Passord',
     //HOME
     get_started: 'Kom i gang!',
@@ -48,6 +53,9 @@ export const languageText = {
     register_text: 'Har du ingen bruker? Registrer deg her',
     sign_up: 'Registrer deg her',
     create_user: 'Lag bruker',
+    full_name: 'Fullt navn',
+    confirm_password: 'Gjenta passord',
+    cancel: 'Avbryt',
   },
   english: {
     property: 'english',
@@ -55,8 +63,9 @@ export const languageText = {
     marked: 'Market',
     about: 'About us',
     log_in: 'Sign in',
+    profile: 'My profile',
     change_language: 'Change language',
-    username: 'Username',
+    mail: 'E-mail adress',
     password: 'Password',
     //HOME
     get_started: 'Get started!',
@@ -72,5 +81,8 @@ export const languageText = {
     register_text: 'No user? Sign up here',
     sign_up: 'Sign up',
     create_user: 'Create user',
+    full_name: 'Full name',
+    confirm_password: 'Confirm password',
+    cancel: 'Cancel',
   },
 };

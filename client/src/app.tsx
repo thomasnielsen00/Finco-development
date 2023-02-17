@@ -9,10 +9,11 @@ import CompanyDetails from './components/company-details';
 import Home from './components/homepage';
 import Portfolio from './components/portfolio';
 import { languageText, LanguageTextInfo } from './language';
+import { User } from './user-service';
 
 export default function App() {
-  const [user, setUser] = useState({ username: '', password: '' });
-  const [language, setLanguage] = useState(languageText.norwegian);
+  const [user, setUser] = useState<User | boolean>(false);
+  const [language, setLanguage] = useState<LanguageTextInfo>(languageText.norwegian);
 
   return (
     //@ts-ignore

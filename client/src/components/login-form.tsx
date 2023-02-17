@@ -15,50 +15,52 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { ThemeProvider } from '@emotion/react';
 import { MidlertidigTheme, useStyles } from '../styles';
 import { LanguageContext, UserContext } from '../context';
+import userService from '../user-service';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
 export default function LogIn() {
-  const defaultLogInFormInput = {
-    username: '',
-    password: '',
-  };
-
-  const [logInFormInput, setLogInFormInput] = useState(defaultLogInFormInput);
-  const { username, password } = logInFormInput;
   const classes = useStyles();
 
   // context, må lage en type for brukere
   //@ts-ignore
   const { user, setUser } = useContext(UserContext);
+
   //@ts-ignore
   const { language } = useContext(LanguageContext);
-  const { log_in, register_text } = language;
+  const { log_in, register_text, mail, password } = language;
 
-  const onInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setLogInFormInput((prevState) => ({
-      ...prevState,
-      [event.target.id]: event.target.value,
-    }));
+  const defaultLogInFormInput = {
+    email: '',
+    password: '',
   };
 
-  const logInSubmit = () => {
-    // kode under vil kobles til backend og sjekke om passord og brukernavn stemmer overens.
-    //videre skal man kjøre denne med all data som trengs å lagres for hver bruker ;D
-    setUser({ username: username, password: password });
-    //videre skal man pushes til hjemside eller brukerside
-    history.push('/');
+  const [logInFormValues, setLogInFormValues] = useState(defaultLogInFormInput);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setLogInFormValues({
+      ...logInFormValues,
+      [event.target.name]: event.target.value,
+    });
   };
 
-  const register = () => {
-    history.push('/register');
+  //@ts-ignore
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    userService
+      .signInUser(logInFormValues.email, logInFormValues.password)
+      .then((user) => {
+        setUser(user);
+        history.push('/profile/' + user.user_id);
+      })
+      .catch((error) => console.error(error.message));
   };
 
   return (
     <ThemeProvider theme={MidlertidigTheme}>
       <CssBaseline />
       <Container maxWidth="xs" className={classes.log_in_container}>
-        <Box className={classes.log_in_box}>
+        <Box component="form" onSubmit={handleSubmit} className={classes.log_in_box}>
           {/* denne fungerer ikke  */}
           {/* <Avatar className={classes.log_in_avatar}> */}
           <Avatar sx={{ bgcolor: MidlertidigTheme.palette.secondary.main }}>
@@ -72,27 +74,28 @@ export default function LogIn() {
             fullWidth
             color="secondary"
             margin="normal"
-            id="username"
-            label={language.username}
-            onChange={onInputChange}
+            name="email"
+            value={logInFormValues.email}
+            label={mail}
+            onChange={handleChange}
           />
           <TextField
             required
             fullWidth
             color="secondary"
             margin="normal"
-            id="password"
-            label={language.password}
+            name="password"
+            value={logInFormValues.password}
+            label={password}
             type="password"
-            onChange={onInputChange}
+            onChange={handleChange}
           />
           <Button
             className={classes.log_in_button}
-            //hvorfor vil ikke denne endre marginTop
+            type="submit"
             color="secondary"
             fullWidth
             variant="contained"
-            onClick={logInSubmit}
             //midlertidig
             sx={{ mt: 2 }}
           >
