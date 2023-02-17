@@ -36,6 +36,12 @@ export default function Register() {
   };
 
   const [signUpFormValues, setSignUpFormValues] = useState(defaultSignUpFormValues);
+  const [error, setError] = useState({
+    full_name: false,
+    mail: false,
+    password: false,
+    confirm_password: false,
+  });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSignUpFormValues({
@@ -47,6 +53,14 @@ export default function Register() {
   //@ts-ignore
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    // funker, men oppdaterer ikke error fort nok
+    formValidation(); // Call the formValidation() function to validate the form
+
+    // Check if there are any errors in the form
+    if (Object.values(error).some((value) => value === true)) {
+      return;
+    }
     userService
       .createUser(
         signUpFormValues.full_name,
@@ -56,7 +70,6 @@ export default function Register() {
         100
       )
       .then((user_id) => {
-        console.log(user_id);
         userService
           .getUser(user_id)
           .then((user) => {
@@ -71,6 +84,35 @@ export default function Register() {
         console.error(error.message);
       });
     setSignUpFormValues(defaultSignUpFormValues);
+  };
+
+  const formValidation = () => {
+    //pattern for testing if there is a letter both before and after the space (\s), both with upper and lowerCase
+    let pattern = /[a-zA-Z]\s[a-zA-Z]/;
+    //Validation for full name input
+    if (!pattern.test(signUpFormValues.full_name)) {
+      setError((prevState) => ({ ...prevState, full_name: true }));
+    } else {
+      setError((prevState) => ({ ...prevState, full_name: false }));
+    }
+    //Validation for email input
+    if (!signUpFormValues.mail.includes('@')) {
+      setError((prevState) => ({ ...prevState, mail: true }));
+    } else {
+      setError((prevState) => ({ ...prevState, mail: false }));
+    }
+    //Validation for password input
+    if (signUpFormValues.password.length < 8) {
+      setError((prevState) => ({ ...prevState, password: true }));
+    } else {
+      setError((prevState) => ({ ...prevState, password: false }));
+    }
+    //Validation for confirm_password input
+    if (signUpFormValues.password != signUpFormValues.confirm_password) {
+      setError((prevState) => ({ ...prevState, confirm_password: true }));
+    } else {
+      setError((prevState) => ({ ...prevState, confirm_password: false }));
+    }
   };
 
   return (
@@ -88,8 +130,10 @@ export default function Register() {
           </Typography>
           <TextField
             required
+            error={error.full_name}
             fullWidth
             color="secondary"
+            helperText={error.full_name ? 'Please write your full name.' : ''}
             margin="normal"
             name="full_name"
             value={signUpFormValues.full_name}
@@ -98,8 +142,10 @@ export default function Register() {
           />
           <TextField
             required
+            error={error.mail}
             fullWidth
             color="secondary"
+            helperText={error.mail ? 'Email provided not valid.' : ''}
             margin="normal"
             name="mail"
             value={signUpFormValues.mail}
@@ -108,8 +154,10 @@ export default function Register() {
           />
           <TextField
             required
+            error={error.password}
             fullWidth
             color="secondary"
+            helperText={error.password ? 'Must have 8 characters.' : 'Must have 8 characters.'}
             margin="normal"
             name="password"
             value={signUpFormValues.password}
@@ -119,8 +167,10 @@ export default function Register() {
           />
           <TextField
             required
+            error={error.confirm_password}
             fullWidth
             color="secondary"
+            helperText={error.confirm_password ? 'Must match with the first password.' : ''}
             margin="normal"
             name="confirm_password"
             value={signUpFormValues.confirm_password}
@@ -140,6 +190,7 @@ export default function Register() {
           >
             {create_user}
           </Button>
+          <Button onClick={formValidation}>Test</Button>
           <Grid container>
             <Grid item className={classes.register_link}>
               <Link href="#" variant="body2">
