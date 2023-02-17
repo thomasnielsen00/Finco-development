@@ -8,7 +8,7 @@ export type User = {
   password: string;
   email: string;
   risk_willingness: string;
-  monthly_savings_amount: string;
+  monthly_savings_amount: number;
 };
 
 export type Investment = {
@@ -42,6 +42,10 @@ class UserService {
     return axios.get<User>(`/users/${user_id}`).then((response) => response.data);
   }
 
+  signInUser(email: string, password: string) {
+    return axios.get<User>(`/users/${email}/${password}`).then((response) => response.data);
+  }
+
   /**
    * Create new user having the given username, password, email, risk_willingness, monthly_savings_amount.
    *
@@ -52,7 +56,7 @@ class UserService {
     password: string,
     email: string,
     risk_willingness: string,
-    monthly_savings_amount: string
+    monthly_savings_amount: number
   ) {
     return axios
       .post<{ user_id: number }>('/users', {

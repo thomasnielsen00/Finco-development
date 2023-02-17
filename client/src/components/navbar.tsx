@@ -24,9 +24,9 @@ export default function NavBar() {
   const classes = useStyles();
   //@ts-ignore
   const { language, setLanguage } = useContext(LanguageContext);
-  const { change_language, property, marked, portfolio, log_in, about } = language;
+  const { change_language, property, marked, portfolio, log_in, about, profile } = language;
   //@ts-ignore
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
 
   function updateLanguage() {
     if (property == 'norwegian') {
@@ -89,9 +89,9 @@ export default function NavBar() {
                   color="inherit"
                   key={log_in}
                   component="a"
-                  href={'/#/log_in'}
+                  href={user ? '/#/profile/' + user.user_id : '/#/log_in'}
                 >
-                  {log_in}
+                  {user ? profile : log_in}
                 </Button>
                 <Button
                   className={classes.navbar_button}

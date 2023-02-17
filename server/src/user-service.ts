@@ -57,6 +57,23 @@ class UserService {
   }
 
   /**
+   * Get user with given email and password
+   */
+  signInUser(email: string, password: string) {
+    return new Promise<User | undefined>((resolve, reject) => {
+      pool.query(
+        'SELECT * FROM user WHERE email = ? AND password = ?',
+        [email, password],
+        (error, results: RowDataPacket[]) => {
+          if (error) return reject(error);
+
+          resolve(results[0] as User);
+        }
+      );
+    });
+  }
+
+  /**
    * Create new user having the given username, password, email, risk_willingness, monthly_savings_amount.
    *
    * Resolves the newly created users user_id.

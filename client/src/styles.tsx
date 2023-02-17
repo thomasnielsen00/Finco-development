@@ -37,19 +37,21 @@ export const useStyles = makeStyles((MidlertidigTheme) => ({
   },
   log_in_box: {
     marginTop: '8px',
-    padding: '25px 50px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
   },
   log_in_button: {
-    marginTop: '20px',
+    marginTop: '50px',
   },
   log_in_avatar: {
     backgroundColor: '#092d0d',
     //vet ikke hvorfor denne over ikke fungerer,
 
     margin: '20px',
+  },
+  register_link: {
+    paddingTop: '15px',
   },
   logo: {
     maxWidth: '160',
