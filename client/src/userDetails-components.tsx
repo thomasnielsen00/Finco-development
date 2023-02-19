@@ -180,6 +180,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+//Er det her riktig måte å benytte komponentene på? Altså som en funksjon
 export const UserProfile: User = () => {
   const [userData, setUserData] = useState<User>();
   const testPhonenumber = 7676686;
