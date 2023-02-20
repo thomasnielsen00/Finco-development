@@ -72,7 +72,13 @@ router.put('/users/:user_id', (request, response) => {
     typeof data.risk_willingness == 'string' &&
     data.risk_willingness.length != 0 &&
     typeof data.monthly_savings_amount == 'string' &&
-    data.monthly_savings_amount.length != 0
+    data.monthly_savings_amount.length != 0 &&
+    typeof data.first_name == 'string' &&
+    data.first_name.length != 0 &&
+    typeof data.last_name == 'string' &&
+    data.last_name.length != 0 &&
+    typeof data.phone_number == 'string' &&
+    data.phone_number.length != 0
   )
     userService
       .updateUser({
@@ -81,6 +87,9 @@ router.put('/users/:user_id', (request, response) => {
         email: data.email,
         risk_willingness: data.risk_willingness,
         monthly_savings_amount: data.monthly_savings_amount,
+        first_name: data.first_name,
+        last_name: data.last_name,
+        phone_number: data.phone_number,
         user_id: user_id,
       })
       .then(() => response.send('User was updated'))

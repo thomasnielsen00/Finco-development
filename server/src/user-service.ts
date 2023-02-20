@@ -8,6 +8,9 @@ export type User = {
   email: string;
   risk_willingness: string;
   monthly_savings_amount: string;
+  first_name: string;
+  last_name: string;
+  phone_number: string;
 };
 
 export type Investment = {
@@ -87,13 +90,16 @@ class UserService {
   updateUser(user: User) {
     return new Promise<void>((resolve, reject) => {
       pool.query(
-        'UPDATE user SET username=?, password=?, email=?, risk_willingness=?, monthly_savings_amount=? WHERE user_id=?',
+        'UPDATE user SET username=?, password=?, email=?, risk_willingness=?, monthly_savings_amount=?, first_name=?, last_name=?, phone_number=? WHERE user_id=?',
         [
           user.username,
           user.password,
           user.email,
           user.risk_willingness,
           user.monthly_savings_amount,
+          user.first_name,
+          user.last_name,
+          user.phone_number,
           user.user_id,
         ],
         (error, _results) => {

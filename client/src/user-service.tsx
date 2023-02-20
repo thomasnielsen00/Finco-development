@@ -9,6 +9,9 @@ export type User = {
   email: string;
   risk_willingness: string;
   monthly_savings_amount: string;
+  first_name: string;
+  last_name: string;
+  phone_number: string;
 };
 
 export type Investment = {

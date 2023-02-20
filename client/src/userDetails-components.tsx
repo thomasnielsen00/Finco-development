@@ -141,52 +141,124 @@ import {
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import userService, { Investment, User } from './user-service';
-import { Alert, Checkbox, FormControlLabel, InputLabel } from '@mui/material';
+import {
+  Alert,
+  Checkbox,
+  CircularProgress,
+  Fab,
+  FormControlLabel,
+  InputLabel,
+} from '@mui/material';
+import SaveIcon from '@material-ui/icons/Save';
+import { green } from '@mui/material/colors';
+import clsx from 'clsx';
+import CheckIcon from '@material-ui/icons/Check';
 
-const genders: Array<{ value: string; label: string }> = [
-  {
-    value: 'female',
-    label: 'Female',
-  },
-  {
-    value: 'male',
-    label: 'Male',
-  },
-  {
-    value: 'other',
-    label: 'Other',
-  },
-];
-
-// interface UserProfileProps {
-//   firstName: string;
-//   lastName: string;
-//   birthday: string;
-//   gender: string;
-//   email: string;
-//   phone: string;
-// }
+//Skal vi ha med dette?:
+// const risk_willingness: Array<{ value: string; label: string }> = [
+//   {
+//     value: 'high',
+//     label: 'High',
+//   },
+//   {
+//     value: 'moderate',
+//     label: 'Moderate',
+//   },
+//   {
+//     value: 'low',
+//     label: 'Low',
+//   },
+// ];
 
 const useStyles = makeStyles((theme) => ({
   form: {
     margin: '50px auto', // adjust the vertical margin as needed
-    maxWidth: '600px', // adjust the maximum width as needed
+    maxWidth: '50%', // adjust the maximum width as needed
+    //Vi trenger kanskje flere breakpoints?
     [theme.breakpoints.up('md')]: {
-      marginTop: '100px', // adjust the vertical margin on larger screens
+      marginTop: '3%', // adjust the vertical margin on larger screens
     },
   },
   TextField: {
     backgroundColor: 'white',
   },
+
+  buttonSuccess: {
+    backgroundColor: green[500],
+    '&:hover': {
+      backgroundColor: green[700],
+    },
+  },
+
+  buttonProgress: {
+    color: green[500],
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
 }));
 
 //Er det her riktig måte å benytte komponentene på? Altså som en funksjon
-export const UserProfile: User = () => {
+export const UserProfile: React.FC = () => {
   const [userData, setUserData] = useState<User>();
-  const testPhonenumber = 7676686;
-
+  //Save-button related
+  const [loading, setLoading] = React.useState(false);
+  ////Save-button related
+  const [savedChange, setSavedChange] = React.useState(false);
+  ////Save-button related
+  const timer = React.useRef<number>();
   const { user_id } = useParams();
+  //Constant referering to the defined styling of given elements:
+  const classes = useStyles();
 
+  const buttonClassname = clsx({
+    [classes.buttonSuccess]: savedChange,
+  });
+
+  //Save-button related
+  React.useEffect(() => {
+    return () => {
+      clearTimeout(timer.current);
+    };
+  }, []);
+
+  // const handleButtonClick = () => {
+  //   if (!loading) {
+  //     setSavedChange(false);
+  //     setLoading(true);
+  //     timer.current = window.setTimeout(() => {
+  //       setSavedChange(true);
+  //       setLoading(false);
+  //     }, 2000);
+  //   }
+  // };
+
+  const buttonText = savedChange ? 'Saved' : 'Save changes';
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUserData({ ...userData, [event.target.name]: event.target.value });
+    //Every time there is a change of input the button is reset to "Save changes"
+    setSavedChange(false);
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    if (!loading) {
+      setSavedChange(false);
+      setLoading(true);
+      timer.current = window.setTimeout(() => {
+        setSavedChange(true);
+        setLoading(false);
+        //.preventDefault is a common pattern in React form handling to prevent the default
+        //behavior of the form submission, which typically involves the page being refreshed or reloaded.
+        event.preventDefault();
+        userService.updateUser(userData).catch((error) => console.log(error));
+      }, 2000);
+    }
+  };
+
+  //The code below fetches the details for a given user with the provided method in the userService-objekt
   useEffect(() => {
     const current_id = parseInt(user_id, 10); //base 10
 
@@ -202,19 +274,8 @@ export const UserProfile: User = () => {
       });
   }, [user_id]);
 
-  const classes = useStyles();
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUserData({ ...userData, [event.target.name]: event.target.value });
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    console.log(userData);
-  };
-
   return (
-    <form onSubmit={handleSubmit} className={classes.form}>
+    <form className={classes.form}>
       <Typography variant="h5">General information</Typography>
       <br></br>
       <Grid container spacing={2}>
@@ -224,6 +285,7 @@ export const UserProfile: User = () => {
           <br></br>
           <TextField
             required
+            // helperText="Denne må være fylt ut"
             id="username"
             name="username"
             label={userData?.username}
@@ -245,6 +307,40 @@ export const UserProfile: User = () => {
             label={userData?.password}
             variant="outlined"
             value={userData?.password}
+            onChange={handleChange}
+            fullWidth
+            className={classes.TextField}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
+          <InputLabel htmlFor="first_name">First name</InputLabel>
+          <br></br>
+          <TextField
+            required
+            id="first_name"
+            name="first_name"
+            label={userData?.first_name}
+            variant="outlined"
+            // type="tel"
+            value={userData?.first_name}
+            onChange={handleChange}
+            fullWidth
+            className={classes.TextField}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
+          <InputLabel htmlFor="last_name">Last name</InputLabel>
+          <br></br>
+          <TextField
+            required
+            id="last_name"
+            name="last_name"
+            label={userData?.last_name}
+            variant="outlined"
+            // type="tel"
+            value={userData?.last_name}
             onChange={handleChange}
             fullWidth
             className={classes.TextField}
@@ -302,7 +398,6 @@ export const UserProfile: User = () => {
             className={classes.TextField}
           />
         </Grid>
-
         <Grid item xs={6}>
           {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
           <InputLabel htmlFor="monthly_savings_amount">Monthly savings amount</InputLabel>
@@ -328,15 +423,38 @@ export const UserProfile: User = () => {
             required
             id="phonenumber"
             name="phonenumber"
-            label={testPhonenumber}
+            label={userData?.phone_number}
             variant="outlined"
             // type="tel"
-            value={testPhonenumber}
+            value={userData?.phone_number}
             onChange={handleChange}
             fullWidth
             className={classes.TextField}
           />
         </Grid>
+        {/* <Button
+          variant="contained"
+          color="primary"
+          size="small"
+          className={classes.button}
+          startIcon={<SaveIcon />}
+          onClick={handleSubmit}
+        >
+          Save changes
+        </Button> */}
+
+        <Button
+          variant="contained"
+          aria-label="save"
+          color="primary"
+          className={buttonClassname}
+          onClick={handleSubmit}
+        >
+          {buttonText}
+          {savedChange ? <CheckIcon /> : <SaveIcon />}
+        </Button>
+
+        {loading && <CircularProgress size={68} className={classes.buttonProgress} />}
       </Grid>
     </form>
   );
