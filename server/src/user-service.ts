@@ -3,14 +3,13 @@ import type { RowDataPacket, ResultSetHeader } from 'mysql2';
 
 export type User = {
   user_id: number;
-  username: string;
-  password: string;
+  full_name: string;
   email: string;
-  risk_willingness: string;
-  monthly_savings_amount: string;
-  first_name: string;
-  last_name: string;
+  password: string;
   phone_number: string;
+  savings_from: number;
+  savings_to: number;
+  risk_willingness: string;
 };
 
 export type Investment = {
@@ -65,16 +64,18 @@ class UserService {
    * Resolves the newly created users user_id.
    */
   createUser(
-    username: string,
-    password: string,
+    full_name: string,
     email: string,
-    risk_willingness: string,
-    monthly_savings_amount: string
+    password: string,
+    phone_number: string,
+    savings_from: number,
+    savings_to: number,
+    risk_willingness: string
   ) {
     return new Promise<number>((resolve, reject) => {
       pool.query(
-        'INSERT INTO user SET username=?, password=?, email=?, risk_willingness=?, monthly_savings_amount=?',
-        [username, password, email, risk_willingness, monthly_savings_amount],
+        'INSERT INTO user SET full_name=?, email=?, password=?, phone_number=?, savings_from=?, savings_to=?, risk_willingess=?',
+        [full_name, email, password, phone_number, savings_from, savings_to, risk_willingness],
         (error, results: ResultSetHeader) => {
           if (error) return reject(error);
 
@@ -90,16 +91,15 @@ class UserService {
   updateUser(user: User) {
     return new Promise<void>((resolve, reject) => {
       pool.query(
-        'UPDATE user SET username=?, password=?, email=?, risk_willingness=?, monthly_savings_amount=?, first_name=?, last_name=?, phone_number=? WHERE user_id=?',
+        'UPDATE user SET full_name=?, email=?, password=?, phone_number=?, savings_from=?, savings_to=?, risk_willingness=? WHERE user_id=?',
         [
-          user.username,
-          user.password,
+          user.full_name,
           user.email,
-          user.risk_willingness,
-          user.monthly_savings_amount,
-          user.first_name,
-          user.last_name,
+          user.password,
           user.phone_number,
+          user.savings_from,
+          user.savings_to,
+          user.risk_willingness,
           user.user_id,
         ],
         (error, _results) => {

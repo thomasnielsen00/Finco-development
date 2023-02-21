@@ -140,13 +140,14 @@ import {
   FormLabel,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import userService, { Investment, User } from './user-service';
+import userService, { Industry, Investment, User } from './user-service';
 import {
   Alert,
   Checkbox,
   CircularProgress,
   Fab,
   FormControlLabel,
+  FormHelperText,
   InputLabel,
 } from '@mui/material';
 import SaveIcon from '@material-ui/icons/Save';
@@ -212,6 +213,8 @@ export const UserProfile: React.FC = () => {
   const { user_id } = useParams();
   //Constant referering to the defined styling of given elements:
   const classes = useStyles();
+  //Following const is regarding userInvestment:
+  const [preferedIndustry, setPreferedIndustry] = useState<Industry>();
 
   const buttonClassname = clsx({
     [classes.buttonSuccess]: savedChange,
@@ -224,6 +227,7 @@ export const UserProfile: React.FC = () => {
     };
   }, []);
 
+  //Denne er flytte ned inn i handleSubmit, men vet ikke hva som er best?
   // const handleButtonClick = () => {
   //   if (!loading) {
   //     setSavedChange(false);
@@ -262,6 +266,8 @@ export const UserProfile: React.FC = () => {
   useEffect(() => {
     const current_id = parseInt(user_id, 10); //base 10
 
+    userService.get;
+
     userService
       .getUser(current_id)
       .then((user) => {
@@ -275,95 +281,101 @@ export const UserProfile: React.FC = () => {
   }, [user_id]);
 
   return (
-    <form className={classes.form}>
-      <Typography variant="h5">General information</Typography>
-      <br></br>
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
+    <>
+      <form className={classes.form}>
+        <Typography variant="h5">General information</Typography>
+
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
+            <InputLabel htmlFor="email">Email</InputLabel>
+
+            <TextField
+              required
+              // helperText="Denne må være fylt ut"
+              id="email"
+              name="email"
+              // label={userData?.email}
+              variant="outlined"
+              value={userData?.email}
+              onChange={handleChange}
+              fullWidth
+              className={classes.TextField}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
+            <InputLabel htmlFor="password">Password</InputLabel>
+
+            <TextField
+              required
+              id="password"
+              name="password"
+              // label={userData?.password}
+              variant="outlined"
+              value={userData?.password}
+              onChange={handleChange}
+              fullWidth
+              className={classes.TextField}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
+            <InputLabel htmlFor="full_name">Full name</InputLabel>
+
+            <TextField
+              required
+              id="full_name"
+              name="full_name"
+              // label="Full name"
+              variant="outlined"
+              // type="tel"
+              value={userData?.full_name}
+              onChange={handleChange}
+              fullWidth
+              className={classes.TextField}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
+            <InputLabel htmlFor="phone_number">Phone number</InputLabel>
+
+            <TextField
+              required
+              id="phone_number"
+              name="phone_number"
+              // label={userData?.phone_number}
+              variant="outlined"
+              // type="tel"
+              value={userData?.phone_number}
+              onChange={handleChange}
+              fullWidth
+              className={classes.TextField}
+            />
+          </Grid>
+
           {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
-          <InputLabel htmlFor="username">Username</InputLabel>
-          <br></br>
-          <TextField
-            required
-            // helperText="Denne må være fylt ut"
-            id="username"
-            name="username"
-            label={userData?.username}
-            variant="outlined"
-            value={userData?.username}
-            onChange={handleChange}
-            fullWidth
-            className={classes.TextField}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
-          <InputLabel htmlFor="password">Password</InputLabel>
-          <br></br>
-          <TextField
-            required
-            id="password"
-            name="password"
-            label={userData?.password}
-            variant="outlined"
-            value={userData?.password}
-            onChange={handleChange}
-            fullWidth
-            className={classes.TextField}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
-          <InputLabel htmlFor="first_name">First name</InputLabel>
-          <br></br>
-          <TextField
-            required
-            id="first_name"
-            name="first_name"
-            label={userData?.first_name}
-            variant="outlined"
-            // type="tel"
-            value={userData?.first_name}
-            onChange={handleChange}
-            fullWidth
-            className={classes.TextField}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
-          <InputLabel htmlFor="last_name">Last name</InputLabel>
-          <br></br>
-          <TextField
-            required
-            id="last_name"
-            name="last_name"
-            label={userData?.last_name}
-            variant="outlined"
-            // type="tel"
-            value={userData?.last_name}
-            onChange={handleChange}
-            fullWidth
-            className={classes.TextField}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
-          <InputLabel htmlFor="email">Email</InputLabel>
-          <br></br>
-          <TextField
-            required
-            id="email"
-            name="email"
-            label={userData?.email}
-            variant="outlined"
-            // type="date"
-            value={userData?.email}
-            onChange={handleChange}
-            fullWidth
-            className={classes.TextField}
-          />
-        </Grid>
-        {/* <Grid item xs={6}>
+          <Grid item xs={6}>
+            <InputLabel htmlFor="monthly_savings_amount">Monthly savings amount</InputLabel>
+
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <TextField
+                  required
+                  id="savings_from"
+                  name="savings_from"
+                  // label="From"
+                  variant="outlined"
+                  // type="date"
+                  value={userData?.savings_from}
+                  onChange={handleChange}
+                  fullWidth
+                  className={classes.TextField}
+                />
+                <FormHelperText>From kr</FormHelperText>
+              </Grid>
+
+              {/* <Grid item xs={6}>
           <TextField
             id="gender"
             name="gender"
@@ -381,58 +393,43 @@ export const UserProfile: React.FC = () => {
             ))}
           </TextField>
         </Grid> */}
-        <Grid item xs={6}>
-          {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
-          <InputLabel htmlFor="risk_willingness">Risk willingness</InputLabel>
-          <br></br>
-          <TextField
-            required
-            id="risk_willingness"
-            name="risk_willingness"
-            label={userData?.risk_willingness}
-            variant="outlined"
-            // type="email"
-            value={userData?.risk_willingness}
-            onChange={handleChange}
-            fullWidth
-            className={classes.TextField}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
-          <InputLabel htmlFor="monthly_savings_amount">Monthly savings amount</InputLabel>
-          <br></br>
-          <TextField
-            required
-            id="monthly_savings_amount"
-            name="monthly_savings_amount"
-            label={userData?.monthly_savings_amount}
-            variant="outlined"
-            // type="tel"
-            value={userData?.monthly_savings_amount}
-            onChange={handleChange}
-            fullWidth
-            className={classes.TextField}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
-          <InputLabel htmlFor="monthly_savings_amount">Phonenumber</InputLabel>
-          <br></br>
-          <TextField
-            required
-            id="phonenumber"
-            name="phonenumber"
-            label={userData?.phone_number}
-            variant="outlined"
-            // type="tel"
-            value={userData?.phone_number}
-            onChange={handleChange}
-            fullWidth
-            className={classes.TextField}
-          />
-        </Grid>
-        {/* <Button
+
+              {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
+              <Grid item xs={6}>
+                <TextField
+                  required
+                  id="savings_to"
+                  name="savings_to"
+                  // label="To"
+                  variant="outlined"
+                  // type="email"
+                  value={userData?.savings_to}
+                  onChange={handleChange}
+                  fullWidth
+                  className={classes.TextField}
+                />
+                <FormHelperText>To kr</FormHelperText>
+              </Grid>
+            </Grid>
+          </Grid>
+
+          <Grid item xs={6}>
+            {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
+            <InputLabel htmlFor="risk_willingness">Risk willingness</InputLabel>
+
+            <TextField
+              required
+              id="risk_willingness"
+              name="risk_willingness"
+              // label= "Risk willing"
+              variant="outlined"
+              value={userData?.risk_willingness}
+              onChange={handleChange}
+              fullWidth
+              className={classes.TextField}
+            />
+          </Grid>
+          {/* <Button
           variant="contained"
           color="primary"
           size="small"
@@ -443,19 +440,24 @@ export const UserProfile: React.FC = () => {
           Save changes
         </Button> */}
 
-        <Button
-          variant="contained"
-          aria-label="save"
-          color="primary"
-          className={buttonClassname}
-          onClick={handleSubmit}
-        >
-          {buttonText}
-          {savedChange ? <CheckIcon /> : <SaveIcon />}
-        </Button>
+          <Button
+            variant="contained"
+            aria-label="save"
+            color="primary"
+            className={buttonClassname}
+            onClick={handleSubmit}
+          >
+            {buttonText}
+            {savedChange ? <CheckIcon /> : <SaveIcon />}
+          </Button>
 
-        {loading && <CircularProgress size={68} className={classes.buttonProgress} />}
-      </Grid>
-    </form>
+          {loading && <CircularProgress size={68} className={classes.buttonProgress} />}
+        </Grid>
+      </form>
+
+      <ul>
+        <li></li>
+      </ul>
+    </>
   );
 };

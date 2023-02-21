@@ -4,14 +4,13 @@ axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
 export type User = {
   user_id: number;
-  username: string;
-  password: string;
+  full_name: string;
   email: string;
-  risk_willingness: string;
-  monthly_savings_amount: string;
-  first_name: string;
-  last_name: string;
+  password: string;
   phone_number: string;
+  savings_from: string;
+  savings_to: string;
+  risk_willingness: string;
 };
 
 export type Investment = {
@@ -51,19 +50,23 @@ class UserService {
    * Resolves the newly created user_id.
    */
   createUser(
-    username: string,
-    password: string,
+    full_name: string,
     email: string,
-    risk_willingness: string,
-    monthly_savings_amount: string
+    password: string,
+    phone_number: string,
+    savings_from: number,
+    savings_to: number,
+    risk_willingness: string
   ) {
     return axios
       .post<{ user_id: number }>('/users', {
-        username: username,
-        password: password,
+        full_name: full_name,
         email: email,
+        password: password,
+        phone_number: phone_number,
+        savings_from: savings_from,
+        savings_to: savings_to,
         risk_willingness: risk_willingness,
-        monthly_savings_amount: monthly_savings_amount,
       })
       .then((response) => response.data.user_id);
   }
