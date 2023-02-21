@@ -69,13 +69,7 @@ export default function Register() {
     formValidation(signUpFormValues, setError)
       .then(() =>
         userService
-          .createUser(
-            signUpFormValues.full_name,
-            signUpFormValues.password,
-            signUpFormValues.mail,
-            'Medium',
-            100
-          )
+          .createUser(signUpFormValues.full_name, signUpFormValues.mail, signUpFormValues.password)
           .then((user_id) => {
             userService
               .getUser(user_id)
@@ -91,8 +85,7 @@ export default function Register() {
             console.error(error.message);
           })
       )
-      .catch(() => console.log('feil funnet'));
-    // setSignUpFormValues(defaultSignUpFormValues);
+      .catch(() => console.log('Error detected'));
   };
 
   // midlertidig type

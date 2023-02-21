@@ -78,17 +78,11 @@ class UserService {
    *
    * Resolves the newly created users user_id.
    */
-  createUser(
-    username: string,
-    password: string,
-    email: string,
-    risk_willingness: string,
-    monthly_savings_amount: string
-  ) {
+  createUser(full_name: string, email: string, password: string) {
     return new Promise<number>((resolve, reject) => {
       pool.query(
-        'INSERT INTO user SET username=?, password=?, email=?, risk_willingness=?, monthly_savings_amount=?',
-        [username, password, email, risk_willingness, monthly_savings_amount],
+        'INSERT INTO user SET full_name=?, email=?, password=?, phone_number=? ,risk_willingness=?, savings_from=?, savings_to=?',
+        [full_name, email, password, 'Not selected', 'Not selected', 0, 0],
         (error, results: ResultSetHeader) => {
           if (error) return reject(error);
 
