@@ -37,35 +37,24 @@ router.get('/users/:email/:password', (request, response) => {
 // Example response body: { user_id: 4 }
 router.post('/users', (request, response) => {
   const data = request.body;
+
   if (
     data &&
-    data.username &&
-    data.username.length != 0 &&
     data.password &&
     data.password.length != 0 &&
     data.email &&
     data.email.length != 0 &&
-    data.risk_willingness &&
-    data.risk_willingness.length != 0 &&
-    data.monthly_savings_amount &&
-    data.monthly_savings_amount.length != 0
+    data.full_name &&
+    data.full_name.length != 0
   )
     userService
-      .createUser(
-        data.username,
-        data.password,
-        data.email,
-        data.risk_willingness,
-        data.monthly_savings_amount
-      )
+      .createUser(data.full_name, data.email, data.password)
       .then((user_id) => response.send({ user_id: user_id }))
       .catch((error) => response.status(500).send(error));
   else
     response
       .status(400)
-      .send(
-        'Missing task one or more of the following attributes: username, password, email, risk_willingness, monthly_savings_amount'
-      );
+      .send('Missing one or more of the following attributes: full_name, email, password');
 });
 
 // Updates a user´s information

@@ -25,6 +25,10 @@ export type LanguageTextInfo = {
   full_name: string;
   confirm_password: string;
   cancel: string;
+  write_full_name: string;
+  email_not_valid: string;
+  password_not_long_enough: string;
+  passwords_not_matching: string;
 };
 
 export const languageText = {
@@ -56,6 +60,10 @@ export const languageText = {
     full_name: 'Fullt navn',
     confirm_password: 'Gjenta passord',
     cancel: 'Avbryt',
+    write_full_name: 'Vennligst skriv inn ditt fulle navn',
+    email_not_valid: 'E-post ikke gyldig',
+    password_not_long_enough: 'Vennligst velg et passord med minumum 8 tegn',
+    passwords_not_matching: 'Passordene dine er ikke like, vennligst prøv igjen',
   },
   english: {
     property: 'english',
@@ -84,5 +92,9 @@ export const languageText = {
     full_name: 'Full name',
     confirm_password: 'Confirm password',
     cancel: 'Cancel',
+    write_full_name: 'Please write your full name',
+    email_not_valid: 'Provided email is not valid',
+    password_not_long_enough: 'Please choose a password with minimum 8 characters',
+    passwords_not_matching: 'Your passwords does not match, please try again',
   },
 };

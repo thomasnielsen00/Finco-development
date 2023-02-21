@@ -51,20 +51,12 @@ class UserService {
    *
    * Resolves the newly created user_id.
    */
-  createUser(
-    username: string,
-    password: string,
-    email: string,
-    risk_willingness: string,
-    monthly_savings_amount: number
-  ) {
+  createUser(full_name: string, email: string, password: string) {
     return axios
       .post<{ user_id: number }>('/users', {
-        username: username,
-        password: password,
+        full_name: full_name,
         email: email,
-        risk_willingness: risk_willingness,
-        monthly_savings_amount: monthly_savings_amount,
+        password: password,
       })
       .then((response) => response.data.user_id);
   }
