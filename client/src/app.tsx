@@ -9,7 +9,7 @@ import CompanyDetails from './components/company-details';
 import Home from './components/homepage';
 import Portfolio from './components/portfolio';
 import { languageText, LanguageTextInfo } from './language';
-import UserDetails, { UserProfile } from './userDetails-components';
+import UserDetails, { UserProfile } from './components/userDetails';
 import { User } from './user-service';
 
 export default function App() {
