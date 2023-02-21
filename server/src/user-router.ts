@@ -28,7 +28,7 @@ router.get('/users/:email/:password', (request, response) => {
   userService
     .signInUser(email, password)
     .then((user) =>
-      user ? response.send(user) : response.status(404).send('Wrong email or password')
+      user ? response.send(user) : response.status(400).send('Wrong email or password')
     )
     .catch((error) => response.status(500).send(error));
 });

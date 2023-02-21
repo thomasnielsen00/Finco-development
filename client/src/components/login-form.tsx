@@ -51,7 +51,7 @@ export default function LogIn() {
       .signInUser(logInFormValues.email, logInFormValues.password)
       .then((user) => {
         setUser(user);
-        history.push('/profile/' + user.user_id);
+        history.push('/users/' + user.user_id);
       })
       .catch((error) => console.error(error.message));
   };

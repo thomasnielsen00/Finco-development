@@ -89,7 +89,7 @@ export default function NavBar() {
                   color="inherit"
                   key={log_in}
                   component="a"
-                  href={user ? '/#/profile/' + user.user_id : '/#/log_in'}
+                  href={user ? '/#/users/' + user.user_id : '/#/log_in'}
                 >
                   {user ? profile : log_in}
                 </Button>

@@ -77,7 +77,7 @@ export default function Register() {
               .then((user) => {
                 setUser(user);
               })
-              .then(() => history.push('/profile/' + user_id))
+              .then(() => history.push('/users/' + user_id))
               .catch((error) => {
                 console.error(error.message);
               });

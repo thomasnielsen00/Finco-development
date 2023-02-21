@@ -9,7 +9,7 @@ import CompanyDetails from './components/company-details';
 import Home from './components/homepage';
 import Portfolio from './components/portfolio';
 import { languageText, LanguageTextInfo } from './language';
-// import UserDetails, { UserProfile } from './components/userDetails';
+import { UserProfile } from './components/userDetails';
 import { User } from './user-service';
 
 export default function App() {
@@ -24,7 +24,7 @@ export default function App() {
         <NavBar />
         <Route exact path="/" component={Home} />
         {/* Må kanskje være :user_id, men funker ikke ends mtp teststien i finco-components */}
-        {/* <Route exact path="/users/:user_id" component={UserProfile} /> */}
+        <Route exact path="/users/:user_id" component={UserProfile} />
         <Route exact path="/users/:user_id/investments" component={Portfolio} />
         <Route exact path="/log_in" component={LogIn} />
         <Route exact path="/register" component={Register} />
