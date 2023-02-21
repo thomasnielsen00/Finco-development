@@ -1,5 +1,6 @@
 import { createTheme } from '@mui/material/styles';
 import { makeStyles } from '@material-ui/styles';
+import { green } from '@mui/material/colors';
 
 export const MidlertidigTheme = createTheme({
   palette: {
@@ -61,5 +62,35 @@ export const useStyles = makeStyles((MidlertidigTheme) => ({
   navbar_button: {
     display: 'block',
     margin: '0px 20px',
+  },
+
+  //USERDETAILS-COMPONENTS STYLES:
+  form: {
+    margin: '50px auto', // adjust the vertical margin as needed
+    maxWidth: '50%', // adjust the maximum width as needed
+    //Vi trenger kanskje flere breakpoints?
+
+    // [theme.breakpoints.up('md')]: {
+    //   marginTop: '3%', // adjust the vertical margin on larger screens
+    // },
+  },
+  // TextField: {
+  //   backgroundColor: 'white',
+  // },
+
+  buttonSuccess: {
+    backgroundColor: green[500],
+    '&:hover': {
+      backgroundColor: green[700],
+    },
+  },
+
+  buttonProgress: {
+    color: green[500],
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
   },
 }));
