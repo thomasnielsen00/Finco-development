@@ -20,6 +20,7 @@ import userService from '../user-service';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
 export default function Register() {
+  //teit
   const classes = useStyles();
   // context, må lage en type for brukere
   //@ts-ignore
