@@ -4,11 +4,13 @@ axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
 export type User = {
   user_id: number;
-  username: string;
-  password: string;
+  full_name: string;
   email: string;
+  password: string;
+  phone_number: string;
+  savings_from: string;
+  savings_to: string;
   risk_willingness: string;
-  monthly_savings_amount: number;
 };
 
 export type Investment = {

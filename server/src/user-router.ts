@@ -62,26 +62,33 @@ router.put('/users/:user_id', (request, response) => {
   const user_id = Number(request.params.user_id);
   const data = request.body;
   if (
-    typeof data.user_id == 'number' &&
-    user_id != 0 &&
-    typeof data.username == 'string' &&
-    data.username.length != 0 &&
-    typeof data.password == 'string' &&
-    data.password.length != 0 &&
+    data &&
+    typeof data.full_name == 'string' &&
+    data.full_name.length != 0 &&
     typeof data.email == 'string' &&
     data.email.length != 0 &&
-    typeof data.risk_willingness == 'string' &&
-    data.risk_willingness.length != 0 &&
-    typeof data.monthly_savings_amount == 'string' &&
-    data.monthly_savings_amount.length != 0
+    typeof data.password == 'string' &&
+    data.password.length != 0 &&
+    typeof data.phone_number == 'string' &&
+    data.phone_number.length != 0 &&
+    typeof data.savings_from == 'number' &&
+    data.savings_from >= 0 &&
+    typeof data.savings_to == 'number' &&
+    data.savings_to >= 0 &&
+    typeof data.risk_willingess == 'string' &&
+    data.risk_willingess.length != 0 &&
+    typeof user_id == 'number' &&
+    user_id != 0
   )
     userService
       .updateUser({
-        username: data.username,
-        password: data.password,
+        full_name: data.full_name,
         email: data.email,
-        risk_willingness: data.risk_willingness,
-        monthly_savings_amount: data.monthly_savings_amount,
+        password: data.password,
+        phone_number: data.phone_number,
+        savings_from: data.savings_from,
+        savings_to: data.savings_to,
+        risk_willingness: data.risk_willingess,
         user_id: user_id,
       })
       .then(() => response.send('User was updated'))

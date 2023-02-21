@@ -3,11 +3,13 @@ import type { RowDataPacket, ResultSetHeader } from 'mysql2';
 
 export type User = {
   user_id: number;
-  username: string;
-  password: string;
+  full_name: string;
   email: string;
+  password: string;
+  phone_number: string;
+  savings_from: number;
+  savings_to: number;
   risk_willingness: string;
-  monthly_savings_amount: string;
 };
 
 export type Investment = {
@@ -98,13 +100,15 @@ class UserService {
   updateUser(user: User) {
     return new Promise<void>((resolve, reject) => {
       pool.query(
-        'UPDATE user SET username=?, password=?, email=?, risk_willingness=?, monthly_savings_amount=? WHERE user_id=?',
+        'UPDATE user SET full_name=?, email=?, password=?, phone_number=?, savings_from=?, savings_to=?, risk_willingness=? WHERE user_id=?',
         [
-          user.username,
-          user.password,
+          user.full_name,
           user.email,
+          user.password,
+          user.phone_number,
+          user.savings_from,
+          user.savings_to,
           user.risk_willingness,
-          user.monthly_savings_amount,
           user.user_id,
         ],
         (error, _results) => {
