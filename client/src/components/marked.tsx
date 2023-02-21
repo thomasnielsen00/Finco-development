@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 // import { NavLink } from 'react-router-dom';
-import companyService, { Company } from './company-service';
+import companyService, { Company } from '../company-service';
 import { createHashHistory } from 'history';
 import {
   Button,
@@ -17,15 +17,17 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { ThemeProvider } from '@emotion/react';
-import { MidlertidigTheme, useStyles } from './styles';
-import { LanguageContext, UserContext } from './context';
+import { MidlertidigTheme, useStyles } from '../styles';
+import { LanguageContext, UserContext } from '../context';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
 export default function Marked() {
   const classes = useStyles();
 
+  //@ts-ignore
   const { user } = useContext(UserContext);
+  //@ts-ignore
   const { language } = useContext(LanguageContext);
   const { calculated_stock_value, live_stock_value, explore_company } = language;
   const [companies, setCompanies] = useState<Company[]>([]);

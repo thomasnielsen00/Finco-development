@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 // import { NavLink } from 'react-router-dom';
-import companyService, { Company } from './company-service';
-import userService, { Investment } from './user-service';
+import companyService, { Company } from '../company-service';
+import userService, { Investment } from '../user-service';
 import { createHashHistory } from 'history';
 import {
   Button,
@@ -18,17 +18,19 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { ThemeProvider } from '@emotion/react';
-import { MidlertidigTheme, useStyles } from './styles';
-import { LanguageContext, UserContext } from './context';
+import { MidlertidigTheme, useStyles } from '../styles';
+import { LanguageContext, UserContext } from '../context';
 import { useParams } from 'react-router-dom';
-import { LanguageTextInfo } from './language';
+import { LanguageTextInfo } from '../language';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
 export default function Portfolio() {
   const classes = useStyles();
 
+  //@ts-ignore
   const { user } = useContext(UserContext);
+  //@ts-ignore
   const { language } = useContext(LanguageContext);
   //   const { calculated_stock_value, live_stock_value, explore_company } = language;
   const { show_details } = language;
@@ -36,6 +38,7 @@ export default function Portfolio() {
   const [investments, setInvestments] = useState<Investment[]>([]);
   const [openAlert, setOpenAlert] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  //@ts-ignore
   const { user_id } = useParams();
 
   useEffect(() => {

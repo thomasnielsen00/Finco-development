@@ -44,29 +44,21 @@ class UserService {
     return axios.get<User>(`/users/${user_id}`).then((response) => response.data);
   }
 
+  signInUser(email: string, password: string) {
+    return axios.get<User>(`/users/${email}/${password}`).then((response) => response.data);
+  }
+
   /**
    * Create new user having the given username, password, email, risk_willingness, monthly_savings_amount.
    *
    * Resolves the newly created user_id.
    */
-  createUser(
-    full_name: string,
-    email: string,
-    password: string,
-    phone_number: string,
-    savings_from: number,
-    savings_to: number,
-    risk_willingness: string
-  ) {
+  createUser(full_name: string, email: string, password: string) {
     return axios
       .post<{ user_id: number }>('/users', {
         full_name: full_name,
         email: email,
         password: password,
-        phone_number: phone_number,
-        savings_from: savings_from,
-        savings_to: savings_to,
-        risk_willingness: risk_willingness,
       })
       .then((response) => response.data.user_id);
   }

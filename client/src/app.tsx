@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { LanguageContext, UserContext } from './context';
 import { HashRouter, Route } from 'react-router-dom';
-import NavBar from './finco-components';
-import LogIn from './login-component';
-import Marked from './marked-components';
-import CompanyDetails from './company-component';
-import { Home } from './finco-components';
-import Portfolio from './portfolio-component';
+import NavBar from './components/navbar';
+import LogIn from './components/login-form';
+import Register from './components/register-user';
+import Marked from './components/marked';
+import CompanyDetails from './components/company-details';
+import Home from './components/homepage';
+import Portfolio from './components/portfolio';
 import { languageText, LanguageTextInfo } from './language';
 import UserDetails, { UserProfile } from './userDetails-components';
+import { User } from './user-service';
 
 export default function App() {
-  const [user, setUser] = useState({ username: '', password: '' });
-  const [language, setLanguage] = useState(languageText.norwegian);
+  const [user, setUser] = useState<User | boolean>(false);
+  const [language, setLanguage] = useState<LanguageTextInfo>(languageText.norwegian);
 
   return (
     //@ts-ignore
@@ -24,8 +26,9 @@ export default function App() {
         {/* Må kanskje være :user_id, men funker ikke ends mtp teststien i finco-components */}
         <Route exact path="/users/:user_id" component={UserProfile} />
         <Route exact path="/users/:user_id/investments" component={Portfolio} />
-        <Route exact path="/Logg inn" component={LogIn} />
-        <Route exact path="/Marked" component={Marked} />
+        <Route exact path="/log_in" component={LogIn} />
+        <Route exact path="/register" component={Register} />
+        <Route exact path="/marked" component={Marked} />
         <Route exact path="/company/:company_id" component={CompanyDetails} />
       </UserContext.Provider>
     </LanguageContext.Provider>

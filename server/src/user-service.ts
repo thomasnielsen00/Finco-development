@@ -59,23 +59,32 @@ class UserService {
   }
 
   /**
+   * Get user with given email and password
+   */
+  signInUser(email: string, password: string) {
+    return new Promise<User | undefined>((resolve, reject) => {
+      pool.query(
+        'SELECT * FROM user WHERE email = ? AND password = ?',
+        [email, password],
+        (error, results: RowDataPacket[]) => {
+          if (error) return reject(error);
+
+          resolve(results[0] as User);
+        }
+      );
+    });
+  }
+
+  /**
    * Create new user having the given username, password, email, risk_willingness, monthly_savings_amount.
    *
    * Resolves the newly created users user_id.
    */
-  createUser(
-    full_name: string,
-    email: string,
-    password: string,
-    phone_number: string,
-    savings_from: number,
-    savings_to: number,
-    risk_willingness: string
-  ) {
+  createUser(full_name: string, email: string, password: string) {
     return new Promise<number>((resolve, reject) => {
       pool.query(
-        'INSERT INTO user SET full_name=?, email=?, password=?, phone_number=?, savings_from=?, savings_to=?, risk_willingess=?',
-        [full_name, email, password, phone_number, savings_from, savings_to, risk_willingness],
+        'INSERT INTO user SET full_name=?, email=?, password=?, phone_number=? ,risk_willingness=?, savings_from=?, savings_to=?',
+        [full_name, email, password, 'Not selected', 'Not selected', 0, 0],
         (error, results: ResultSetHeader) => {
           if (error) return reject(error);
 
