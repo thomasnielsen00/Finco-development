@@ -15,6 +15,7 @@ import { User } from './user-service';
 export default function App() {
   const [user, setUser] = useState<User | boolean>(false);
   const [language, setLanguage] = useState<LanguageTextInfo>(languageText.norwegian);
+  //test
 
   return (
     //@ts-ignore
