@@ -37,6 +37,7 @@ router.get('/users/:email/:password', (request, response) => {
 // Example response body: { user_id: 4 }
 router.post('/users', (request, response) => {
   const data = request.body;
+
   if (
     data &&
     data.username &&
