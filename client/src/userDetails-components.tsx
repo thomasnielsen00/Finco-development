@@ -214,7 +214,7 @@ export const UserProfile: React.FC = () => {
   //Constant referering to the defined styling of given elements:
   const classes = useStyles();
   //Following const is regarding userInvestment:
-  const [preferedIndustry, setPreferedIndustry] = useState<Industry>();
+  const [preferedIndustries, setPreferedIndustries] = useState<Industry>();
 
   const buttonClassname = clsx({
     [classes.buttonSuccess]: savedChange,
@@ -265,8 +265,6 @@ export const UserProfile: React.FC = () => {
   //The code below fetches the details for a given user with the provided method in the userService-objekt
   useEffect(() => {
     const current_id = parseInt(user_id, 10); //base 10
-
-    userService.get;
 
     userService
       .getUser(current_id)
