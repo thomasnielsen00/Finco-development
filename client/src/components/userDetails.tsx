@@ -90,7 +90,7 @@ export const UserProfile: React.FC = () => {
   //Constant referering to the defined styling of given elements:
   const classes = useStyles();
   //Following const is regarding userInvestment:
-  const [preferedIndustries, setPreferedIndustries] = useState<Industry>();
+  const [preferedIndustries, setPreferedIndustries] = useState<Industry[]>();
 
   //buttonClassname is a variable that will store the result of calling the clsx function.
   //clsx is a utility library that allows you to conditionally apply class names based on a set of input values. In this case, the input value is an object that maps class names to boolean values.
@@ -146,6 +146,16 @@ export const UserProfile: React.FC = () => {
   //The code below fetches the details for a given user with the provided method in the userService-objekt
   useEffect(() => {
     const current_id = parseInt(user_id, 10); //base 10
+
+    userService
+      .getAllPreferedIndustries(current_id)
+      .then((prefered_industries) => {
+        //setPreferedIndustries(value) sets the preferedIndustry constant to value
+        setPreferedIndustries(prefered_industries);
+      })
+      .catch((error) => {
+        <Alert>{error}</Alert>;
+      });
 
     userService
       .getUser(current_id)
@@ -327,9 +337,7 @@ export const UserProfile: React.FC = () => {
           </Grid>
         </form>
 
-        <ul>
-          <li></li>
-        </ul>
+        {console.log(preferedIndustries)}
       </>
     </ThemeProvider>
   );

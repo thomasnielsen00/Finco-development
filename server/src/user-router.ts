@@ -21,18 +21,6 @@ router.get('/users/:user_id', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
-// login
-router.get('/users/:email/:password', (request, response) => {
-  const email = request.params.email;
-  const password = request.params.password;
-  userService
-    .signInUser(email, password)
-    .then((user) =>
-      user ? response.send(user) : response.status(400).send('Wrong email or password')
-    )
-    .catch((error) => response.status(500).send(error));
-});
-
 // Example request body: { username: "new user" }
 // Example response body: { user_id: 4 }
 router.post('/users', (request, response) => {
@@ -58,6 +46,7 @@ router.post('/users', (request, response) => {
 });
 
 // Updates a user´s information
+//Må vi kanskje ta en titt på denne mtp om noe kan stå "Unselected"?
 router.put('/users/:user_id', (request, response) => {
   const user_id = Number(request.params.user_id);
   const data = request.body;
@@ -75,8 +64,8 @@ router.put('/users/:user_id', (request, response) => {
     data.savings_from >= 0 &&
     typeof data.savings_to == 'number' &&
     data.savings_to >= 0 &&
-    typeof data.risk_willingess == 'string' &&
-    data.risk_willingess.length != 0 &&
+    typeof data.risk_willingness == 'string' &&
+    data.risk_willingness.length != 0 &&
     typeof user_id == 'number' &&
     user_id != 0
   )
@@ -88,7 +77,7 @@ router.put('/users/:user_id', (request, response) => {
         phone_number: data.phone_number,
         savings_from: data.savings_from,
         savings_to: data.savings_to,
-        risk_willingness: data.risk_willingess,
+        risk_willingness: data.risk_willingness,
         user_id: user_id,
       })
       .then(() => response.send('User was updated'))
@@ -285,6 +274,26 @@ router.delete('/users/:user_id/industries/:industry_id', (request, response) => 
   } else {
     response.status(400).send('Propperties are not valid');
   }
+});
+
+//Denne må ligge nederst hvis ikke fungerer ikke de øvrige stiene siden Express går kronologisk fram
+//når det matcher stiene.
+//Svar fra chatGPT:
+//Both have the same number of parameters and the same path structure, and when a request is made to /users/xyz/abc,
+// Express will match it to the first route that matches the path pattern, which in this case is /users/:email/:password.
+//To fix this issue, you should move the investments routes above the login route so that they are defined before it.
+//This way, Express will match requests to /users/:user_id/investments before matching them to /users/:email/:password.
+
+// login
+router.get('/users/:email/:password', (request, response) => {
+  const email = request.params.email;
+  const password = request.params.password;
+  userService
+    .signInUser(email, password)
+    .then((user) =>
+      user ? response.send(user) : response.status(400).send('Wrong email or password')
+    )
+    .catch((error) => response.status(500).send(error));
 });
 
 export default router;
