@@ -29,6 +29,9 @@ export type LanguageTextInfo = {
   email_not_valid: string;
   password_not_long_enough: string;
   passwords_not_matching: string;
+  wrong_email_or_password: string;
+  network_error: string;
+  email_in_use: string;
   portfolio_right: string;
   //USER-ACCOUNT
   my_account: string;
@@ -67,6 +70,9 @@ export const languageText = {
     email_not_valid: 'E-post ikke gyldig',
     password_not_long_enough: 'Vennligst velg et passord med minumum 8 tegn',
     passwords_not_matching: 'Passordene dine er ikke like, vennligst prøv igjen',
+    wrong_email_or_password: 'Feil e-post eller passord!',
+    network_error: 'Nettverksfeil!',
+    email_in_use: 'E-post er allerede i bruk',
     portfolio_right: 'Porteføljeoversikt',
     //USER-ACCOUNT
     my_account: 'Min profil',
@@ -102,6 +108,9 @@ export const languageText = {
     email_not_valid: 'Provided email is not valid',
     password_not_long_enough: 'Please choose a password with minimum 8 characters',
     passwords_not_matching: 'Your passwords does not match, please try again',
+    wrong_email_or_password: 'Wrong e-mail or password!',
+    network_error: 'Network error!',
+    email_in_use: 'E-mail already in use',
     portfolio_right: 'Portfolio overview',
     //PROFILE
     my_account: 'My account',

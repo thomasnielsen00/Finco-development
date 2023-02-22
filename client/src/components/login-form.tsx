@@ -10,8 +10,12 @@ import {
   Avatar,
   Grid,
   Link,
+  Alert,
+  IconButton,
+  Collapse,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import CloseIcon from '@mui/icons-material/Close';
 import { ThemeProvider } from '@emotion/react';
 import { MidlertidigTheme, useStyles } from '../styles';
 import { LanguageContext, UserContext } from '../context';
@@ -26,9 +30,13 @@ export default function LogIn() {
   //@ts-ignore
   const { user, setUser } = useContext(UserContext);
 
+  const [openAlert, setOpenAlert] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
   //@ts-ignore
   const { language } = useContext(LanguageContext);
-  const { log_in, register_text, mail, password } = language;
+  const { log_in, register_text, mail, password, wrong_email_or_password, network_error } =
+    language;
 
   const defaultLogInFormInput = {
     email: '',
@@ -53,13 +61,41 @@ export default function LogIn() {
         setUser(user);
         history.push('/users/' + user.user_id);
       })
-      .catch((error) => console.error(error.message));
+      .catch((error) => {
+        if (error.response.status == 400) {
+          setErrorMessage(wrong_email_or_password);
+          setOpenAlert(true);
+        } else {
+          setErrorMessage(network_error);
+          setOpenAlert(true);
+        }
+      });
   };
 
   return (
     <ThemeProvider theme={MidlertidigTheme}>
       <CssBaseline />
       <Container maxWidth="xs" className={classes.log_in_container}>
+        <Collapse in={openAlert}>
+          <Alert
+            severity="error"
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setOpenAlert(false);
+                }}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+            sx={{ mb: 2, p: 2 }}
+          >
+            {errorMessage}
+          </Alert>
+        </Collapse>
         <Box component="form" onSubmit={handleSubmit} className={classes.log_in_box}>
           {/* denne fungerer ikke  */}
           {/* <Avatar className={classes.log_in_avatar}> */}

@@ -76,6 +76,23 @@ class UserService {
   }
 
   /**
+   * Check if e-mail exists
+   */
+  emailCheck(email: string) {
+    return new Promise<void>((resolve, reject) => {
+      pool.query(
+        'SELECT * FROM user WHERE email = ?',
+        [email],
+        (error, results: RowDataPacket[]) => {
+          if (error) return reject(error);
+          if (results.length != 0) reject('E-mail in use');
+
+          resolve();
+        }
+      );
+    });
+  }
+  /**
    * Create new user having the given username, password, email, risk_willingness, monthly_savings_amount.
    *
    * Resolves the newly created users user_id.
