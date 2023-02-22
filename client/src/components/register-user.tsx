@@ -98,7 +98,7 @@ export default function Register() {
             }
           })
       )
-      .catch(() => console.log('Error detected'));
+      .catch(() => console.log('Error in form detected'));
   };
 
   // midlertidig type
