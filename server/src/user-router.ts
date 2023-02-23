@@ -1,10 +1,13 @@
 import express, { request, response } from 'express';
 import userService from './user-service';
+import bcrypt from 'bcryptjs';
 
 /**
  * Express router containing user methods.
  */
 const router = express.Router();
+export const salt = bcrypt.genSaltSync(10);
+//trenger denne å eksporteres?
 
 router.get('/users', (_request, response) => {
   userService
@@ -22,22 +25,24 @@ router.get('/users/:user_id', (request, response) => {
 });
 
 // login
-router.get('/users/:email/:password', (request, response) => {
-  const email = request.params.email;
-  const password = request.params.password;
+router.get('/users/login/:email/:password', (request, response) => {
+  const email = String(request.params.email);
+  const password = String(request.params.password);
   userService
-    .signInUser(email, password)
-    .then((user) =>
-      user ? response.send(user) : response.status(400).send('Wrong email or password')
-    )
-    .catch((error) => response.status(500).send(error));
+    .signInUser(email)
+    .then((user) => {
+      if (bcrypt.compareSync(password, user.password)) {
+        response.send(user);
+      } else {
+        response.status(400).send('Incorrect Email and/or Password! ');
+      }
+    })
+    .catch(() => response.status(500).send('Network error'));
 });
 
-// Example request body: { username: "new user" }
-// Example response body: { user_id: 4 }
-router.post('/users', (request, response) => {
+// register new user with bcrypt
+router.post('/users/register', (request, response) => {
   const data = request.body;
-
   if (
     data &&
     data.password &&
@@ -48,9 +53,19 @@ router.post('/users', (request, response) => {
     data.full_name.length != 0
   )
     userService
-      .createUser(data.full_name, data.email, data.password)
-      .then((user_id) => response.send({ user_id: user_id }))
-      .catch((error) => response.status(500).send(error));
+      .emailCheck(data.email)
+      .then(() => {
+        bcrypt.hash(data.password, salt, (error, hash) => {
+          if (error) throw error;
+          data.password = hash;
+          userService
+            .createUser(data.full_name, data.email, data.password)
+            .then((user_id) => response.send({ user_id: user_id }))
+            .catch((error) => response.status(500).send(error));
+          return;
+        });
+      })
+      .catch((error) => response.status(409).send(error));
   else
     response
       .status(400)

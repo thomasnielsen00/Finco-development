@@ -61,13 +61,14 @@ class UserService {
   /**
    * Get user with given email and password
    */
-  signInUser(email: string, password: string) {
-    return new Promise<User | undefined>((resolve, reject) => {
+  signInUser(email: string) {
+    return new Promise<User>((resolve, reject) => {
       pool.query(
-        'SELECT * FROM user WHERE email = ? AND password = ?',
-        [email, password],
+        'SELECT * FROM user WHERE email = ?',
+        [email],
         (error, results: RowDataPacket[]) => {
           if (error) return reject(error);
+          if (results.length == 0) reject();
 
           resolve(results[0] as User);
         }
@@ -75,6 +76,23 @@ class UserService {
     });
   }
 
+  /**
+   * Check if e-mail exists
+   */
+  emailCheck(email: string) {
+    return new Promise<void>((resolve, reject) => {
+      pool.query(
+        'SELECT * FROM user WHERE email = ?',
+        [email],
+        (error, results: RowDataPacket[]) => {
+          if (error) return reject(error);
+          if (results.length != 0) reject('E-mail in use');
+
+          resolve();
+        }
+      );
+    });
+  }
   /**
    * Create new user having the given username, password, email, risk_willingness, monthly_savings_amount.
    *

@@ -10,8 +10,12 @@ import {
   Avatar,
   Grid,
   Link,
+  Collapse,
+  Alert,
+  IconButton,
 } from '@mui/material';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import CloseIcon from '@mui/icons-material/Close';
 import { ThemeProvider } from '@emotion/react';
 import { MidlertidigTheme, useStyles } from '../styles';
 import { LanguageContext, UserContext } from '../context';
@@ -39,6 +43,7 @@ export default function Register() {
     email_not_valid,
     password_not_long_enough,
     passwords_not_matching,
+    email_in_use,
   } = language;
 
   const defaultSignUpFormValues = {
@@ -47,6 +52,9 @@ export default function Register() {
     password: '',
     confirm_password: '',
   };
+
+  const [openAlert, setOpenAlert] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const [signUpFormValues, setSignUpFormValues] = useState(defaultSignUpFormValues);
   const [error, setError] = useState({
@@ -66,7 +74,6 @@ export default function Register() {
   //@ts-ignore
   const handleSubmit = (event) => {
     event.preventDefault();
-    // funker, men oppdaterer ikke error fort nok
     formValidation(signUpFormValues, setError)
       .then(() =>
         userService
@@ -83,10 +90,15 @@ export default function Register() {
               });
           })
           .catch((error) => {
-            console.error(error.message);
+            if (error.response.status == 409) {
+              setErrorMessage(email_in_use);
+              setOpenAlert(true);
+            } else {
+              console.error(error.message);
+            }
           })
       )
-      .catch(() => console.log('Error detected'));
+      .catch(() => console.log('Error in form detected'));
   };
 
   // midlertidig type
@@ -139,6 +151,26 @@ export default function Register() {
     <ThemeProvider theme={MidlertidigTheme}>
       <CssBaseline />
       <Container maxWidth="xs" className={classes.log_in_container}>
+        <Collapse in={openAlert}>
+          <Alert
+            severity="error"
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setOpenAlert(false);
+                }}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+            sx={{ mb: 2, p: 2 }}
+          >
+            {errorMessage}
+          </Alert>
+        </Collapse>
         <Box component="form" onSubmit={handleSubmit} className={classes.log_in_box}>
           {/* denne fungerer ikke  */}
           {/* <Avatar className={classes.log_in_avatar}> */}

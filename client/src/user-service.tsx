@@ -45,7 +45,7 @@ class UserService {
   }
 
   signInUser(email: string, password: string) {
-    return axios.get<User>(`/users/${email}/${password}`).then((response) => response.data);
+    return axios.get<User>(`/users/login/${email}/${password}`).then((response) => response.data);
   }
 
   /**
@@ -55,7 +55,7 @@ class UserService {
    */
   createUser(full_name: string, email: string, password: string) {
     return axios
-      .post<{ user_id: number }>('/users', {
+      .post<{ user_id: number }>('/users/register', {
         full_name: full_name,
         email: email,
         password: password,
