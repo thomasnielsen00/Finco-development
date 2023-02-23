@@ -26,13 +26,17 @@ router.get('/users/:user_id', (request, response) => {
 
 // login
 router.get('/users/login/:email/:password', (request, response) => {
-  const email = request.params.email;
-  const password = request.params.password;
+  const email = String(request.params.email);
+  const password = String(request.params.password);
   userService
-    .signInUser(email, password)
-    .then((user) =>
-      user ? response.send(user) : response.status(400).send('Wrong email or password')
-    )
+    .signInUser(email)
+    .then((user) => {
+      if (bcrypt.compareSync(password, user.password)) {
+        response.send(user);
+      } else {
+        response.status(400).send('Incorrect Email and/or Password! ');
+      }
+    })
     .catch(() => response.status(500).send('Network error'));
 });
 
