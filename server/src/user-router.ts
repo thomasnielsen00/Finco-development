@@ -31,12 +31,8 @@ router.get('/users/login/:email/:password', (request, response) => {
   userService
     .signInUser(email)
     .then((user) => {
-      if (user) {
-        if (bcrypt.compareSync(password, user.password)) {
-          response.send(user);
-        } else {
-          response.status(400).send('Incorrect Email and/or Password! ');
-        }
+      if (user && bcrypt.compareSync(password, user.password)) {
+        response.send(user);
       } else {
         response.status(400).send('Incorrect Email and/or Password! ');
       }
