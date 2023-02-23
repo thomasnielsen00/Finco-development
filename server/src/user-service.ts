@@ -68,7 +68,6 @@ class UserService {
         [email],
         (error, results: RowDataPacket[]) => {
           if (error) return reject(error);
-          if (results.length == 0) reject();
 
           resolve(results[0] as User);
         }
