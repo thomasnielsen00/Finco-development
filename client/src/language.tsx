@@ -10,6 +10,7 @@ export type LanguageTextInfo = {
   password: string;
   //HOME
   get_started: string;
+  header: string;
   welcome_text: string;
   //MARKED
   calculated_stock_value: string;
@@ -50,8 +51,9 @@ export const languageText = {
     password: 'Passord',
     //HOME
     get_started: 'Kom i gang!',
+    header: 'Vanskelig å komme i gang med akjer?',
     welcome_text:
-      'Velkommen til FINCO-inverstering, ikke la inflasjonen spise opp dine sparepenger',
+      'Velkommen til FINCO-inverstering, ikke la inflasjonen spise opp dine sparepenger. Sjekk ut våre beregninger og gjør akjseinvesteringer på en trygg måte!',
     //MARKED
     calculated_stock_value: 'Kalkulert akjseverdi',
     live_stock_value: 'Sanntids aksjekurs',
@@ -89,7 +91,9 @@ export const languageText = {
     password: 'Password',
     //HOME
     get_started: 'Get started!',
-    welcome_text: 'Welcome to FINCO-investement, dont let the inflation eat your savings',
+    header: 'Hard to get started with stocks?',
+    welcome_text:
+      'Welcome to FINCO-investement, dont let the inflation eat your savings. Browse our calculations and make safe trades!',
     //MARKED
     calculated_stock_value: 'Calculated stock value',
     live_stock_value: 'Live stock value',

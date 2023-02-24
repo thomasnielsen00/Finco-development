@@ -6,14 +6,17 @@ export const MidlertidigTheme = createTheme({
     //@ts-ignore
     type: 'light',
     primary: {
-      main: '#3f51b5',
+      main: '#06293d',
     },
     secondary: {
-      main: '#173828',
+      main: '#06293d',
     },
     background: {
-      default: '#dfe8e4',
+      default: '#fffcf4',
     },
+  },
+  typography: {
+    fontFamily: ['Quicksand', 'sans-serif'].join(','),
   },
   props: {
     MuiAppBar: {
@@ -24,10 +27,16 @@ export const MidlertidigTheme = createTheme({
 
 export const useStyles = makeStyles((MidlertidigTheme) => ({
   home_page_container: {
-    backgroundImage: 'linear-gradient(to right, lightgreen, white)',
-    width: '100vw',
-    height: '100vh',
+    paddingTop: '100px',
+    width: '100%',
+    height: '92vh',
+    background: 'linear-gradient(0deg, rgba(255,252,244,1) 60%, rgba(6,41,61,1) 100%)',
   },
+  home_grid: {
+    marginTop: '3rem',
+    paddingLeft: '8rem',
+  },
+
   container: {
     // backgroundColor: '#faa7a7',
     backgroundImage: 'linear-gradient(to bottom right, lightblue, lightgreen)',
