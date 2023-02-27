@@ -89,8 +89,8 @@ export const UserProfile: React.FC = () => {
   const { user_id } = useParams();
   //Constant referering to the defined styling of given elements:
   const classes = useStyles();
-  //Following const is regarding userInvestment:
-  const [preferedIndustries, setPreferedIndustries] = useState<Industry[]>();
+  //Following const is regarding userInvestment:         //([]) is to make sure that the intialize value is not undefined
+  const [preferedIndustries, setPreferedIndustries] = useState<Industry[]>([]);
 
   //buttonClassname is a variable that will store the result of calling the clsx function.
   //clsx is a utility library that allows you to conditionally apply class names based on a set of input values. In this case, the input value is an object that maps class names to boolean values.
@@ -124,6 +124,7 @@ export const UserProfile: React.FC = () => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserData({ ...userData, [event.target.name]: event.target.value });
+    setPreferedIndustries({ ...preferedIndustries, [event.target.name]: event.target.value });
     //Every time there is a change of input the button is reset to "Save changes"
     setSavedChange(false);
   };
@@ -238,7 +239,11 @@ export const UserProfile: React.FC = () => {
                 fullWidth
               />
             </Grid>
+          </Grid>
+          <br></br>
+          <Typography variant="h5">Investing details</Typography>
 
+          <Grid container spacing={2}>
             {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
             <Grid item xs={6}>
               <InputLabel htmlFor="monthly_savings_amount">Monthly savings amount</InputLabel>
@@ -284,9 +289,7 @@ export const UserProfile: React.FC = () => {
                     required
                     id="savings_to"
                     name="savings_to"
-                    // label="To"
                     variant="outlined"
-                    // type="email"
                     value={userData?.savings_to}
                     onChange={handleChange}
                     fullWidth
@@ -311,33 +314,40 @@ export const UserProfile: React.FC = () => {
                 fullWidth
               />
             </Grid>
-            {/* <Button
-          variant="contained"
-          color="primary"
-          size="small"
-          className={classes.button}
-          startIcon={<SaveIcon />}
-          onClick={handleSubmit}
-        >
-          Save changes
-        </Button> */}
 
-            <Button
-              variant="contained"
-              aria-label="save"
-              color="primary"
-              className={buttonClassname}
-              onClick={handleSubmit}
-            >
-              {buttonText}
-              {savedChange ? <CheckIcon /> : <SaveIcon />}
-            </Button>
+            <Grid item xs={6}>
+              {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
+              <InputLabel htmlFor="risk_willingness">Prefered industries</InputLabel>
 
-            {loading && <CircularProgress size={68} className={classes.buttonProgress} />}
+              {preferedIndustries?.map((preferedIndustry) => {
+                <TextField
+                  required
+                  id="prefered_industry" //+ id
+                  name="prefered_industry" // +id
+                  // label="From"
+                  variant="outlined"
+                  // type="date"
+                  value={preferedIndustry?.industry_name}
+                  onChange={handleChange}
+                  fullWidth
+                />;
+              })}
+            </Grid>
           </Grid>
-        </form>
 
-        {console.log(preferedIndustries)}
+          <Button
+            variant="contained"
+            aria-label="save"
+            color="primary"
+            className={buttonClassname}
+            onClick={handleSubmit}
+          >
+            {buttonText}
+            {savedChange ? <CheckIcon /> : <SaveIcon />}
+          </Button>
+
+          {loading && <CircularProgress size={68} className={classes.buttonProgress} />}
+        </form>
       </>
     </ThemeProvider>
   );
