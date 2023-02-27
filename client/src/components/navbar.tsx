@@ -18,7 +18,7 @@ import { languageText, LanguageTextInfo } from '../language';
 import { LanguageContext, UserContext } from '../context';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
-const pages = ['Din portefølje', 'Marked', 'Logg inn'];
+// const pages = ['Din portefølje', 'Marked', 'Logg inn'];
 
 export default function NavBar() {
   const classes = useStyles();
@@ -69,7 +69,7 @@ export default function NavBar() {
                   key={portfolio}
                   color="inherit"
                   component="a"
-                  href={'/#/portfolio'}
+                  href={user ? '/#/portfolio/' + user.user_id : '/#/log_in_needed'}
                 >
                   {portfolio}
                 </Button>

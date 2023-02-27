@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 //Er det her riktig måte å benytte komponentene på? Altså som en funksjon
-export const UserProfile: React.FC = () => {
+export function UserProfile() {
   const [userData, setUserData] = useState<User>();
   //Save-button related
   const [loading, setLoading] = React.useState(false);
@@ -330,4 +330,8 @@ export const UserProfile: React.FC = () => {
       </ul>
     </>
   );
-};
+}
+
+export function LogInNeeded() {
+  return <>halla brur</>;
+}
