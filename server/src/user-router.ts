@@ -164,18 +164,23 @@ router.post('/users/:user_id/investments/', (request, response) => {
     data &&
     data.amount &&
     data.amount.length != 0 &&
-    data.investment_date &&
-    data.investment_date.length != 0 &&
+    data.buy_price &&
+    data.buy_price != 0 &&
+    data.buy_date &&
+    data.buy_date.length != 0 &&
+    data.sell_date &&
+    data.sell_date.length != 0 &&
     data.user_id &&
-    data.user_id.length != 0 &&
+    data.user_id != 0 &&
     data.company_id &&
-    data.company_id.length != 0
+    data.company_id != 0
   )
     userService
       .createUserInvestment(
         data.amount,
-        data.investment_date,
-        data.investment_yield,
+        data.buy_price,
+        data.buy_date,
+        data.sell_date,
         data.user_id,
         data.company_id
       )

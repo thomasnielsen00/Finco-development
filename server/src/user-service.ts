@@ -15,8 +15,9 @@ export type User = {
 export type Investment = {
   investment_id: number;
   amount: number;
-  investment_date: Date;
-  investment_yield: string;
+  buy_price: number;
+  buy_date: Date;
+  sell_date: Date;
   user_id: number;
   company_id: number;
   company_name: string;
@@ -203,15 +204,16 @@ class UserService {
    */
   createUserInvestment(
     amount: number,
-    investment_date: Date,
-    investment_yield: string,
+    buy_price: number,
+    buy_date: Date,
+    sell_date: Date,
     user_id: number,
     company_id: number
   ) {
     return new Promise<number>((resolve, reject) => {
       pool.query(
-        'INSERT INTO investment SET amount=?, investment_date=?, investment_yield=?, user_id=?, company_id=?',
-        [amount, investment_date, investment_yield, user_id, company_id],
+        'INSERT INTO investment SET amount=?, buy_price=?, buy_date=?, sell_date=?, user_id, company_id=?',
+        [amount, buy_price, buy_price, buy_date, sell_date, user_id, company_id],
         (error, results: ResultSetHeader) => {
           if (error) return reject(error);
 
@@ -225,14 +227,16 @@ class UserService {
    * Updates a user-investment with given investment-id.
    */
 
+  //DENNE ER NOK KANSKJE IKKE NØDVENDIG MTP DET IKKE GÅR AN Å ENDRE ET GITT INVESTERINGSKJØP
   updateUserInvestment(investment: Investment) {
     return new Promise<void>((resolve, reject) => {
       pool.query(
-        'UPDATE investment SET amount=?, investment_date=?, investment_yield=?, company_id=? WHERE user_id=? AND investment_id=?',
+        'UPDATE investment SET amount=?, buy_price=?, buy_date=?, sell_date=?, company_id WHERE user_id=? AND investment_id=?',
         [
           investment.amount,
-          investment.investment_date,
-          investment.investment_yield,
+          investment.buy_price,
+          investment.buy_date,
+          investment.sell_date,
           investment.company_id,
           investment.user_id,
           investment.investment_id,
