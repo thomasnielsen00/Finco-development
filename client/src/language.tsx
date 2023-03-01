@@ -10,12 +10,17 @@ export type LanguageTextInfo = {
   password: string;
   //HOME
   get_started: string;
+  header: string;
   welcome_text: string;
   //MARKED
   calculated_stock_value: string;
   live_stock_value: string;
   explore_company: string;
   difference: string;
+  watchlist: string;
+  search: string;
+  sort_by: string;
+  no_sort: string;
   //PORTFOLIO
   show_details: string;
   //REGISTER
@@ -50,13 +55,18 @@ export const languageText = {
     password: 'Passord',
     //HOME
     get_started: 'Kom i gang!',
+    header: 'Vanskelig å komme i gang med akjer?',
     welcome_text:
-      'Velkommen til FINCO-inverstering, ikke la inflasjonen spise opp dine sparepenger',
+      'Velkommen til FINCO-inverstering, ikke la inflasjonen spise opp dine sparepenger. Sjekk ut våre beregninger og gjør akjseinvesteringer på en trygg måte!',
     //MARKED
     calculated_stock_value: 'Kalkulert akjseverdi',
     live_stock_value: 'Sanntids aksjekurs',
-    explore_company: 'Utforsk selskapet',
+    explore_company: 'Utforsk',
     difference: 'Differanse',
+    watchlist: 'Følg selskap',
+    search: 'Søk her',
+    sort_by: 'Sorter etter',
+    no_sort: 'Ingen sortering',
     //PORTFOLIO
     show_details: 'Vis detaljer',
     //REGISTER
@@ -89,12 +99,18 @@ export const languageText = {
     password: 'Password',
     //HOME
     get_started: 'Get started!',
-    welcome_text: 'Welcome to FINCO-investement, dont let the inflation eat your savings',
+    header: 'Hard to get started with stocks?',
+    welcome_text:
+      'Welcome to FINCO-investement, dont let the inflation eat your savings. Browse our calculations and make safe trades!',
     //MARKED
     calculated_stock_value: 'Calculated stock value',
     live_stock_value: 'Live stock value',
-    explore_company: 'Explore the company',
+    explore_company: 'Explore',
     difference: 'Difference',
+    watchlist: 'Add to watchlist',
+    search: 'Search',
+    sort_by: 'Sort by',
+    no_sort: 'No sorting',
     //PORTFOLIO
     show_details: 'Show details',
     //REGISTER
