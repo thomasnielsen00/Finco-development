@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/styles';
 export const MidlertidigTheme = createTheme({
   palette: {
     //@ts-ignore
-    type: 'light',
+    mode: 'light',
     primary: {
       main: '#06293d',
     },
@@ -17,11 +17,6 @@ export const MidlertidigTheme = createTheme({
   },
   typography: {
     fontFamily: ['Quicksand', 'sans-serif'].join(','),
-  },
-  props: {
-    MuiAppBar: {
-      color: 'primary',
-    },
   },
 });
 
