@@ -105,64 +105,63 @@ export default function CompanyDetails() {
               {errorMessage}
             </Alert>
           </Collapse>
-          <Grid container spacing={4} justifyContent="space-between" alignItems="center">
+          <Grid container spacing={4}>
             <Grid item xs={12}>
               <Box sx={{ pt: 1 }}>
                 <Typography gutterBottom variant="h3" sx={{ m: 2 }}>
                   {company?.company_name}
                 </Typography>
-                <Grid
-                  container
-                  spacing={1}
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="flex-end"
-                >
-                  <Grid item xs={4}>
-                    <Box>
-                      <Card sx={{ m: 2 }}>
-                        <CardContent>
-                          <Typography variant="h6" gutterBottom textAlign="center">
-                            {calculated_stock_value}
-                          </Typography>
-                          <Typography variant="h3" textAlign="center">
-                            {Number(company?.calculated_value_per_share).toFixed(2)},-
-                          </Typography>
-                        </CardContent>
-                      </Card>
-                      <Card sx={{ m: 2 }}>
-                        <CardContent>
-                          <Typography variant="h6" gutterBottom textAlign="center">
-                            {live_stock_value}
-                          </Typography>
-                          <Typography variant="h3" textAlign="center">
-                            {Number(company?.currentSharePrice).toFixed(2)},-
-                          </Typography>
-                        </CardContent>
-                      </Card>
-                    </Box>
+                <Grid container spacing={1}>
+                  <Grid item xs={12} md={4}>
+                    <Grid container>
+                      <Grid item xs={6} md={12}>
+                        <Card sx={{ m: 1 }}>
+                          <CardContent>
+                            <Typography variant="body1" gutterBottom textAlign="center">
+                              {calculated_stock_value}
+                            </Typography>
+                            <Typography variant="h3" textAlign="center">
+                              {Number(company?.calculated_value_per_share).toFixed(2)},-
+                            </Typography>
+                          </CardContent>
+                        </Card>
+                      </Grid>
+                      <Grid item xs={6} md={12}>
+                        <Card sx={{ m: 1 }}>
+                          <CardContent>
+                            <Typography variant="body1" gutterBottom textAlign="center">
+                              {live_stock_value}
+                            </Typography>
+                            <Typography variant="h3" textAlign="center">
+                              {Number(company?.currentSharePrice).toFixed(2)},-
+                            </Typography>
+                          </CardContent>
+                        </Card>
+                      </Grid>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={8}>
-                    <Card sx={{ mb: 2, mr: 2, height: 286.02 }}>
+
+                  <Grid item xs={12} md={8}>
+                    <Card sx={{ m: 1, maxHeight: 267.22 }}>
                       {/* 135.01 x 2 + 16, 135 er høyde på de andre kortene til venstre, foreløpig*/}
                       <CardContent>
-                        <Typography>Test, her kommer graf</Typography>{' '}
                         <CardMedia
+                          sx={{ aspectRatio: '16/9' }}
                           component="img"
                           src="images/test-chart.png"
                           alt="Chart"
-                          sx={{ aspectRatio: '16/9' }}
                         ></CardMedia>
                       </CardContent>
                     </Card>
                   </Grid>
                 </Grid>
+
                 <Grid item xs={12} sx={{ m: 2 }}>
                   <Divider>NØKKELTALL</Divider>
                   <Box sx={{ m: 2 }}>
-                    <Grid container justifyContent="space-between" alignItems="center">
-                      <Grid item xs={3}>
-                        <Typography variant="h6" sx={{}}>
+                    <Grid container justifyContent="space-between">
+                      <Grid item xs={12} sm={3}>
+                        <Typography variant="h6">
                           {difference}:{' '}
                           {calculateDifference(
                             company?.calculated_value_per_share,
@@ -171,17 +170,18 @@ export default function CompanyDetails() {
                           %
                         </Typography>
                       </Grid>
-                      <Grid item>
+                      <Grid>
                         <Typography variant="h6">Flere nøkkeltall bortover her kanskje?</Typography>
                       </Grid>
                     </Grid>
                   </Box>
                 </Grid>
+
                 <Grid item xs={12} sx={{ m: 2 }}>
                   <Divider>KJØP AKSJE</Divider>
                   <Box sx={{ ml: 2, mr: 2 }}>
                     <Grid container justifyContent="space-between" alignItems="center">
-                      <Grid item xs={3}>
+                      <Grid item xs={12} sm={3}>
                         <TextField
                           color="secondary"
                           margin="normal"
@@ -189,6 +189,7 @@ export default function CompanyDetails() {
                           name="Sum"
                           value={sum}
                           label="Sum"
+                          fullWidth
                           inputProps={{ min: 1 }}
                           InputProps={{
                             endAdornment: <InputAdornment position="end">kr</InputAdornment>,
@@ -196,15 +197,12 @@ export default function CompanyDetails() {
                           onChange={handleChange}
                         ></TextField>
                       </Grid>
-                      {/* <Grid item xs={2}>
-                        <Typography variant="h6">Kjøp:</Typography>
-                      </Grid> */}
-                      <Grid item xs={6}>
-                        <Typography align="center" variant="h6">
+                      <Grid item xs={12} sm={6}>
+                        <Typography align="center" variant="h6" sx={{ m: 1 }}>
                           Kalkulert avkastning: {roi} kr
                         </Typography>
                       </Grid>
-                      <Grid item xs={3}>
+                      <Grid item xs={12} sm={3}>
                         <Button
                           disabled={sum ? false : true}
                           size="large"
