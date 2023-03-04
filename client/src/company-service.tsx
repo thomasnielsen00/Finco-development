@@ -6,6 +6,8 @@ export type Company = {
   company_id: number;
   company_name: string;
   calculated_value_per_share: number;
+  currentSharePrice: number;
+  calculated_difference: number;
 };
 
 class CompanyService {

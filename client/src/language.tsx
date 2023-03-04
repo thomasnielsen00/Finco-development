@@ -17,6 +17,10 @@ export type LanguageTextInfo = {
   live_stock_value: string;
   explore_company: string;
   difference: string;
+  watchlist: string;
+  search: string;
+  sort_by: string;
+  no_sort: string;
   //PORTFOLIO
   show_details: string;
   //REGISTER
@@ -57,8 +61,12 @@ export const languageText = {
     //MARKED
     calculated_stock_value: 'Kalkulert akjseverdi',
     live_stock_value: 'Sanntids aksjekurs',
-    explore_company: 'Utforsk selskapet',
+    explore_company: 'Utforsk',
     difference: 'Differanse',
+    watchlist: 'Følg selskap',
+    search: 'Søk her',
+    sort_by: 'Sorter etter',
+    no_sort: 'Ingen sortering',
     //PORTFOLIO
     show_details: 'Vis detaljer',
     //REGISTER
@@ -97,8 +105,12 @@ export const languageText = {
     //MARKED
     calculated_stock_value: 'Calculated stock value',
     live_stock_value: 'Live stock value',
-    explore_company: 'Explore the company',
+    explore_company: 'Explore',
     difference: 'Difference',
+    watchlist: 'Add to watchlist',
+    search: 'Search',
+    sort_by: 'Sort by',
+    no_sort: 'No sorting',
     //PORTFOLIO
     show_details: 'Show details',
     //REGISTER
