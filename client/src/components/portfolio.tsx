@@ -130,7 +130,14 @@ export function Portfolio() {
           <TableCell align="right">{Number(currentValue).toFixed(2)} kr</TableCell>
         </TableRow>
         <TableRow>
-          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <TableCell
+            style={{
+              paddingBottom: 0,
+              paddingTop: 0,
+              boxShadow: 'inset 0 3px 6px 0 rgba(0 0 0 / 0.2)',
+            }}
+            colSpan={6}
+          >
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Box sx={{ margin: 1 }}>
                 <Typography variant="h6" gutterBottom component="div">
@@ -144,7 +151,7 @@ export function Portfolio() {
                       <TableCell align="right">Historic share price (kr)</TableCell>
                       {/* Not necesary for now
                       <TableCell align="right">Yield (kr)</TableCell> */}
-                      <TableCell align="right">Total price (kr)</TableCell>
+                      <TableCell align="right">Price (kr)</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -162,7 +169,7 @@ export function Portfolio() {
 
                           {/* <TableCell align="right">Yield: To be implemented if necesary</TableCell> */}
                           <TableCell align="right">
-                            {Math.round(investment.amount * investment.buy_price * 100) / 100} kr
+                            {Math.round(investment.amount * investment.buy_price * 100) / 100}
                           </TableCell>
                         </TableRow>
                       ))}
@@ -181,32 +188,40 @@ export function Portfolio() {
       <ThemeProvider theme={MidlertidigTheme}>
         <CssBaseline />
 
-        <TableContainer component={Paper}>
-          <Table aria-label="collapsible table">
-            <TableHead>
-              <TableRow>
-                <TableCell />
-                <TableCell>Company name</TableCell>
-                <TableCell align="right">Sum</TableCell>
-                <TableCell align="right">Return(%)</TableCell>
-                <TableCell align="right">Return(kr)</TableCell>
-                <TableCell align="right">Current value</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {investments
-                .filter((investment, index, array) => {
-                  // Check if the company_name of the current investment is unique
-                  return (
-                    array.findIndex((i) => i.company_name === investment.company_name) === index
-                  );
-                })
-                .map((investment) => (
-                  <Row key={investment.company_name} row={investment} />
-                ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <Card
+          style={{
+            width: '90%',
+            marginLeft: '5%',
+            marginTop: '3%',
+          }}
+        >
+          <TableContainer component={Paper}>
+            <Table aria-label="collapsible table">
+              <TableHead>
+                <TableRow>
+                  <TableCell />
+                  <TableCell>Company name</TableCell>
+                  <TableCell align="right">Total price</TableCell>
+                  <TableCell align="right">Return(%)</TableCell>
+                  <TableCell align="right">Return(kr)</TableCell>
+                  <TableCell align="right">Current value</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {investments
+                  .filter((investment, index, array) => {
+                    // Check if the company_name of the current investment is unique
+                    return (
+                      array.findIndex((i) => i.company_name === investment.company_name) === index
+                    );
+                  })
+                  .map((investment) => (
+                    <Row key={investment.company_name} row={investment} />
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Card>
       </ThemeProvider>
     </>
   );
