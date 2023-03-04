@@ -23,12 +23,17 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { ThemeProvider } from '@emotion/react';
 import { MidlertidigTheme, useStyles } from '../styles';
 import { LanguageContext, UserContext } from '../context';
-import { useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import { LanguageTextInfo } from '../language';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -105,6 +110,31 @@ export function Portfolio() {
     const returnPercentage = ((currentValue - buyValue) / buyValue) * 100;
     const returnAmount = (returnPercentage / 100) * sum;
 
+    const [openSellConfirm, setOpenSellConfirm] = React.useState(false);
+    const [investmentToSell, setInvestmentToSell] = React.useState<Investment | null>(null);
+
+    function sellInvestment(investment: Investment) {
+      const index = investments.findIndex((inv) => inv.investment_id === investment.investment_id);
+      if (index !== -1) {
+        investments.splice(index, 1);
+      }
+    }
+
+    const handleOpenSellConfirm = (investment_id: number) => {
+      const investment = investments.find((inv) => inv.investment_id === investment_id);
+      if (investment) {
+        setInvestmentToSell(investment);
+        setOpenSellConfirm(true);
+      }
+    };
+
+    const handleCloseSellConfirm = () => {
+      setOpenSellConfirm(false);
+      if (investmentToSell) {
+        sellInvestment(investmentToSell);
+      }
+    };
+
     {
       console.log(returnPercentage + '*' + sum);
     }
@@ -122,7 +152,7 @@ export function Portfolio() {
             </IconButton>
           </TableCell>
           <TableCell component="th" scope="row">
-            {row.company_name}
+            <NavLink to={'/company/' + row.company_id}>{row.company_name}</NavLink>
           </TableCell>
           <TableCell align="right">{sum} kr</TableCell>
           <TableCell align="right">{Number(returnPercentage.toFixed(2))} %</TableCell>
@@ -160,7 +190,11 @@ export function Portfolio() {
                       .map((investment) => (
                         <TableRow key={investment.buy_date}>
                           <TableCell component="th" scope="row">
-                            {investment.buy_date}
+                            {new Date(investment.buy_date).toLocaleDateString('en-GB', {
+                              day: 'numeric',
+                              month: 'numeric',
+                              year: 'numeric',
+                            })}
                           </TableCell>
                           <TableCell>{Number(investment.amount).toFixed(1)}</TableCell>
                           <TableCell align="right">
@@ -170,6 +204,55 @@ export function Portfolio() {
                           {/* <TableCell align="right">Yield: To be implemented if necesary</TableCell> */}
                           <TableCell align="right">
                             {Math.round(investment.amount * investment.buy_price * 100) / 100}
+                          </TableCell>
+
+                          <TableCell align="right">
+                            <Button
+                              variant="contained"
+                              onClick={() => handleOpenSellConfirm(investment.investment_id)}
+                              color="warning"
+                            >
+                              Sell
+                            </Button>
+                            <Dialog
+                              open={openSellConfirm}
+                              onClose={handleCloseSellConfirm}
+                              aria-labelledby="alert-dialog-title"
+                              aria-describedby="alert-dialog-description"
+                            >
+                              <DialogTitle id="alert-dialog-title">
+                                {'Sure you want to sell this investment?'}
+                              </DialogTitle>
+                              <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                  If you sell your investment of {Number(row.amount).toFixed(1)}{' '}
+                                  shares in {row.company_name} you are left with{' '}
+                                  {Number(
+                                    investment.amount *
+                                      investment.buy_price *
+                                      ((currentValue - investment.amount * investment.buy_price) /
+                                        (investment.amount * investment.buy_price))
+                                  ).toFixed(2)}
+                                  kr in return
+                                </DialogContentText>
+                              </DialogContent>
+                              <DialogActions>
+                                <Button onClick={handleCloseSellConfirm}>Cancel</Button>
+                                <Button
+                                  onClick={() => {
+                                    //Her mangler jeg å oppdatere sellDate når metoden kjøres
+                                    // userService.deleteUserInvestment(
+                                    //   row.user_id,
+                                    //   row.investment_id
+                                    // );
+                                    window.location.reload();
+                                  }}
+                                  autoFocus
+                                >
+                                  Confirm
+                                </Button>
+                              </DialogActions>
+                            </Dialog>
                           </TableCell>
                         </TableRow>
                       ))}

@@ -86,8 +86,8 @@ export function UserProfile() {
   const { user_id } = useParams();
   //Constant referering to the defined styling of given elements:
   const classes = useStyles();
-  //Following const is regarding userInvestment:
-  const [preferedIndustries, setPreferedIndustries] = useState<Industry>();
+  //Following const is regarding user-prefered Industry:
+  const [preferedIndustries, setPreferedIndustries] = useState<Industry[]>();
 
   const buttonClassname = clsx({
     [classes.buttonSuccess]: savedChange,
@@ -139,6 +139,10 @@ export function UserProfile() {
   useEffect(() => {
     const current_id = parseInt(user_id, 10); //base 10
 
+    userService.getAllPreferedIndustries(current_id).then((preferedIndustries) => {
+      setPreferedIndustries(preferedIndustries);
+    });
+
     userService
       .getUser(current_id)
       .then((user) => {
@@ -153,6 +157,7 @@ export function UserProfile() {
 
   return (
     <>
+      {console.log(preferedIndustries)}
       <form className={classes.form}>
         <Typography variant="h5">General information</Typography>
 
@@ -325,9 +330,16 @@ export function UserProfile() {
         </Grid>
       </form>
 
-      <ul>
-        <li></li>
-      </ul>
+      {preferedIndustries && (
+        <div>
+          <Typography variant="h5">Preferred Industries</Typography>
+          {preferedIndustries.map((industry) => (
+            <div key={industry.industry_id}>
+              <Typography>{industry.industry_name}</Typography>
+            </div>
+          ))}
+        </div>
+      )}
     </>
   );
 }
