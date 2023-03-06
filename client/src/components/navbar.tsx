@@ -11,22 +11,35 @@ import {
   Box,
   Container,
   Grid,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemButton,
+  Icon,
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { MidlertidigTheme, useStyles } from '../styles';
 import { languageText, LanguageTextInfo } from '../language';
 import { LanguageContext, UserContext } from '../context';
+import { Menu as MenuIcon } from '@mui/icons-material';
+import { alignProperty } from '@mui/material/styles/cssUtils';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
-const pages = ['Din portefølje', 'Marked', 'Logg inn'];
 
-export default function NavBar() {
+const NavBar = () => {
   const classes = useStyles();
   //@ts-ignore
   const { language, setLanguage } = useContext(LanguageContext);
   const { change_language, property, marked, portfolio, log_in, about, profile } = language;
   //@ts-ignore
   const { user, setUser } = useContext(UserContext);
+  const [open, setOpen] = useState(false);
+
+  const handleDrawerToggle = () => {
+    setOpen(!open);
+  };
 
   function updateLanguage() {
     if (property == 'norwegian') {
@@ -36,6 +49,26 @@ export default function NavBar() {
     }
   }
 
+  const menuItems = (
+    <List>
+      <ListItemButton key={marked} href={'/#/marked'}>
+        <ListItemText primary={marked} />
+      </ListItemButton>
+      <ListItemButton key={portfolio} href={'/#/portifolio'}>
+        <ListItemText primary={portfolio} />
+      </ListItemButton>
+      <ListItemButton key={about} href={'/#/about'}>
+        <ListItemText primary={about} />
+      </ListItemButton>
+      <ListItemButton key={log_in} href={user ? '/#/users/' + user.user_id : '/#/log_in'}>
+        <ListItemText primary={user ? profile : log_in} />
+      </ListItemButton>
+      <ListItemButton key={change_language} onClick={() => updateLanguage()}>
+        <ListItemText primary={change_language} />
+      </ListItemButton>
+    </List>
+  );
+
   return (
     <>
       <ThemeProvider theme={MidlertidigTheme}>
@@ -43,6 +76,15 @@ export default function NavBar() {
         <AppBar position="static" color="secondary">
           <Container maxWidth="xl">
             <Toolbar>
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                onClick={handleDrawerToggle}
+                sx={{ display: { md: 'none' } }}
+              >
+                <MenuIcon />
+              </IconButton>
               <NavLink to={'/'}>
                 <Box
                   className={classes.logo}
@@ -101,10 +143,43 @@ export default function NavBar() {
                   {change_language}
                 </Button>
               </Box>
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="logo"
+                sx={{ display: { md: 'none' } }}
+              >
+                <NavLink to={'/'}>
+                  <Box
+                    className={classes.logo}
+                    component="img"
+                    sx={{
+                      display: { md: 'none', xs: 'flex' },
+                      flexGrow: 1,
+                      justifyContent: 'flex-end',
+                    }}
+                    alt="Finco logo"
+                    src="images/logo.png"
+                  />
+                </NavLink>
+              </IconButton>
             </Toolbar>
           </Container>
         </AppBar>
+        <Drawer anchor="top" open={open} onClose={handleDrawerToggle}>
+          <div
+            //@ts-ignore
+            className={classes.drawer}
+            role="presentation"
+            onClick={handleDrawerToggle}
+            onKeyDown={handleDrawerToggle}
+          >
+            {menuItems}
+          </div>
+        </Drawer>
       </ThemeProvider>
     </>
   );
-}
+};
+
+export default NavBar;
