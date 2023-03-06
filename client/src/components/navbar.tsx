@@ -23,8 +23,11 @@ import { ThemeProvider } from '@mui/material/styles';
 import { MidlertidigTheme, useStyles } from '../styles';
 import { languageText, LanguageTextInfo } from '../language';
 import { LanguageContext, UserContext } from '../context';
+import { Menu as MenuIcon } from '@mui/icons-material';
+import { alignProperty } from '@mui/material/styles/cssUtils';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
+
 const NavBar = () => {
   const classes = useStyles();
   //@ts-ignore
