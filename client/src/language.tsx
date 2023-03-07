@@ -50,7 +50,7 @@ export const languageText = {
     about: 'Om oss',
     log_in: 'Logg inn',
     profile: 'Min profil',
-    change_language: 'Endre språk',
+    change_language: 'Change language',
     mail: 'E-post',
     password: 'Passord',
     //HOME
@@ -94,7 +94,7 @@ export const languageText = {
     about: 'About us',
     log_in: 'Sign in',
     profile: 'My profile',
-    change_language: 'Change language',
+    change_language: 'Endre språk',
     mail: 'E-mail adress',
     password: 'Password',
     //HOME
