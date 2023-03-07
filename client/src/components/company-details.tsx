@@ -170,9 +170,9 @@ export default function CompanyDetails() {
                           %
                         </Typography>
                       </Grid>
-                      <Grid>
+                      {/* <Grid>
                         <Typography variant="h6">Flere nøkkeltall bortover her kanskje?</Typography>
-                      </Grid>
+                      </Grid> */}
                     </Grid>
                   </Box>
                 </Grid>

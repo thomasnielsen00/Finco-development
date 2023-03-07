@@ -99,7 +99,7 @@ export const languageText = {
     password: 'Password',
     //HOME
     get_started: 'Get started!',
-    header: 'Hard to get started with stocks?',
+    header: 'Struggling to get started with stocks?',
     welcome_text:
       'Welcome to FINCO-investement, dont let the inflation eat your savings. Browse our calculations and make safe trades!',
     //MARKED
