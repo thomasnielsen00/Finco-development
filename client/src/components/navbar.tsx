@@ -125,7 +125,7 @@ const NavBar = () => {
                   key={about}
                   color="inherit"
                   component="a"
-                  href={'/#/about'}
+                  href={'https://www.finco.no/'}
                 >
                   {about}
                 </Button>

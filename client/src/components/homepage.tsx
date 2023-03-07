@@ -15,6 +15,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { MidlertidigTheme, useStyles } from '../styles';
 import { languageText, LanguageTextInfo } from '../language';
 import { LanguageContext, UserContext } from '../context';
+import Footer from './footer';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
@@ -75,6 +76,7 @@ export default function Home() {
           </Grid>
         </Container>
       </div>
+      <Footer />
     </ThemeProvider>
   );
 }
