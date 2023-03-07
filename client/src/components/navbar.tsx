@@ -20,14 +20,15 @@ import {
   Icon,
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
+import LanguageIcon from '@mui/icons-material/Language';
+import LoginIcon from '@mui/icons-material/Login';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { MidlertidigTheme, useStyles } from '../styles';
 import { languageText, LanguageTextInfo } from '../language';
 import { LanguageContext, UserContext } from '../context';
 import { Menu as MenuIcon } from '@mui/icons-material';
-import { alignProperty } from '@mui/material/styles/cssUtils';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
-
 
 const NavBar = () => {
   const classes = useStyles();
@@ -99,6 +100,7 @@ const NavBar = () => {
               </NavLink>
               <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                 <Button
+                  size="large"
                   className={classes.navbar_button}
                   key={marked}
                   color="inherit"
@@ -108,6 +110,7 @@ const NavBar = () => {
                   {marked}
                 </Button>
                 <Button
+                  size="large"
                   className={classes.navbar_button}
                   key={portfolio}
                   color="inherit"
@@ -117,6 +120,7 @@ const NavBar = () => {
                   {portfolio}
                 </Button>
                 <Button
+                  size="large"
                   className={classes.navbar_button}
                   key={about}
                   color="inherit"
@@ -128,17 +132,21 @@ const NavBar = () => {
               </Box>
               <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                 <Button
+                  size="large"
                   className={classes.navbar_button}
                   color="inherit"
                   key={log_in}
+                  endIcon={user ? <AccountCircleIcon /> : <LoginIcon />}
                   component="a"
                   href={user ? '/#/users/' + user.user_id : '/#/log_in'}
                 >
                   {user ? profile : log_in}
                 </Button>
                 <Button
+                  size="large"
                   className={classes.navbar_button}
                   color="inherit"
+                  endIcon={<LanguageIcon />}
                   onClick={() => updateLanguage()}
                 >
                   {change_language}

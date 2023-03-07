@@ -54,6 +54,7 @@ export default function Home() {
                       fontSize: '20px',
                       fontWeight: 'bold',
                     }}
+                    href={'/#/marked'}
                   >
                     {get_started}
                   </Button>
