@@ -24,7 +24,7 @@ export const useStyles = makeStyles((MidlertidigTheme) => ({
   home_page_container: {
     // paddingTop: '100px',
     width: '100%',
-    height: '88vh',
+    height: '85vh',
     background: 'linear-gradient(0deg, rgba(255,252,244,1) 60%, rgba(6,41,61,1) 100%)',
   },
 
