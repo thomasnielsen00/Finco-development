@@ -4,7 +4,7 @@ import { HashRouter, Route } from 'react-router-dom';
 import NavBar from './components/navbar';
 import LogIn from './components/login-form';
 import Register from './components/register-user';
-import Marked from './components/marked';
+import Market from './components/market';
 import CompanyDetails from './components/company-details';
 import Home from './components/homepage';
 import { Portfolio } from './components/portfolio';
@@ -30,7 +30,7 @@ export default function App() {
         <Route exact path="/log_in_needed" component={LogInNeeded} />
         <Route exact path="/log_in" component={LogIn} />
         <Route exact path="/register" component={Register} />
-        <Route exact path="/marked" component={Marked} />
+        <Route exact path="/market" component={Market} />
         <Route exact path="/company/:company_id" component={CompanyDetails} />
       </UserContext.Provider>
     </LanguageContext.Provider>

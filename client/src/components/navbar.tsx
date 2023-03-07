@@ -105,7 +105,7 @@ const NavBar = () => {
                   key={marked}
                   color="inherit"
                   component="a"
-                  href={'/#/marked'}
+                  href={'/#/market'}
                 >
                   {marked}
                 </Button>

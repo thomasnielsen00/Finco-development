@@ -39,7 +39,7 @@ import { LanguageContext, UserContext } from '../context';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
-export default function Marked() {
+export default function Market() {
   const classes = useStyles();
 
   //@ts-ignore
