@@ -55,7 +55,7 @@ export const languageText = {
     password: 'Passord',
     //HOME
     get_started: 'Kom i gang!',
-    header: 'Vanskelig å komme i gang med akjer?',
+    header: 'Vanskelig å komme i gang med aksjer?',
     welcome_text:
       'Velkommen til FINCO-inverstering, ikke la inflasjonen spise opp dine sparepenger. Sjekk ut våre beregninger og gjør akjseinvesteringer på en trygg måte!',
     //MARKED
