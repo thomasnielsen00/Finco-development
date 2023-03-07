@@ -53,6 +53,7 @@ export function Portfolio() {
   const [investments, setInvestments] = useState<Investment[]>([]);
   const [openAlert, setOpenAlert] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [refresh, setRefresh] = useState<boolean>(false);
   //@ts-ignore
   const { user_id } = useParams();
 
@@ -68,7 +69,7 @@ export function Portfolio() {
         setOpenAlert(true);
         setErrorMessage(error.message);
       });
-  }, [user_id]);
+  }, [refresh]);
 
   function Row(props: { row: Investment }) {
     const { row } = props;
@@ -111,38 +112,15 @@ export function Portfolio() {
     const returnAmount = (returnPercentage / 100) * sum;
 
     const [openSellConfirm, setOpenSellConfirm] = React.useState(false);
-    const [investmentToSell, setInvestmentToSell] = React.useState<Investment | null>(null);
 
-    function sellInvestment(investment: Investment) {
-      const index = investments.findIndex((inv) => inv.investment_id === investment.investment_id);
-      if (index !== -1) {
-        investments.splice(index, 1);
-      }
-    }
-
-    const handleOpenSellConfirm = (investment_id: number) => {
-      const investment = investments.find((inv) => inv.investment_id === investment_id);
-      if (investment) {
-        setInvestmentToSell(investment);
-        setOpenSellConfirm(true);
-      }
+    const handleOpenSellConfirm = () => {
+      setOpenSellConfirm(true);
     };
 
     const handleCloseSellConfirm = () => {
       setOpenSellConfirm(false);
-      if (investmentToSell) {
-        sellInvestment(investmentToSell);
-      }
     };
 
-    {
-      console.log(returnPercentage + '*' + sum);
-    }
-
-    {
-      console.log(currentValue);
-      console.log(totalShares);
-    }
     return (
       <React.Fragment>
         <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -237,15 +215,27 @@ export function Portfolio() {
                                 </DialogContentText>
                               </DialogContent>
                               <DialogActions>
-                                <Button onClick={handleCloseSellConfirm}>Cancel</Button>
+                                <Button onClick={() => handleCloseSellConfirm()}>Cancel</Button>
                                 <Button
                                   onClick={() => {
-                                    //Her mangler jeg å oppdatere sellDate når metoden kjøres
-                                    // userService.deleteUserInvestment(
-                                    //   row.user_id,
-                                    //   row.investment_id
-                                    // );
-                                    window.location.reload();
+                                    handleCloseSellConfirm();
+
+                                    const today: Date = new Date();
+                                    const year: number = today.getFullYear();
+                                    const month: number = today.getMonth() + 1;
+                                    const date: number = today.getDate();
+
+                                    const formattedDate: string = `${year}-${month
+                                      .toString()
+                                      .padStart(2, '0')}-${date.toString().padStart(2, '0')}`;
+
+                                    userService.updateSoldUserInvestment(
+                                      formattedDate,
+                                      row.user_id,
+                                      row.investment_id
+                                    );
+
+                                    setRefresh(true);
                                   }}
                                   autoFocus
                                 >

@@ -171,6 +171,7 @@ export function UserProfile() {
               // helperText="Denne må være fylt ut"
               id="email"
               name="email"
+              // label={userData?.email}
               variant="outlined"
               value={userData?.email}
               onChange={handleChange}
@@ -303,8 +304,8 @@ export function UserProfile() {
               fullWidth
               className={classes.TextField}
             />
-          </Grid>
-          {/* <Button
+
+            {/* <Button
           variant="contained"
           color="primary"
           size="small"
@@ -315,18 +316,19 @@ export function UserProfile() {
           Save changes
         </Button> */}
 
-          <Button
-            variant="contained"
-            aria-label="save"
-            color="primary"
-            className={buttonClassname}
-            onClick={handleSubmit}
-          >
-            {buttonText}
-            {savedChange ? <CheckIcon /> : <SaveIcon />}
-          </Button>
+            <Button
+              variant="contained"
+              aria-label="save"
+              color="primary"
+              className={buttonClassname}
+              onClick={handleSubmit}
+            >
+              {buttonText}
+              {savedChange ? <CheckIcon /> : <SaveIcon />}
+            </Button>
 
-          {loading && <CircularProgress size={68} className={classes.buttonProgress} />}
+            {loading && <CircularProgress size={68} className={classes.buttonProgress} />}
+          </Grid>
         </Grid>
       </form>
 

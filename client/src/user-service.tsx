@@ -128,10 +128,10 @@ class UserService {
   /**
    * Updates given user-investment
    */
-  //DENNE ER NOK KANSKJE IKKE NØDVENDIG MTP DET IKKE GÅR AN Å ENDRE ET GITT INVESTERINGSKJØP
-  updateUserInvestment(investment: Investment) {
+
+  updateSoldUserInvestment(sell_date: string, user_id: number, investment_id: number) {
     return axios
-      .put(`/users/${investment.user_id}/investments/${investment.investment_id}`, investment)
+      .put(`/users/${user_id}/investments/${investment_id}`, { sell_date })
       .then((response) => response.data);
   }
 

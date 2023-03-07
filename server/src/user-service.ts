@@ -169,7 +169,7 @@ class UserService {
   getAllUserInvestments(user_id: number) {
     return new Promise<Investment[]>((resolve, reject) => {
       pool.query(
-        'SELECT * FROM investment, company WHERE company.company_id = investment.company_id AND user_id=?',
+        'SELECT * FROM investment, company WHERE company.company_id = investment.company_id AND user_id=? AND sell_date IS NULL',
         [user_id],
         (error, results: RowDataPacket[]) => {
           if (error) return reject(error);
@@ -186,7 +186,7 @@ class UserService {
   getUserInvestment(user_id: number, investment_id: number) {
     return new Promise<Investment | undefined>((resolve, reject) => {
       pool.query(
-        'SELECT * FROM investment WHERE user_id=? AND investment_id=?',
+        'SELECT * FROM investment WHERE user_id=? AND investment_id=? AND sell_date IS NULL',
         [user_id, investment_id],
         (error, results: RowDataPacket[]) => {
           if (error) return reject(error);
@@ -227,20 +227,11 @@ class UserService {
    * Updates a user-investment with given investment-id.
    */
 
-  //DENNE ER NOK KANSKJE IKKE NØDVENDIG MTP DET IKKE GÅR AN Å ENDRE ET GITT INVESTERINGSKJØP
-  updateUserInvestment(investment: Investment) {
+  updateSoldUserInvestment(sell_date: string, user_id: number, investment_id: number) {
     return new Promise<void>((resolve, reject) => {
       pool.query(
-        'UPDATE investment SET amount=?, buy_price=?, buy_date=?, sell_date=?, company_id WHERE user_id=? AND investment_id=?',
-        [
-          investment.amount,
-          investment.buy_price,
-          investment.buy_date,
-          investment.sell_date,
-          investment.company_id,
-          investment.user_id,
-          investment.investment_id,
-        ],
+        'UPDATE investment SET sell_date=? WHERE user_id=? AND investment_id=?',
+        [sell_date, user_id, investment_id],
         (error, _results) => {
           if (error) return reject(error);
 
