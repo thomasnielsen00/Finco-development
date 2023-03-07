@@ -153,6 +153,26 @@ router.get('/users/:user_id/investments/:investment_id', (request, response) => 
     .catch((error) => response.status(500).send(error));
 });
 
+router.put('/users/:user_id/investments/:investment_id', (request, response) => {
+  const user_id = Number(request.params.user_id);
+  const investment_id = Number(request.params.investment_id);
+  const data = request.body;
+  if (
+    data &&
+    typeof data.sell_date == 'string' &&
+    data.sell_date.length != 0 &&
+    typeof user_id == 'number' &&
+    user_id != 0 &&
+    typeof investment_id == 'number' &&
+    investment_id != 0
+  )
+    userService
+      .updateSoldUserInvestment(data.sell_date, user_id, investment_id)
+      .then(() => response.send('Sell_date was updated'))
+      .catch((error) => response.status(500).send(error));
+  else response.status(400).send('Propperties are not valid');
+});
+
 //A path that contributes to creating a new investment for a given user
 //SKAL DET VÆRE PARANTES ETETR INVESTMENTS HER PÅ POST?
 //--------------------------------------------------------
@@ -164,18 +184,23 @@ router.post('/users/:user_id/investments/', (request, response) => {
     data &&
     data.amount &&
     data.amount.length != 0 &&
-    data.investment_date &&
-    data.investment_date.length != 0 &&
+    data.buy_price &&
+    data.buy_price != 0 &&
+    data.buy_date &&
+    data.buy_date.length != 0 &&
+    data.sell_date &&
+    data.sell_date.length != 0 &&
     data.user_id &&
-    data.user_id.length != 0 &&
+    data.user_id != 0 &&
     data.company_id &&
-    data.company_id.length != 0
+    data.company_id != 0
   )
     userService
       .createUserInvestment(
         data.amount,
-        data.investment_date,
-        data.investment_yield,
+        data.buy_price,
+        data.buy_date,
+        data.sell_date,
         data.user_id,
         data.company_id
       )

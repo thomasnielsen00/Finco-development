@@ -28,6 +28,7 @@ import { alignProperty } from '@mui/material/styles/cssUtils';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
+
 const NavBar = () => {
   const classes = useStyles();
   //@ts-ignore
@@ -111,7 +112,7 @@ const NavBar = () => {
                   key={portfolio}
                   color="inherit"
                   component="a"
-                  href={'/#/portfolio'}
+                  href={user ? '/#/portfolio/' + user.user_id : '/#/log_in_needed'}
                 >
                   {portfolio}
                 </Button>

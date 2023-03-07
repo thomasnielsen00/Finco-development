@@ -15,17 +15,32 @@ import {
   Alert,
   IconButton,
   Collapse,
+  Box,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { ThemeProvider } from '@emotion/react';
 import { MidlertidigTheme, useStyles } from '../styles';
 import { LanguageContext, UserContext } from '../context';
-import { useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import { LanguageTextInfo } from '../language';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
-export default function Portfolio() {
+export function Portfolio() {
   const classes = useStyles();
 
   //@ts-ignore
@@ -38,6 +53,7 @@ export default function Portfolio() {
   const [investments, setInvestments] = useState<Investment[]>([]);
   const [openAlert, setOpenAlert] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [refresh, setRefresh] = useState<boolean>(false);
   //@ts-ignore
   const { user_id } = useParams();
 
@@ -53,95 +69,232 @@ export default function Portfolio() {
         setOpenAlert(true);
         setErrorMessage(error.message);
       });
-  }, [user_id]);
+  }, [refresh]);
+
+  function Row(props: { row: Investment }) {
+    const { row } = props;
+    const [open, setOpen] = React.useState(false);
+    const totalPrices: number[] = [];
+    const currentSharePrice = [
+      {
+        company_name: 'Europris',
+        currentSharePrice: 10.98,
+      },
+      {
+        company_name: 'Airthings',
+        currentSharePrice: 34,
+      },
+    ];
+
+    // Calculate total prices for the current company
+    investments.forEach((investment) => {
+      if (investment.company_name === row.company_name) {
+        totalPrices.push(Math.round(investment.amount * investment.buy_price * 100) / 100);
+      }
+    });
+    const sum = totalPrices.reduce(
+      (accumulator, currentElement) => accumulator + currentElement,
+      0
+    );
+
+    const currentCompanyPrice = currentSharePrice.find(
+      (price) => price.company_name === row.company_name
+    );
+    const currentPrice = currentCompanyPrice?.currentSharePrice || 0;
+    const totalShares = investments
+      .filter((investment) => investment.company_name === row.company_name)
+      // accumulator is the variable that accumulates the result of the callback function,
+      //and currentElement is the current element of the array being processed.
+      .reduce((accumulator, currentElement) => accumulator + Number(currentElement.amount), 0);
+    const currentValue = totalShares * currentPrice;
+    const buyValue = sum;
+    const returnPercentage = ((currentValue - buyValue) / buyValue) * 100;
+    const returnAmount = (returnPercentage / 100) * sum;
+
+    const [openSellConfirm, setOpenSellConfirm] = React.useState(false);
+
+    const handleOpenSellConfirm = () => {
+      setOpenSellConfirm(true);
+    };
+
+    const handleCloseSellConfirm = () => {
+      setOpenSellConfirm(false);
+    };
+
+    return (
+      <React.Fragment>
+        <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+          <TableCell>
+            <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </IconButton>
+          </TableCell>
+          <TableCell component="th" scope="row">
+            <NavLink to={'/company/' + row.company_id}>{row.company_name}</NavLink>
+          </TableCell>
+          <TableCell align="right">{sum} kr</TableCell>
+          <TableCell align="right">{Number(returnPercentage.toFixed(2))} %</TableCell>
+          <TableCell align="right">{Number(returnAmount).toFixed(2)} kr</TableCell>
+          <TableCell align="right">{Number(currentValue).toFixed(2)} kr</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell
+            style={{
+              paddingBottom: 0,
+              paddingTop: 0,
+              boxShadow: 'inset 0 3px 6px 0 rgba(0 0 0 / 0.2)',
+            }}
+            colSpan={6}
+          >
+            <Collapse in={open} timeout="auto" unmountOnExit>
+              <Box sx={{ margin: 1 }}>
+                <Typography variant="h6" gutterBottom component="div">
+                  History
+                </Typography>
+                <Table size="small" aria-label="purchases">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Date</TableCell>
+                      <TableCell>Amount</TableCell>
+                      <TableCell align="right">Historic share price (kr)</TableCell>
+                      {/* Not necesary for now
+                      <TableCell align="right">Yield (kr)</TableCell> */}
+                      <TableCell align="right">Price (kr)</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {investments
+                      .filter((investment) => investment.company_name === row.company_name)
+                      .map((investment) => (
+                        <TableRow key={investment.buy_date}>
+                          <TableCell component="th" scope="row">
+                            {new Date(investment.buy_date).toLocaleDateString('en-GB', {
+                              day: 'numeric',
+                              month: 'numeric',
+                              year: 'numeric',
+                            })}
+                          </TableCell>
+                          <TableCell>{Number(investment.amount).toFixed(1)}</TableCell>
+                          <TableCell align="right">
+                            {Number(investment.buy_price).toFixed(2)}
+                          </TableCell>
+
+                          {/* <TableCell align="right">Yield: To be implemented if necesary</TableCell> */}
+                          <TableCell align="right">
+                            {Math.round(investment.amount * investment.buy_price * 100) / 100}
+                          </TableCell>
+
+                          <TableCell align="right">
+                            <Button
+                              variant="contained"
+                              onClick={() => handleOpenSellConfirm(investment.investment_id)}
+                              color="warning"
+                            >
+                              Sell
+                            </Button>
+                            <Dialog
+                              open={openSellConfirm}
+                              onClose={handleCloseSellConfirm}
+                              aria-labelledby="alert-dialog-title"
+                              aria-describedby="alert-dialog-description"
+                            >
+                              <DialogTitle id="alert-dialog-title">
+                                {'Sure you want to sell this investment?'}
+                              </DialogTitle>
+                              <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                  If you sell your investment of {Number(row.amount).toFixed(1)}{' '}
+                                  shares in {row.company_name} you are left with{' '}
+                                  {Number(
+                                    investment.amount *
+                                      investment.buy_price *
+                                      ((currentValue - investment.amount * investment.buy_price) /
+                                        (investment.amount * investment.buy_price))
+                                  ).toFixed(2)}
+                                  kr in return
+                                </DialogContentText>
+                              </DialogContent>
+                              <DialogActions>
+                                <Button onClick={() => handleCloseSellConfirm()}>Cancel</Button>
+                                <Button
+                                  onClick={() => {
+                                    handleCloseSellConfirm();
+
+                                    const today: Date = new Date();
+                                    const year: number = today.getFullYear();
+                                    const month: number = today.getMonth() + 1;
+                                    const date: number = today.getDate();
+
+                                    const formattedDate: string = `${year}-${month
+                                      .toString()
+                                      .padStart(2, '0')}-${date.toString().padStart(2, '0')}`;
+
+                                    userService.updateSoldUserInvestment(
+                                      formattedDate,
+                                      row.user_id,
+                                      row.investment_id
+                                    );
+
+                                    setRefresh(true);
+                                  }}
+                                  autoFocus
+                                >
+                                  Confirm
+                                </Button>
+                              </DialogActions>
+                            </Dialog>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </Box>
+            </Collapse>
+          </TableCell>
+        </TableRow>
+      </React.Fragment>
+    );
+  }
 
   return (
     <>
       <ThemeProvider theme={MidlertidigTheme}>
         <CssBaseline />
-        <Container maxWidth="lg" sx={{ mt: 3 }}>
-          {/* sx er midlertidig */}
-          <Collapse in={openAlert}>
-            <Alert
-              severity="error"
-              action={
-                <IconButton
-                  aria-label="close"
-                  color="inherit"
-                  size="small"
-                  onClick={() => {
-                    setOpenAlert(false);
-                  }}
-                >
-                  <CloseIcon fontSize="inherit" />
-                </IconButton>
-              }
-              sx={{ mb: 2, p: 2 }}
-            >
-              {errorMessage}
-            </Alert>
-          </Collapse>
-          <Grid container spacing={4}>
-            {investments.map((investment: Investment) => (
-              <Grid item key={investment.investment_id} xs={12} sm={6} md={4}>
-                {/* <NavLink to={'/companies/' + company.company_id}> */}
-                <Card sx={{ p: 2 }}>
-                  <Card className={classes.container} sx={{ m: 1 }}>
-                    <CardContent>
-                      <Typography align="center" variant="h4">
-                        {investment.company_name}
-                        {/* Midlertidig løsning */}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                  <CardContent>
-                    <Typography align="center" variant="h4">
-                      {(() => {
-                        const date = new Date(investment.investment_date);
-                        //The getMonth() method of the Date object returns an integer value between 0 and 11,
-                        //representing the month of the date object, where 0 corresponds to January,
-                        // and 11 corresponds to December. There 1 needs to be added to getMonth()
-                        const formattedDate = `${date.getDate()}.${
-                          date.getMonth() + 1 < 10
-                            ? `0${date.getMonth() + 1}`
-                            : `${date.getMonth() + 1}`
-                        }.${date.getFullYear()}`;
-                        return formattedDate;
-                      })()}
-                    </Typography>
-                  </CardContent>
-                  <Card>
-                    <CardContent style={{ display: 'flex' }}>
-                      <div style={{ flex: 1 }}>
-                        <Typography align="center" variant="h4">
-                          Beløp: {investment.amount}kr
-                        </Typography>
-                        <Card sx={{ bgcolor: '#b6e3c0', m: 1 }} />
-                      </div>
-                      <div style={{ flex: 1 }}>
-                        <Typography align="center" variant="h4">
-                          Avkastning: {investment.investment_yield}
-                        </Typography>
-                      </div>
-                    </CardContent>
-                  </Card>
 
-                  <CardActions>
-                    <Button
-                      size="large"
-                      variant="contained"
-                      color="secondary"
-                      onClick={() => history.push('/investment/' + investment.investment_id)}
-                    >
-                      {show_details}
-                    </Button>
-                  </CardActions>
-                </Card>
-                {/* </NavLink> */}
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
+        <Card
+          style={{
+            width: '90%',
+            marginLeft: '5%',
+            marginTop: '3%',
+          }}
+        >
+          <TableContainer component={Paper}>
+            <Table aria-label="collapsible table">
+              <TableHead>
+                <TableRow>
+                  <TableCell />
+                  <TableCell>Company name</TableCell>
+                  <TableCell align="right">Total price</TableCell>
+                  <TableCell align="right">Return(%)</TableCell>
+                  <TableCell align="right">Return(kr)</TableCell>
+                  <TableCell align="right">Current value</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {investments
+                  .filter((investment, index, array) => {
+                    // Check if the company_name of the current investment is unique
+                    return (
+                      array.findIndex((i) => i.company_name === investment.company_name) === index
+                    );
+                  })
+                  .map((investment) => (
+                    <Row key={investment.company_name} row={investment} />
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Card>
       </ThemeProvider>
     </>
   );

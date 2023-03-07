@@ -15,8 +15,9 @@ export type User = {
 export type Investment = {
   investment_id: number;
   amount: number;
-  investment_date: Date;
-  investment_yield: string;
+  buy_price: number;
+  buy_date: Date;
+  sell_date: Date;
   user_id: number;
   company_id: number;
   company_name: string;
@@ -168,7 +169,7 @@ class UserService {
   getAllUserInvestments(user_id: number) {
     return new Promise<Investment[]>((resolve, reject) => {
       pool.query(
-        'SELECT * FROM investment, company WHERE company.company_id = investment.company_id AND user_id=?',
+        'SELECT * FROM investment, company WHERE company.company_id = investment.company_id AND user_id=? AND sell_date IS NULL',
         [user_id],
         (error, results: RowDataPacket[]) => {
           if (error) return reject(error);
@@ -185,7 +186,7 @@ class UserService {
   getUserInvestment(user_id: number, investment_id: number) {
     return new Promise<Investment | undefined>((resolve, reject) => {
       pool.query(
-        'SELECT * FROM investment WHERE user_id=? AND investment_id=?',
+        'SELECT * FROM investment WHERE user_id=? AND investment_id=? AND sell_date IS NULL',
         [user_id, investment_id],
         (error, results: RowDataPacket[]) => {
           if (error) return reject(error);
@@ -203,15 +204,16 @@ class UserService {
    */
   createUserInvestment(
     amount: number,
-    investment_date: Date,
-    investment_yield: string,
+    buy_price: number,
+    buy_date: Date,
+    sell_date: Date,
     user_id: number,
     company_id: number
   ) {
     return new Promise<number>((resolve, reject) => {
       pool.query(
-        'INSERT INTO investment SET amount=?, investment_date=?, investment_yield=?, user_id=?, company_id=?',
-        [amount, investment_date, investment_yield, user_id, company_id],
+        'INSERT INTO investment SET amount=?, buy_price=?, buy_date=?, sell_date=?, user_id, company_id=?',
+        [amount, buy_price, buy_price, buy_date, sell_date, user_id, company_id],
         (error, results: ResultSetHeader) => {
           if (error) return reject(error);
 
@@ -225,18 +227,11 @@ class UserService {
    * Updates a user-investment with given investment-id.
    */
 
-  updateUserInvestment(investment: Investment) {
+  updateSoldUserInvestment(sell_date: string, user_id: number, investment_id: number) {
     return new Promise<void>((resolve, reject) => {
       pool.query(
-        'UPDATE investment SET amount=?, investment_date=?, investment_yield=?, company_id=? WHERE user_id=? AND investment_id=?',
-        [
-          investment.amount,
-          investment.investment_date,
-          investment.investment_yield,
-          investment.company_id,
-          investment.user_id,
-          investment.investment_id,
-        ],
+        'UPDATE investment SET sell_date=? WHERE user_id=? AND investment_id=?',
+        [sell_date, user_id, investment_id],
         (error, _results) => {
           if (error) return reject(error);
 

@@ -16,8 +16,9 @@ export type User = {
 export type Investment = {
   investment_id: number;
   amount: number;
-  investment_date: Date;
-  investment_yield: string;
+  buy_price: number;
+  buy_date: Date;
+  sell_date: Date;
   user_id: number;
   company_id: number;
   company_name: string;
@@ -106,16 +107,18 @@ class UserService {
    */
   createUserInvestment(
     amount: number,
-    date: Date,
-    investment_yield: string,
+    buy_price: number,
+    buy_date: Date,
+    sell_date: Date,
     user_id: number,
     company_id: number
   ) {
     return axios
       .post<{ investment_id: number }>(`/users/:user_id/investments`, {
         amount: amount,
-        date: date,
-        investment_yield: investment_yield,
+        buy_price: buy_price,
+        buy_date: buy_date,
+        sell_date: sell_date,
         user_id: user_id,
         company_id: company_id,
       })
@@ -125,9 +128,10 @@ class UserService {
   /**
    * Updates given user-investment
    */
-  updateUserInvestment(investment: Investment) {
+
+  updateSoldUserInvestment(sell_date: string, user_id: number, investment_id: number) {
     return axios
-      .put(`/users/${investment.user_id}/investments/${investment.investment_id}`, investment)
+      .put(`/users/${user_id}/investments/${investment_id}`, { sell_date })
       .then((response) => response.data);
   }
 
