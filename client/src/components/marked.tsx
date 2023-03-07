@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 // import { NavLink } from 'react-router-dom';
 import companyService, { Company } from '../company-service';
+import apiService from '../aplha-vantage-service';
 import { createHashHistory } from 'history';
 import {
   Button,
@@ -92,6 +93,15 @@ export default function Marked() {
 
   const handleSort = (event: SelectChangeEvent) => {
     setSortValue(event.target.value);
+  };
+
+  const testAPI = () => {
+    apiService
+      .getCurrentStock()
+      //@ts-ignore
+      .then((results) => console.log(results))
+      //@ts-ignore
+      .catch((error) => console.log(error));
   };
 
   //@ts-ignore
@@ -204,6 +214,9 @@ export default function Marked() {
                   </Select>
                 </FormControl>
               </Grid>
+              {/* <Grid item>
+                <Button onClick={testAPI}>Test</Button>
+              </Grid> */}
             </Grid>
           </Box>
 
