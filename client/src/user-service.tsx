@@ -159,16 +159,37 @@ class UserService {
   }
 
   /**
-   * Updates a given user´s prefered industry:
+   * Get a all industries regardless of a user.
    */
-  updatePreferedIndustry(industry: Industry) {
+  getAllIndustries() {
+    return axios.get<Industry[]>(`/industries`).then((response) => response.data);
+  }
+
+  /**
+   * Create new user-investment.
+   *
+   * Resolves the newly created investment_id.
+   */
+  createNewPreferedIndustry(user_id: number, industry_name: string) {
     return axios
-      .put(
-        `/users/${industry.industry_id}/industries/${industry.industry_id}`,
-        industry.industry_name
-      )
+      .post(`/users/${user_id}/industries`, {
+        user_id: user_id,
+        industry_name: industry_name,
+      })
       .then((response) => response.data);
   }
+
+  /**
+   * Updates a given user´s prefered industry:
+   */
+  // updatePreferedIndustry(industry: Industry) {
+  //   return axios
+  //     .put(
+  //       `/users/${industry.industry_id}/industries/${industry.industry_id}`,
+  //       industry.industry_name
+  //     )
+  //     .then((response) => response.data);
+  // }
 
   deleteUserIndustry(industry_id: number, user_id: number) {
     return axios

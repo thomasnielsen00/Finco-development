@@ -12,22 +12,38 @@ import {
   TextField,
   MenuItem,
   FormLabel,
+  ThemeProvider,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import userService, { Industry, Investment, User } from '../user-service';
 import {
   Alert,
+  Autocomplete,
+  Box,
   Checkbox,
   CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Fab,
   FormControlLabel,
   FormHelperText,
+  IconButton,
   InputLabel,
+  List,
+  ListItem,
+  ListItemSecondaryAction,
+  ListItemText,
+  Radio,
+  RadioGroup,
 } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import CheckIcon from '@mui/icons-material/Check';
 import { green } from '@mui/material/colors';
 import clsx from 'clsx';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 // Skal vi ha med dette?:
 // const risk_willingness: Array<{ value: string; label: string }> = [
 //   {
@@ -74,9 +90,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-//Er det her riktig måte å benytte komponentene på? Altså som en funksjon
 export function UserProfile() {
-  const [userData, setUserData] = useState<User>();
+  const [userData, setUserData] = useState<User>({});
+
   //Save-button related
   const [loading, setLoading] = React.useState(false);
   ////Save-button related
@@ -87,7 +103,36 @@ export function UserProfile() {
   //Constant referering to the defined styling of given elements:
   const classes = useStyles();
   //Following const is regarding user-prefered Industry:
-  const [preferedIndustries, setPreferedIndustries] = useState<Industry[]>();
+  const [preferedIndustries, setPreferedIndustries] = useState<Industry[]>([]);
+  //Following const is related to the Automcomplete element regarding all industries
+  const [allIndustries, setAllIndustries] = useState<Industry[]>([]);
+  //Following const is related to the new industries a user selects in the autoComplete-element
+  const [selectedIndustries, setSelectedIndustries] = useState<Industry[]>([]);
+
+  const handleIndustryChange = (event: any, values: Industry[]) => {
+    const updatedValues = values.map((value) => {
+      if (!value.user_id) {
+        // add user_id to the new industry object
+        return {
+          industry_id: value.industry_id,
+          user_id: Number(user_id),
+          industry_name: value.industry_name,
+        };
+      } else {
+        return value;
+      }
+    });
+    setPreferedIndustries(updatedValues);
+    setSavedChange(false);
+
+    // Check if an industry was removed
+    const removedIndustry = preferedIndustries.find((industry) => !values.includes(industry));
+
+    if (removedIndustry) {
+      const industryId = removedIndustry.industry_id;
+      userService.deleteUserIndustry(industryId, user_id);
+    }
+  };
 
   const buttonClassname = clsx({
     [classes.buttonSuccess]: savedChange,
@@ -130,7 +175,14 @@ export function UserProfile() {
         //.preventDefault is a common pattern in React form handling to prevent the default
         //behavior of the form submission, which typically involves the page being refreshed or reloaded.
         event.preventDefault();
+
         userService.updateUser(userData).catch((error) => console.log(error));
+        preferedIndustries.map((preferedIndustry) =>
+          userService.createNewPreferedIndustry(
+            preferedIndustry.user_id,
+            preferedIndustry.industry_name
+          )
+        );
       }, 2000);
     }
   };
@@ -141,7 +193,11 @@ export function UserProfile() {
 
     userService.getAllPreferedIndustries(current_id).then((preferedIndustries) => {
       setPreferedIndustries(preferedIndustries);
+
+      // setSelectedIndustries(preferedIndustries);
     });
+
+    userService.getAllIndustries().then((allIndustries) => setAllIndustries(allIndustries));
 
     userService
       .getUser(current_id)
@@ -157,7 +213,7 @@ export function UserProfile() {
 
   return (
     <>
-      {console.log(preferedIndustries)}
+      {console.log(userData)}
       <form className={classes.form}>
         <Typography variant="h5">General information</Typography>
 
@@ -187,6 +243,7 @@ export function UserProfile() {
               required
               id="password"
               name="password"
+              type="password"
               // label={userData?.password}
               variant="outlined"
               value={userData?.password}
@@ -229,7 +286,11 @@ export function UserProfile() {
               className={classes.TextField}
             />
           </Grid>
+        </Grid>
+        <br></br>
+        <Typography variant="h5">Investing details</Typography>
 
+        <Grid container spacing={2}>
           {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
           <Grid item xs={6}>
             <InputLabel htmlFor="monthly_savings_amount">Monthly savings amount</InputLabel>
@@ -304,44 +365,60 @@ export function UserProfile() {
               fullWidth
               className={classes.TextField}
             />
+          </Grid>
 
-            {/* <Button
+          <Grid item xs={12}>
+            <InputLabel htmlFor="prefered_industries">Prefered industries</InputLabel>
+            <Autocomplete
+              multiple
+              id="tags-outlined"
+              //Here i check if the option is already a part of preferedIndustries
+              //and thus removing it from the options-dropDown menu
+              options={allIndustries.filter(
+                (option) =>
+                  //Checks wheter preferedIndustries does not contain a industry_id equal to the option in question
+                  !preferedIndustries.some(
+                    (preferedIndustry) => preferedIndustry.industry_id === option.industry_id
+                  )
+              )}
+              getOptionLabel={(option) => option.industry_name}
+              value={preferedIndustries}
+              onChange={handleIndustryChange}
+              filterSelectedOptions
+              renderInput={(params) => (
+                <TextField className={classes.TextField} variant="outlined" {...params} />
+              )}
+            />
+
+            {console.log(preferedIndustries)}
+          </Grid>
+
+          {/* <Grid item xs={6}>
+            {/* {preferedIndustries && (
+              <div>
+                <Typography variant="h5">Preferred Industries</Typography>
+                {preferedIndustries.map((industry) => (
+                  <div key={industry.industry_id}>
+                    <Typography>{industry.industry_name}</Typography>
+                  </div>
+                ))}
+              </div>
+            )} */}
+          {/* </Grid> */}
+        </Grid>
+        <br></br>
+        {loading && <CircularProgress size={68} className={classes.buttonProgress} />}
+        <Button
           variant="contained"
+          aria-label="save"
           color="primary"
-          size="small"
-          className={classes.button}
-          startIcon={<SaveIcon />}
+          className={buttonClassname}
           onClick={handleSubmit}
         >
-          Save changes
-        </Button> */}
-
-            <Button
-              variant="contained"
-              aria-label="save"
-              color="primary"
-              className={buttonClassname}
-              onClick={handleSubmit}
-            >
-              {buttonText}
-              {savedChange ? <CheckIcon /> : <SaveIcon />}
-            </Button>
-
-            {loading && <CircularProgress size={68} className={classes.buttonProgress} />}
-          </Grid>
-        </Grid>
+          {buttonText}
+          {savedChange ? <CheckIcon /> : <SaveIcon />}
+        </Button>
       </form>
-
-      {preferedIndustries && (
-        <div>
-          <Typography variant="h5">Preferred Industries</Typography>
-          {preferedIndustries.map((industry) => (
-            <div key={industry.industry_id}>
-              <Typography>{industry.industry_name}</Typography>
-            </div>
-          ))}
-        </div>
-      )}
     </>
   );
 }
