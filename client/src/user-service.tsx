@@ -108,8 +108,8 @@ class UserService {
   createUserInvestment(
     amount: number,
     buy_price: number,
-    buy_date: Date,
-    sell_date: Date,
+    buy_date: string,
+    // sell_date: Date,
     user_id: number,
     company_id: number
   ) {
@@ -118,7 +118,7 @@ class UserService {
         amount: amount,
         buy_price: buy_price,
         buy_date: buy_date,
-        sell_date: sell_date,
+        // sell_date: sell_date,
         user_id: user_id,
         company_id: company_id,
       })

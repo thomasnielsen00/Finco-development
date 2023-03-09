@@ -205,15 +205,14 @@ class UserService {
   createUserInvestment(
     amount: number,
     buy_price: number,
-    buy_date: Date,
-    sell_date: Date,
+    buy_date: string,
     user_id: number,
     company_id: number
   ) {
     return new Promise<number>((resolve, reject) => {
       pool.query(
-        'INSERT INTO investment SET amount=?, buy_price=?, buy_date=?, sell_date=?, user_id, company_id=?',
-        [amount, buy_price, buy_price, buy_date, sell_date, user_id, company_id],
+        'INSERT INTO investment SET amount=?, buy_price=?, buy_date=?, user_id=?, company_id=?',
+        [amount, buy_price, buy_date, user_id, company_id],
         (error, results: ResultSetHeader) => {
           if (error) return reject(error);
 

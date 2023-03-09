@@ -64,6 +64,7 @@ export function Portfolio() {
       .getAllUserInvestments(current_id)
       .then((investments) => {
         setInvestments(investments);
+        setRefresh(false);
       })
       .catch((error) => {
         setOpenAlert(true);

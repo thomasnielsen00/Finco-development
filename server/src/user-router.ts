@@ -176,7 +176,7 @@ router.put('/users/:user_id/investments/:investment_id', (request, response) => 
 //A path that contributes to creating a new investment for a given user
 //SKAL DET VÆRE PARANTES ETETR INVESTMENTS HER PÅ POST?
 //--------------------------------------------------------
-router.post('/users/:user_id/investments/', (request, response) => {
+router.post('/users/:user_id/investments', (request, response) => {
   const data = request.body;
   //Hvordan blir det med yield?
   //Det trengs vel strengt tatt ikke å være nødvendig å pushe inn når et investering lages i utgangspunktet
@@ -188,8 +188,8 @@ router.post('/users/:user_id/investments/', (request, response) => {
     data.buy_price != 0 &&
     data.buy_date &&
     data.buy_date.length != 0 &&
-    data.sell_date &&
-    data.sell_date.length != 0 &&
+    // data.sell_date &&
+    // data.sell_date.length != 0 &&
     data.user_id &&
     data.user_id != 0 &&
     data.company_id &&
@@ -200,7 +200,7 @@ router.post('/users/:user_id/investments/', (request, response) => {
         data.amount,
         data.buy_price,
         data.buy_date,
-        data.sell_date,
+        // data.sell_date,
         data.user_id,
         data.company_id
       )

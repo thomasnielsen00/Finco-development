@@ -229,6 +229,7 @@ export function UserProfile() {
               name="email"
               // label={userData?.email}
               variant="outlined"
+              disabled
               value={userData?.email}
               onChange={handleChange}
               fullWidth
@@ -243,7 +244,8 @@ export function UserProfile() {
               required
               id="password"
               name="password"
-              type="password"
+              disabled
+              // type="password"
               // label={userData?.password}
               variant="outlined"
               value={userData?.password}
@@ -369,6 +371,7 @@ export function UserProfile() {
 
           <Grid item xs={12}>
             <InputLabel htmlFor="prefered_industries">Prefered industries</InputLabel>
+            {/* Må sørge for at alle industrier slettes når kryss-knappen trykkes på */}
             <Autocomplete
               multiple
               id="tags-outlined"
