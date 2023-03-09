@@ -41,15 +41,32 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
 export function Portfolio() {
+  //Language-select related
+  const { language } = useContext(LanguageContext);
+  const {
+    company_name,
+    total_price,
+    return_percentage,
+    return_kr,
+    current_value,
+    history,
+    investment_date,
+    amount,
+    historic_share_price,
+    price_kr,
+    sell_button,
+    sell_confirmation_header,
+    sell_confirmation_body_first_part,
+    sell_confirmation_body_second_part,
+    sell_confirmation_body_third_part,
+    sell_confirmation_body_fourth_part,
+    sell_confirmation_cancel,
+    sell_confirmation_confirm,
+  } = language;
   const classes = useStyles();
 
   //@ts-ignore
   const { user } = useContext(UserContext);
-  //@ts-ignore
-  const { language } = useContext(LanguageContext);
-  //   const { calculated_stock_value, live_stock_value, explore_company } = language;
-  const { show_details } = language;
-  //Må lære meg dette her:
   const [investments, setInvestments] = useState<Investment[]>([]);
   const [openAlert, setOpenAlert] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -150,17 +167,17 @@ export function Portfolio() {
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Box sx={{ margin: 1 }}>
                 <Typography variant="h6" gutterBottom component="div">
-                  History
+                  {history}
                 </Typography>
                 <Table size="small" aria-label="purchases">
                   <TableHead>
                     <TableRow>
-                      <TableCell>Date</TableCell>
-                      <TableCell>Amount</TableCell>
-                      <TableCell align="right">Historic share price (kr)</TableCell>
+                      <TableCell>{investment_date}</TableCell>
+                      <TableCell>{amount}</TableCell>
+                      <TableCell align="right">{historic_share_price}</TableCell>
                       {/* Not necesary for now
                       <TableCell align="right">Yield (kr)</TableCell> */}
-                      <TableCell align="right">Price (kr)</TableCell>
+                      <TableCell align="right">{price_kr}</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -191,7 +208,7 @@ export function Portfolio() {
                               onClick={() => handleOpenSellConfirm(investment.investment_id)}
                               color="warning"
                             >
-                              Sell
+                              {sell_button}
                             </Button>
                             <Dialog
                               open={openSellConfirm}
@@ -200,23 +217,27 @@ export function Portfolio() {
                               aria-describedby="alert-dialog-description"
                             >
                               <DialogTitle id="alert-dialog-title">
-                                {'Sure you want to sell this investment?'}
+                                {sell_confirmation_header}
                               </DialogTitle>
                               <DialogContent>
                                 <DialogContentText id="alert-dialog-description">
-                                  If you sell your investment of {Number(row.amount).toFixed(1)}{' '}
-                                  shares in {row.company_name} you are left with{' '}
+                                  {sell_confirmation_body_first_part}{' '}
+                                  {Number(row.amount).toFixed(1)}{' '}
+                                  {sell_confirmation_body_second_part} {row.company_name}{' '}
+                                  {sell_confirmation_body_third_part}{' '}
                                   {Number(
                                     investment.amount *
                                       investment.buy_price *
                                       ((currentValue - investment.amount * investment.buy_price) /
                                         (investment.amount * investment.buy_price))
-                                  ).toFixed(2)}
-                                  kr in return
+                                  ).toFixed(2)}{' '}
+                                  {sell_confirmation_body_fourth_part}
                                 </DialogContentText>
                               </DialogContent>
                               <DialogActions>
-                                <Button onClick={() => handleCloseSellConfirm()}>Cancel</Button>
+                                <Button onClick={() => handleCloseSellConfirm()}>
+                                  {sell_confirmation_cancel}
+                                </Button>
                                 <Button
                                   onClick={() => {
                                     handleCloseSellConfirm();
@@ -240,7 +261,7 @@ export function Portfolio() {
                                   }}
                                   autoFocus
                                 >
-                                  Confirm
+                                  {sell_confirmation_confirm}
                                 </Button>
                               </DialogActions>
                             </Dialog>
@@ -274,11 +295,11 @@ export function Portfolio() {
               <TableHead>
                 <TableRow>
                   <TableCell />
-                  <TableCell>Company name</TableCell>
-                  <TableCell align="right">Total price</TableCell>
-                  <TableCell align="right">Return(%)</TableCell>
-                  <TableCell align="right">Return(kr)</TableCell>
-                  <TableCell align="right">Current value</TableCell>
+                  <TableCell>{company_name}</TableCell>
+                  <TableCell align="right">{total_price}</TableCell>
+                  <TableCell align="right">{return_percentage}</TableCell>
+                  <TableCell align="right">{return_kr}</TableCell>
+                  <TableCell align="right">{current_value}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

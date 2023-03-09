@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import {
   Button,
@@ -14,12 +14,13 @@ import {
   FormLabel,
   ThemeProvider,
 } from '@material-ui/core';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import userService, { Industry, Investment, User } from '../user-service';
 import {
   Alert,
   Autocomplete,
   Box,
+  CardHeader,
   Checkbox,
   CircularProgress,
   Dialog,
@@ -43,6 +44,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import { green } from '@mui/material/colors';
 import clsx from 'clsx';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { LanguageContext } from '../context';
 
 // Skal vi ha med dette?:
 // const risk_willingness: Array<{ value: string; label: string }> = [
@@ -91,6 +93,24 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export function UserProfile() {
+  //Language-select related
+  const { language } = useContext(LanguageContext);
+  const {
+    general_information,
+    email_inputLabel,
+    password_inputLabel,
+    full_name_inputLabel,
+    phone_number_inputLabel,
+    investing_details,
+    monthly_savings_inputLabel,
+    from_kr_underLabel,
+    to_kr_underLabel,
+    risk_willingness_inputLabel,
+    prefered_industries_inputLabel,
+    button_saved,
+    button_save,
+  } = language;
+
   const [userData, setUserData] = useState<User>({});
 
   //Save-button related
@@ -157,7 +177,7 @@ export function UserProfile() {
   //   }
   // };
 
-  const buttonText = savedChange ? 'Saved' : 'Save changes';
+  const buttonText = savedChange ? button_saved : button_save;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserData({ ...userData, [event.target.name]: event.target.value });
@@ -215,12 +235,12 @@ export function UserProfile() {
     <>
       {console.log(userData)}
       <form className={classes.form}>
-        <Typography variant="h5">General information</Typography>
+        <Typography variant="h5">{general_information}</Typography>
 
         <Grid container spacing={2}>
           <Grid item xs={6}>
             {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
-            <InputLabel htmlFor="email">Email</InputLabel>
+            <InputLabel htmlFor="email">{email_inputLabel}</InputLabel>
 
             <TextField
               required
@@ -238,7 +258,7 @@ export function UserProfile() {
           </Grid>
           <Grid item xs={6}>
             {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
-            <InputLabel htmlFor="password">Password</InputLabel>
+            <InputLabel htmlFor="password">{password_inputLabel}</InputLabel>
 
             <TextField
               required
@@ -256,7 +276,7 @@ export function UserProfile() {
           </Grid>
           <Grid item xs={6}>
             {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
-            <InputLabel htmlFor="full_name">Full name</InputLabel>
+            <InputLabel htmlFor="full_name">{full_name_inputLabel}</InputLabel>
 
             <TextField
               required
@@ -273,7 +293,7 @@ export function UserProfile() {
           </Grid>
           <Grid item xs={6}>
             {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
-            <InputLabel htmlFor="phone_number">Phone number</InputLabel>
+            <InputLabel htmlFor="phone_number">{phone_number_inputLabel}</InputLabel>
 
             <TextField
               required
@@ -290,12 +310,12 @@ export function UserProfile() {
           </Grid>
         </Grid>
         <br></br>
-        <Typography variant="h5">Investing details</Typography>
+        <Typography variant="h5">{investing_details}</Typography>
 
         <Grid container spacing={2}>
           {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
           <Grid item xs={6}>
-            <InputLabel htmlFor="monthly_savings_amount">Monthly savings amount</InputLabel>
+            <InputLabel htmlFor="monthly_savings_amount">{monthly_savings_inputLabel}</InputLabel>
 
             <Grid container spacing={2}>
               <Grid item xs={6}>
@@ -311,7 +331,7 @@ export function UserProfile() {
                   fullWidth
                   className={classes.TextField}
                 />
-                <FormHelperText>From kr</FormHelperText>
+                <FormHelperText>{from_kr_underLabel}</FormHelperText>
               </Grid>
 
               {/* <Grid item xs={6}>
@@ -339,22 +359,20 @@ export function UserProfile() {
                   required
                   id="savings_to"
                   name="savings_to"
-                  // label="To"
                   variant="outlined"
-                  // type="email"
                   value={userData?.savings_to}
                   onChange={handleChange}
                   fullWidth
                   className={classes.TextField}
                 />
-                <FormHelperText>To kr</FormHelperText>
+                <FormHelperText>{to_kr_underLabel}</FormHelperText>
               </Grid>
             </Grid>
           </Grid>
 
           <Grid item xs={6}>
             {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
-            <InputLabel htmlFor="risk_willingness">Risk willingness</InputLabel>
+            <InputLabel htmlFor="risk_willingness">{risk_willingness_inputLabel}</InputLabel>
 
             <TextField
               required
@@ -370,7 +388,7 @@ export function UserProfile() {
           </Grid>
 
           <Grid item xs={12}>
-            <InputLabel htmlFor="prefered_industries">Prefered industries</InputLabel>
+            <InputLabel htmlFor="prefered_industries">{prefered_industries_inputLabel}</InputLabel>
             {/* Må sørge for at alle industrier slettes når kryss-knappen trykkes på */}
             <Autocomplete
               multiple
@@ -427,5 +445,23 @@ export function UserProfile() {
 }
 
 export function LogInNeeded() {
-  return <>halla brur</>;
+  const { language } = useContext(LanguageContext);
+  const { log_in_needed_text, log_in_here, or, create_a_user, to_access_portfolio } = language;
+  return (
+    <>
+      <div
+        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}
+      >
+        <Card style={{ width: '40%', textAlign: 'center' }}>
+          <CardHeader title={log_in_needed_text} />
+          <CardContent>
+            <Typography>
+              <Link to={'/log_in'}>{log_in_here}</Link>, {or}
+              <Link to={'/register'}> {create_a_user} </Link> {to_access_portfolio}{' '}
+            </Typography>
+          </CardContent>
+        </Card>
+      </div>
+    </>
+  );
 }
