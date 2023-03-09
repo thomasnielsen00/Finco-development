@@ -10,6 +10,42 @@ export type Company = {
   calculated_difference: number;
 };
 
+export type companycalculations = {
+  company_id: number;
+  company_name: string;
+  calculated_value_per_share: number;
+  calculated_difference: number;
+  EBITDA: number;
+  OCFBT: number;
+  CFBT: number;
+  PFCF: number;
+  UFCF: number;
+  discount: number;
+  presentvalue: number;
+  future_EBITDA: [];
+  future_changeNWC: [];
+  futureOCFBT: [];
+  future_CAPEX: [];
+  future_CFBT: [];
+  future_taxespaid: [];
+  future_PFCF: [];
+  future_depLeaseAdjustment: [];
+  future_opLeaseAdjustment: [];
+  future_UFCF: [];
+  futureDiscount: [];
+  presentValueUFCF: [];
+  EBITDAresult: number; // EBITDAresult i database
+  futureDiscount2027: number;
+  discountedTerminalValue: number;
+  PVofUnleveredFCF: number;
+  enterpriseValue: number;
+  impliedEquityValue: number;
+  ImpliedEquityofCommonStockholders: number;
+  currentSharePrice: number;
+  amountShares: number;
+  value_per_share: number;
+};
+
 class CompanyService {
   /**
    * Get company with given id.
@@ -33,6 +69,12 @@ class CompanyService {
   //     .post<{ id: number }>('/tasks', { title: title })
   //     .then((response) => response.data.id);
   // }
+
+  getCompanyCalculations(company_id: number) {
+    return axios
+      .get<companycalculations>('/companycalculations/' + company_id)
+      .then((response) => response.data);
+  }
 }
 
 const companyService = new CompanyService();
