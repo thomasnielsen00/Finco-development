@@ -39,7 +39,7 @@ import { LanguageContext, UserContext } from '../context';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
-export default function Marked() {
+export default function Market() {
   const classes = useStyles();
 
   //@ts-ignore
@@ -83,7 +83,6 @@ export default function Marked() {
       .catch((error) => {
         setOpenAlert(true);
         setErrorMessage(error.message);
-        // av en eller annen grunn tar siden mye lenger tid å laste inn med disse useState
       });
   }, []);
 
