@@ -18,6 +18,7 @@ import {
   ListItemText,
   ListItemButton,
   Icon,
+  Hidden,
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { MidlertidigTheme, useStyles } from '../styles';
@@ -25,6 +26,7 @@ import { languageText, LanguageTextInfo } from '../language';
 import { LanguageContext, UserContext } from '../context';
 import { Menu as MenuIcon } from '@mui/icons-material';
 import { alignProperty } from '@mui/material/styles/cssUtils';
+import userService, { User } from '../user-service';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
@@ -32,7 +34,7 @@ const NavBar = () => {
   const classes = useStyles();
   //@ts-ignore
   const { language, setLanguage } = useContext(LanguageContext);
-  const { change_language, property, marked, portfolio, log_in, about, profile } = language;
+  const { change_language, property, marked, portfolio, log_in, about, profile, admin } = language;
   //@ts-ignore
   const { user, setUser } = useContext(UserContext);
   const [open, setOpen] = useState(false);
@@ -63,9 +65,24 @@ const NavBar = () => {
       <ListItemButton key={log_in} href={user ? '/#/users/' + user.user_id : '/#/log_in'}>
         <ListItemText primary={user ? profile : log_in} />
       </ListItemButton>
+      {user.admin && (
+        <ListItemButton key={admin} href="/#/adminpage">
+          <ListItemText primary={admin} />
+        </ListItemButton>
+      )}
+
       <ListItemButton key={change_language} onClick={() => updateLanguage()}>
         <ListItemText primary={change_language} />
       </ListItemButton>
+      {/*user.admin ? (
+        <ListItemButton key={profile} href={'/#/adminpage'}>
+          <ListItemText primary={admin} />
+        </ListItemButton>
+      ) : (
+        <ListItemButton key={log_in} href={'/#/log_in'}>
+          <ListItemText primary={log_in} />
+        </ListItemButton>
+      )*/}
     </List>
   );
 
@@ -135,6 +152,19 @@ const NavBar = () => {
                 >
                   {user ? profile : log_in}
                 </Button>
+              </Box>
+              <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                {user.admin && (
+                  <Button
+                    className={classes.navbar_button}
+                    color="inherit"
+                    key={admin}
+                    component="a"
+                    href="/#/adminpage"
+                  >
+                    {admin}
+                  </Button>
+                )}
                 <Button
                   className={classes.navbar_button}
                   color="inherit"

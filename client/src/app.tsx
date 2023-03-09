@@ -11,6 +11,8 @@ import Portfolio from './components/portfolio';
 import { languageText, LanguageTextInfo } from './language';
 import { UserProfile } from './components/userDetails';
 import { User } from './user-service';
+import adminpage from './components/adminpage';
+import CompanyCalculations from './components/company-calculations';
 
 export default function App() {
   const [user, setUser] = useState<User | boolean>(false);
@@ -29,7 +31,9 @@ export default function App() {
         <Route exact path="/log_in" component={LogIn} />
         <Route exact path="/register" component={Register} />
         <Route exact path="/marked" component={Marked} />
+        <Route exact path="/adminpage" component={adminpage} />
         <Route exact path="/company/:company_id" component={CompanyDetails} />
+        <Route exact path="/companycalculations/:company_id" component={CompanyCalculations} />
       </UserContext.Provider>
     </LanguageContext.Provider>
   );
