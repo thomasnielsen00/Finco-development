@@ -83,7 +83,6 @@ export default function Market() {
       .catch((error) => {
         setOpenAlert(true);
         setErrorMessage(error.message);
-        // av en eller annen grunn tar siden mye lenger tid å laste inn med disse useState
       });
   }, []);
 
