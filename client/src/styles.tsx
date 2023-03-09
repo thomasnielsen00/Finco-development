@@ -22,14 +22,10 @@ export const MidlertidigTheme = createTheme({
 
 export const useStyles = makeStyles((MidlertidigTheme) => ({
   home_page_container: {
-    paddingTop: '100px',
+    // paddingTop: '100px',
     width: '100%',
-    height: '92vh',
+    height: '85vh',
     background: 'linear-gradient(0deg, rgba(255,252,244,1) 60%, rgba(6,41,61,1) 100%)',
-  },
-  home_grid: {
-    marginTop: '3rem',
-    paddingLeft: '8rem',
   },
 
   container: {

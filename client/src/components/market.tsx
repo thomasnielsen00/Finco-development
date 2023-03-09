@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 // import { NavLink } from 'react-router-dom';
 import companyService, { Company } from '../company-service';
+import apiService from '../aplha-vantage-service';
 import { createHashHistory } from 'history';
 import {
   Button,
@@ -38,7 +39,7 @@ import { LanguageContext, UserContext } from '../context';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
-export default function Marked() {
+export default function Market() {
   const classes = useStyles();
 
   //@ts-ignore
@@ -82,7 +83,6 @@ export default function Marked() {
       .catch((error) => {
         setOpenAlert(true);
         setErrorMessage(error.message);
-        // av en eller annen grunn tar siden mye lenger tid å laste inn med disse useState
       });
   }, []);
 
@@ -92,6 +92,15 @@ export default function Marked() {
 
   const handleSort = (event: SelectChangeEvent) => {
     setSortValue(event.target.value);
+  };
+
+  const testAPI = () => {
+    apiService
+      .getCurrentStock()
+      //@ts-ignore
+      .then((results) => console.log(results))
+      //@ts-ignore
+      .catch((error) => console.log(error));
   };
 
   //@ts-ignore
@@ -204,6 +213,9 @@ export default function Marked() {
                   </Select>
                 </FormControl>
               </Grid>
+              {/* <Grid item>
+                <Button onClick={testAPI}>Test</Button>
+              </Grid> */}
             </Grid>
           </Box>
 

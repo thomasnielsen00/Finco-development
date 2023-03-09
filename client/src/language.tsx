@@ -55,12 +55,12 @@ export const languageText = {
     log_in: 'Logg inn',
     admin: 'Admin',
     profile: 'Min profil',
-    change_language: 'Endre språk',
+    change_language: 'Change language',
     mail: 'E-post',
     password: 'Passord',
     //HOME
     get_started: 'Kom i gang!',
-    header: 'Vanskelig å komme i gang med akjer?',
+    header: 'Vanskelig å komme i gang med aksjer?',
     welcome_text:
       'Velkommen til FINCO-inverstering, ikke la inflasjonen spise opp dine sparepenger. Sjekk ut våre beregninger og gjør akjseinvesteringer på en trygg måte!',
     //MARKED
@@ -103,12 +103,12 @@ export const languageText = {
     log_in: 'Sign in',
     admin: 'Admin',
     profile: 'My profile',
-    change_language: 'Change language',
+    change_language: 'Endre språk',
     mail: 'E-mail adress',
     password: 'Password',
     //HOME
     get_started: 'Get started!',
-    header: 'Hard to get started with stocks?',
+    header: 'Struggling to get started with stocks?',
     welcome_text:
       'Welcome to FINCO-investement, dont let the inflation eat your savings. Browse our calculations and make safe trades!',
     //MARKED

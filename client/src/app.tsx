@@ -4,12 +4,12 @@ import { HashRouter, Route } from 'react-router-dom';
 import NavBar from './components/navbar';
 import LogIn from './components/login-form';
 import Register from './components/register-user';
-import Marked from './components/marked';
+import Market from './components/market';
 import CompanyDetails from './components/company-details';
 import Home from './components/homepage';
-import Portfolio from './components/portfolio';
+import { Portfolio } from './components/portfolio';
 import { languageText, LanguageTextInfo } from './language';
-import { UserProfile } from './components/userDetails';
+import { UserProfile, LogInNeeded } from './components/userDetails';
 import { User } from './user-service';
 import adminpage from './components/adminpage';
 import CompanyCalculations from './components/company-calculations';
@@ -27,11 +27,13 @@ export default function App() {
         <Route exact path="/" component={Home} />
         {/* Må kanskje være :user_id, men funker ikke ends mtp teststien i finco-components */}
         <Route exact path="/users/:user_id" component={UserProfile} />
-        <Route exact path="/users/:user_id/investments" component={Portfolio} />
+        <Route exact path="/portfolio/:user_id" component={Portfolio} />
+        {/* This component is rendered when a user tries to open a portfolio but is not logged in */}
+        <Route exact path="/log_in_needed" component={LogInNeeded} />
         <Route exact path="/log_in" component={LogIn} />
         <Route exact path="/register" component={Register} />
-        <Route exact path="/marked" component={Marked} />
         <Route exact path="/adminpage" component={adminpage} />
+        <Route exact path="/market" component={Market} />
         <Route exact path="/company/:company_id" component={CompanyDetails} />
         <Route exact path="/companycalculations/:company_id" component={CompanyCalculations} />
       </UserContext.Provider>

@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 //Er det her riktig måte å benytte komponentene på? Altså som en funksjon
-export const UserProfile: React.FC = () => {
+export function UserProfile() {
   const [userData, setUserData] = useState<User>();
   //Save-button related
   const [loading, setLoading] = React.useState(false);
@@ -86,8 +86,8 @@ export const UserProfile: React.FC = () => {
   const { user_id } = useParams();
   //Constant referering to the defined styling of given elements:
   const classes = useStyles();
-  //Following const is regarding userInvestment:
-  const [preferedIndustries, setPreferedIndustries] = useState<Industry>();
+  //Following const is regarding user-prefered Industry:
+  const [preferedIndustries, setPreferedIndustries] = useState<Industry[]>();
 
   const buttonClassname = clsx({
     [classes.buttonSuccess]: savedChange,
@@ -139,6 +139,10 @@ export const UserProfile: React.FC = () => {
   useEffect(() => {
     const current_id = parseInt(user_id, 10); //base 10
 
+    userService.getAllPreferedIndustries(current_id).then((preferedIndustries) => {
+      setPreferedIndustries(preferedIndustries);
+    });
+
     userService
       .getUser(current_id)
       .then((user) => {
@@ -153,6 +157,7 @@ export const UserProfile: React.FC = () => {
 
   return (
     <>
+      {console.log(preferedIndustries)}
       <form className={classes.form}>
         <Typography variant="h5">General information</Typography>
 
@@ -166,6 +171,7 @@ export const UserProfile: React.FC = () => {
               // helperText="Denne må være fylt ut"
               id="email"
               name="email"
+              // label={userData?.email}
               variant="outlined"
               value={userData?.email}
               onChange={handleChange}
@@ -298,8 +304,8 @@ export const UserProfile: React.FC = () => {
               fullWidth
               className={classes.TextField}
             />
-          </Grid>
-          {/* <Button
+
+            {/* <Button
           variant="contained"
           color="primary"
           size="small"
@@ -310,24 +316,36 @@ export const UserProfile: React.FC = () => {
           Save changes
         </Button> */}
 
-          <Button
-            variant="contained"
-            aria-label="save"
-            color="primary"
-            className={buttonClassname}
-            onClick={handleSubmit}
-          >
-            {buttonText}
-            {savedChange ? <CheckIcon /> : <SaveIcon />}
-          </Button>
+            <Button
+              variant="contained"
+              aria-label="save"
+              color="primary"
+              className={buttonClassname}
+              onClick={handleSubmit}
+            >
+              {buttonText}
+              {savedChange ? <CheckIcon /> : <SaveIcon />}
+            </Button>
 
-          {loading && <CircularProgress size={68} className={classes.buttonProgress} />}
+            {loading && <CircularProgress size={68} className={classes.buttonProgress} />}
+          </Grid>
         </Grid>
       </form>
 
-      <ul>
-        <li></li>
-      </ul>
+      {preferedIndustries && (
+        <div>
+          <Typography variant="h5">Preferred Industries</Typography>
+          {preferedIndustries.map((industry) => (
+            <div key={industry.industry_id}>
+              <Typography>{industry.industry_name}</Typography>
+            </div>
+          ))}
+        </div>
+      )}
     </>
   );
-};
+}
+
+export function LogInNeeded() {
+  return <>halla brur</>;
+}
