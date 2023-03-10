@@ -5,6 +5,7 @@ export type LanguageTextInfo = {
   about: string;
   log_in: string;
   profile: string;
+  admin: string;
   change_language: string;
   mail: string;
   password: string;
@@ -18,6 +19,7 @@ export type LanguageTextInfo = {
   explore_company: string;
   difference: string;
   watchlist: string;
+  calculate: string;
   search: string;
   sort_by: string;
   no_sort: string;
@@ -79,6 +81,9 @@ export type LanguageTextInfo = {
   sell_confirmation_fourth_part: string;
   sell_confirmation_cancel: string;
   sell_confirmation_confirm: string;
+  //CALCULATIONS
+  ebitda: string;
+
 };
 
 export const languageText = {
@@ -88,6 +93,7 @@ export const languageText = {
     marked: 'Marked',
     about: 'Om oss',
     log_in: 'Logg inn',
+    admin: 'Admin',
     profile: 'Min profil',
     change_language: 'Change language',
     mail: 'E-post',
@@ -103,6 +109,7 @@ export const languageText = {
     explore_company: 'Utforsk',
     difference: 'Differanse',
     watchlist: 'Følg selskap',
+    calculate: 'Se beregninger',
     search: 'Søk her',
     sort_by: 'Sorter etter',
     no_sort: 'Ingen sortering',
@@ -164,6 +171,8 @@ export const languageText = {
     sell_confirmation_body_fourth_part: 'kr i avkastning',
     sell_confirmation_cancel: 'Avbryt',
     sell_confirmation_confirm: 'Bekreft',
+    //CALCULATIONS
+    ebitda: 'Earnings before interest, tax, depreciation and amorization',
   },
   english: {
     property: 'english',
@@ -171,6 +180,7 @@ export const languageText = {
     marked: 'Market',
     about: 'About us',
     log_in: 'Sign in',
+    admin: 'Admin',
     profile: 'My profile',
     change_language: 'Endre språk',
     mail: 'E-mail adress',
@@ -186,6 +196,7 @@ export const languageText = {
     explore_company: 'Explore',
     difference: 'Difference',
     watchlist: 'Add to watchlist',
+    calculate: 'See calculations',
     search: 'Search',
     sort_by: 'Sort by',
     no_sort: 'No sorting',
@@ -247,5 +258,7 @@ export const languageText = {
     sell_confirmation_body_fourth_part: 'kr in return',
     sell_confirmation_cancel: 'Cancel',
     sell_confirmation_confirm: 'Confirm',
+    //CALCULATIONS:
+    ebitda: 'Earnings before interest, tax, depreciation and amorization',
   },
 };

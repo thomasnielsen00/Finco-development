@@ -221,7 +221,7 @@ export default function Market() {
 
           {filterCompanies.map((company) => (
             <Card key={company.company_id} sx={{ mt: 2, p: 1 }}>
-              <Grid container spacing={1} alignItems="center" justifyContent="space-between">
+              <Grid container spacing={2} alignItems="center" justifyContent="space-between">
                 <Grid item md={2.5} xs={12}>
                   <Typography variant="h5">{company.company_name}</Typography>
                 </Grid>
@@ -250,7 +250,7 @@ export default function Market() {
                   </Tooltip>
                 </Grid>
                 <Grid item md={2.2} xs={6}>
-                  <Button variant="contained" endIcon={<VisibilityIcon />}>
+                  <Button variant="contained" fullWidth disabled endIcon={<VisibilityIcon />}>
                     {watchlist}
                   </Button>
                 </Grid>
@@ -258,6 +258,7 @@ export default function Market() {
                   <Button
                     color="success"
                     variant="contained"
+                    fullWidth
                     endIcon={<ReadMoreIcon />}
                     component="a"
                     href={'/#/company/' + company.company_id}

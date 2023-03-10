@@ -11,6 +11,7 @@ export type User = {
   savings_from: string;
   savings_to: string;
   risk_willingness: string;
+  admin: boolean;
 };
 
 export type Investment = {
