@@ -209,7 +209,7 @@ export const languageText = {
     //PROFILE
     my_account: 'My account',
     //LOG-IN NEEDED PROMPT
-    log_in_needed_text: 'Not logged in, or not user yet?',
+    log_in_needed_text: 'Not logged in, or not a user yet?',
     log_in_here: 'Log In here',
     or: 'or',
     create_a_user: 'create a user',
