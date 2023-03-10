@@ -205,15 +205,14 @@ class UserService {
   createUserInvestment(
     amount: number,
     buy_price: number,
-    buy_date: Date,
-    sell_date: Date,
+    buy_date: string,
     user_id: number,
     company_id: number
   ) {
     return new Promise<number>((resolve, reject) => {
       pool.query(
-        'INSERT INTO investment SET amount=?, buy_price=?, buy_date=?, sell_date=?, user_id, company_id=?',
-        [amount, buy_price, buy_price, buy_date, sell_date, user_id, company_id],
+        'INSERT INTO investment SET amount=?, buy_price=?, buy_date=?, user_id=?, company_id=?',
+        [amount, buy_price, buy_date, user_id, company_id],
         (error, results: ResultSetHeader) => {
           if (error) return reject(error);
 
@@ -264,7 +263,7 @@ class UserService {
   //------------------------------------------------------------------------------
 
   /**
-   * Get all users.
+   * Get all industries prefered by a given users.
    */
   getAllPreferedIndustries(user_id: number) {
     return new Promise<Industry[]>((resolve, reject) => {
@@ -298,21 +297,51 @@ class UserService {
   }
 
   /**
-   * Update a prefered industry for a given user.
+   * Get a all industries regardless of a user.
    */
-  updatePreferedIndustry(industry: Industry) {
+  getAllIndustries() {
+    return new Promise<Industry[]>((resolve, reject) => {
+      pool.query('SELECT * FROM industry ', (error, results: RowDataPacket[]) => {
+        if (error) return reject(error);
+
+        resolve(results as Industry[]);
+      });
+    });
+  }
+
+  createNewPreferedIndustry(user_id: number, industry_name: string) {
     return new Promise<void>((resolve, reject) => {
       pool.query(
-        'UPDATE prefered_industry SET prefered_industry.industry_id=(SELECT industry_id FROM industry WHERE industry_name=?) WHERE prefered_industry.user_id=? AND prefered_industry.industry_id=?',
-        [industry.industry_name, industry.user_id, industry.industry_id],
+        `INSERT INTO prefered_industry (user_id, industry_id)
+        SELECT ?, (SELECT industry_id FROM industry WHERE industry_name = ?)
+        WHERE NOT EXISTS (
+          SELECT 1 FROM prefered_industry WHERE user_id = ? AND industry_id = (SELECT industry_id FROM industry WHERE industry_name = ?)
+        )`,
+        [user_id, industry_name, user_id, industry_name],
         (error, _results) => {
           if (error) return reject(error);
-
           resolve();
         }
       );
     });
   }
+
+  /**
+   * Update a prefered industry for a given user.
+   */
+  // updatePreferedIndustry(industry: Industry) {
+  //   return new Promise<void>((resolve, reject) => {
+  //     pool.query(
+  //       'UPDATE prefered_industry SET prefered_industry.industry_id=(SELECT industry_id FROM industry WHERE industry_name=?) WHERE prefered_industry.user_id=? AND prefered_industry.industry_id=?',
+  //       [industry.industry_name, industry.user_id, industry.industry_id],
+  //       (error, _results) => {
+  //         if (error) return reject(error);
+
+  //         resolve();
+  //       }
+  //     );
+  //   });
+  // }
 
   //BURDEN DENNE SKRIVES OM SLIK AT MAN KAN SLETTE PÅ BAKGRUNN AV INDUSTRY_NAME PÅ SAMME MÅTE SOM DEN OVER?
   /**

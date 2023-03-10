@@ -90,8 +90,8 @@ router.put('/users/:user_id', (request, response) => {
     data.savings_from >= 0 &&
     typeof data.savings_to == 'number' &&
     data.savings_to >= 0 &&
-    typeof data.risk_willingess == 'string' &&
-    data.risk_willingess.length != 0 &&
+    typeof data.risk_willingness == 'string' &&
+    data.risk_willingness.length != 0 &&
     typeof user_id == 'number' &&
     user_id != 0
   )
@@ -103,7 +103,7 @@ router.put('/users/:user_id', (request, response) => {
         phone_number: data.phone_number,
         savings_from: data.savings_from,
         savings_to: data.savings_to,
-        risk_willingness: data.risk_willingess,
+        risk_willingness: data.risk_willingness,
         user_id: user_id,
       })
       .then(() => response.send('User was updated'))
@@ -176,7 +176,7 @@ router.put('/users/:user_id/investments/:investment_id', (request, response) => 
 //A path that contributes to creating a new investment for a given user
 //SKAL DET VÆRE PARANTES ETETR INVESTMENTS HER PÅ POST?
 //--------------------------------------------------------
-router.post('/users/:user_id/investments/', (request, response) => {
+router.post('/users/:user_id/investments', (request, response) => {
   const data = request.body;
   //Hvordan blir det med yield?
   //Det trengs vel strengt tatt ikke å være nødvendig å pushe inn når et investering lages i utgangspunktet
@@ -188,8 +188,8 @@ router.post('/users/:user_id/investments/', (request, response) => {
     data.buy_price != 0 &&
     data.buy_date &&
     data.buy_date.length != 0 &&
-    data.sell_date &&
-    data.sell_date.length != 0 &&
+    // data.sell_date &&
+    // data.sell_date.length != 0 &&
     data.user_id &&
     data.user_id != 0 &&
     data.company_id &&
@@ -200,7 +200,7 @@ router.post('/users/:user_id/investments/', (request, response) => {
         data.amount,
         data.buy_price,
         data.buy_date,
-        data.sell_date,
+        // data.sell_date,
         data.user_id,
         data.company_id
       )
@@ -282,32 +282,56 @@ router.get('/users/:user_id/industries/:industry_id', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
-// Updates a given user´s prefered industry
-router.put('/users/:user_id/industries/:industry_id', (request, response) => {
-  const industry_id = Number(request.params.industry_id);
-  const user_id = Number(request.params.user_id);
-  const data = request.body;
-  if (
-    typeof data.industry_name == 'string' &&
-    data.industry_name.length != 0 &&
-    typeof user_id == 'number' &&
-    user_id != 0 &&
-    typeof industry_id == 'number' &&
-    industry_id != 0
-  )
-    userService
-      .updatePreferedIndustry({
-        industry_name: data.industry_name,
-        user_id: user_id,
-        industry_id: industry_id,
-      })
-      .then(() => response.send('User-investment was updated'))
-      .catch((error) => response.status(500).send(error));
-  else response.status(400).send('Propperties are not valid');
+/**
+ * Get a all industries regardless of a user.
+ */
+router.get('/industries', (_request, response) => {
+  userService
+    .getAllIndustries()
+    .then((rows) => response.send(rows))
+    .catch((error) => response.status(500).send(error));
 });
+
+router.post('/users/:user_id/industries', (request, response) => {
+  const user_id = Number(request.params.user_id);
+  // const industry_id = Number(request.params.industry_id);
+  const data = request.body;
+
+  if (data && user_id && user_id != 0 && data.industry_name && data.industry_name.length != 0)
+    userService
+      .createNewPreferedIndustry(user_id, data.industry_name)
+      .then(() => response.status(201).send('successfully updated'))
+      .catch((error) => response.status(500).send(error));
+  else response.status(400).send('Missing task one or more of attributes');
+});
+
+// Updates a given user´s prefered industry
+// router.put('/users/:user_id/industries/:industry_id', (request, response) => {
+//   const industry_id = Number(request.params.industry_id);
+//   const user_id = Number(request.params.user_id);
+//   const data = request.body;
+//   if (
+//     typeof data.industry_name == 'string' &&
+//     data.industry_name.length != 0 &&
+//     typeof user_id == 'number' &&
+//     user_id != 0 &&
+//     typeof industry_id == 'number' &&
+//     industry_id != 0
+//   )
+//     userService
+//       .updatePreferedIndustry({
+//         industry_name: data.industry_name,
+//         user_id: user_id,
+//         industry_id: industry_id,
+//       })
+//       .then(() => response.send('User-investment was updated'))
+//       .catch((error) => response.status(500).send(error));
+//   else response.status(400).send('Propperties are not valid');
+// });
 
 //BURDEN DENNE SKRIVES OM SLIK AT MAN KAN SLETTE PÅ BAKGRUNN AV INDUSTRY_NAME?
 //Delete a prefered industry for a given user:
+
 router.delete('/users/:user_id/industries/:industry_id', (request, response) => {
   const industry_id = Number(request.params.industry_id);
   const user_id = Number(request.params.user_id);

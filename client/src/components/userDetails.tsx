@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import {
   Button,
@@ -12,22 +12,40 @@ import {
   TextField,
   MenuItem,
   FormLabel,
+  ThemeProvider,
 } from '@material-ui/core';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import userService, { Industry, Investment, User } from '../user-service';
 import {
   Alert,
+  Autocomplete,
+  Box,
+  CardHeader,
   Checkbox,
   CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Fab,
   FormControlLabel,
   FormHelperText,
+  IconButton,
   InputLabel,
+  List,
+  ListItem,
+  ListItemSecondaryAction,
+  ListItemText,
+  Radio,
+  RadioGroup,
 } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import CheckIcon from '@mui/icons-material/Check';
 import { green } from '@mui/material/colors';
 import clsx from 'clsx';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { LanguageContext } from '../context';
+
 // Skal vi ha med dette?:
 // const risk_willingness: Array<{ value: string; label: string }> = [
 //   {
@@ -74,9 +92,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-//Er det her riktig måte å benytte komponentene på? Altså som en funksjon
 export function UserProfile() {
-  const [userData, setUserData] = useState<User>();
+  //Language-select related
+  const { language } = useContext(LanguageContext);
+  const {
+    general_information,
+    email_inputLabel,
+    password_inputLabel,
+    full_name_inputLabel,
+    phone_number_inputLabel,
+    investing_details,
+    monthly_savings_inputLabel,
+    from_kr_underLabel,
+    to_kr_underLabel,
+    risk_willingness_inputLabel,
+    prefered_industries_inputLabel,
+    button_saved,
+    button_save,
+  } = language;
+
+  const [userData, setUserData] = useState<User>({});
+
   //Save-button related
   const [loading, setLoading] = React.useState(false);
   ////Save-button related
@@ -87,7 +123,36 @@ export function UserProfile() {
   //Constant referering to the defined styling of given elements:
   const classes = useStyles();
   //Following const is regarding user-prefered Industry:
-  const [preferedIndustries, setPreferedIndustries] = useState<Industry[]>();
+  const [preferedIndustries, setPreferedIndustries] = useState<Industry[]>([]);
+  //Following const is related to the Automcomplete element regarding all industries
+  const [allIndustries, setAllIndustries] = useState<Industry[]>([]);
+  //Following const is related to the new industries a user selects in the autoComplete-element
+  const [selectedIndustries, setSelectedIndustries] = useState<Industry[]>([]);
+
+  const handleIndustryChange = (event: any, values: Industry[]) => {
+    const updatedValues = values.map((value) => {
+      if (!value.user_id) {
+        // add user_id to the new industry object
+        return {
+          industry_id: value.industry_id,
+          user_id: Number(user_id),
+          industry_name: value.industry_name,
+        };
+      } else {
+        return value;
+      }
+    });
+    setPreferedIndustries(updatedValues);
+    setSavedChange(false);
+
+    // Check if an industry was removed
+    const removedIndustry = preferedIndustries.find((industry) => !values.includes(industry));
+
+    if (removedIndustry) {
+      const industryId = removedIndustry.industry_id;
+      userService.deleteUserIndustry(industryId, user_id);
+    }
+  };
 
   const buttonClassname = clsx({
     [classes.buttonSuccess]: savedChange,
@@ -112,7 +177,7 @@ export function UserProfile() {
   //   }
   // };
 
-  const buttonText = savedChange ? 'Saved' : 'Save changes';
+  const buttonText = savedChange ? button_saved : button_save;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserData({ ...userData, [event.target.name]: event.target.value });
@@ -130,7 +195,14 @@ export function UserProfile() {
         //.preventDefault is a common pattern in React form handling to prevent the default
         //behavior of the form submission, which typically involves the page being refreshed or reloaded.
         event.preventDefault();
+
         userService.updateUser(userData).catch((error) => console.log(error));
+        preferedIndustries.map((preferedIndustry) =>
+          userService.createNewPreferedIndustry(
+            preferedIndustry.user_id,
+            preferedIndustry.industry_name
+          )
+        );
       }, 2000);
     }
   };
@@ -141,7 +213,11 @@ export function UserProfile() {
 
     userService.getAllPreferedIndustries(current_id).then((preferedIndustries) => {
       setPreferedIndustries(preferedIndustries);
+
+      // setSelectedIndustries(preferedIndustries);
     });
+
+    userService.getAllIndustries().then((allIndustries) => setAllIndustries(allIndustries));
 
     userService
       .getUser(current_id)
@@ -157,14 +233,14 @@ export function UserProfile() {
 
   return (
     <>
-      {console.log(preferedIndustries)}
+      {console.log(userData)}
       <form className={classes.form}>
-        <Typography variant="h5">General information</Typography>
+        <Typography variant="h5">{general_information}</Typography>
 
         <Grid container spacing={2}>
           <Grid item xs={6}>
             {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
-            <InputLabel htmlFor="email">Email</InputLabel>
+            <InputLabel htmlFor="email">{email_inputLabel}</InputLabel>
 
             <TextField
               required
@@ -173,6 +249,7 @@ export function UserProfile() {
               name="email"
               // label={userData?.email}
               variant="outlined"
+              disabled
               value={userData?.email}
               onChange={handleChange}
               fullWidth
@@ -181,12 +258,14 @@ export function UserProfile() {
           </Grid>
           <Grid item xs={6}>
             {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
-            <InputLabel htmlFor="password">Password</InputLabel>
+            <InputLabel htmlFor="password">{password_inputLabel}</InputLabel>
 
             <TextField
               required
               id="password"
               name="password"
+              disabled
+              // type="password"
               // label={userData?.password}
               variant="outlined"
               value={userData?.password}
@@ -197,7 +276,7 @@ export function UserProfile() {
           </Grid>
           <Grid item xs={6}>
             {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
-            <InputLabel htmlFor="full_name">Full name</InputLabel>
+            <InputLabel htmlFor="full_name">{full_name_inputLabel}</InputLabel>
 
             <TextField
               required
@@ -214,7 +293,7 @@ export function UserProfile() {
           </Grid>
           <Grid item xs={6}>
             {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
-            <InputLabel htmlFor="phone_number">Phone number</InputLabel>
+            <InputLabel htmlFor="phone_number">{phone_number_inputLabel}</InputLabel>
 
             <TextField
               required
@@ -229,10 +308,14 @@ export function UserProfile() {
               className={classes.TextField}
             />
           </Grid>
+        </Grid>
+        <br></br>
+        <Typography variant="h5">{investing_details}</Typography>
 
+        <Grid container spacing={2}>
           {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
           <Grid item xs={6}>
-            <InputLabel htmlFor="monthly_savings_amount">Monthly savings amount</InputLabel>
+            <InputLabel htmlFor="monthly_savings_amount">{monthly_savings_inputLabel}</InputLabel>
 
             <Grid container spacing={2}>
               <Grid item xs={6}>
@@ -248,7 +331,7 @@ export function UserProfile() {
                   fullWidth
                   className={classes.TextField}
                 />
-                <FormHelperText>From kr</FormHelperText>
+                <FormHelperText>{from_kr_underLabel}</FormHelperText>
               </Grid>
 
               {/* <Grid item xs={6}>
@@ -276,22 +359,20 @@ export function UserProfile() {
                   required
                   id="savings_to"
                   name="savings_to"
-                  // label="To"
                   variant="outlined"
-                  // type="email"
                   value={userData?.savings_to}
                   onChange={handleChange}
                   fullWidth
                   className={classes.TextField}
                 />
-                <FormHelperText>To kr</FormHelperText>
+                <FormHelperText>{to_kr_underLabel}</FormHelperText>
               </Grid>
             </Grid>
           </Grid>
 
           <Grid item xs={6}>
             {/* htmlFor = inputfelt-iden gjør at kan føres til tilhørende inpultfeltet når man trykker på labelen */}
-            <InputLabel htmlFor="risk_willingness">Risk willingness</InputLabel>
+            <InputLabel htmlFor="risk_willingness">{risk_willingness_inputLabel}</InputLabel>
 
             <TextField
               required
@@ -304,48 +385,83 @@ export function UserProfile() {
               fullWidth
               className={classes.TextField}
             />
+          </Grid>
 
-            {/* <Button
+          <Grid item xs={12}>
+            <InputLabel htmlFor="prefered_industries">{prefered_industries_inputLabel}</InputLabel>
+            {/* Må sørge for at alle industrier slettes når kryss-knappen trykkes på */}
+            <Autocomplete
+              multiple
+              id="tags-outlined"
+              //Here i check if the option is already a part of preferedIndustries
+              //and thus removing it from the options-dropDown menu
+              options={allIndustries.filter(
+                (option) =>
+                  //Checks wheter preferedIndustries does not contain a industry_id equal to the option in question
+                  !preferedIndustries.some(
+                    (preferedIndustry) => preferedIndustry.industry_id === option.industry_id
+                  )
+              )}
+              getOptionLabel={(option) => option.industry_name}
+              value={preferedIndustries}
+              onChange={handleIndustryChange}
+              filterSelectedOptions
+              renderInput={(params) => (
+                <TextField className={classes.TextField} variant="outlined" {...params} />
+              )}
+            />
+
+            {console.log(preferedIndustries)}
+          </Grid>
+
+          {/* <Grid item xs={6}>
+            {/* {preferedIndustries && (
+              <div>
+                <Typography variant="h5">Preferred Industries</Typography>
+                {preferedIndustries.map((industry) => (
+                  <div key={industry.industry_id}>
+                    <Typography>{industry.industry_name}</Typography>
+                  </div>
+                ))}
+              </div>
+            )} */}
+          {/* </Grid> */}
+        </Grid>
+        <br></br>
+        {loading && <CircularProgress size={68} className={classes.buttonProgress} />}
+        <Button
           variant="contained"
+          aria-label="save"
           color="primary"
-          size="small"
-          className={classes.button}
-          startIcon={<SaveIcon />}
+          className={buttonClassname}
           onClick={handleSubmit}
         >
-          Save changes
-        </Button> */}
-
-            <Button
-              variant="contained"
-              aria-label="save"
-              color="primary"
-              className={buttonClassname}
-              onClick={handleSubmit}
-            >
-              {buttonText}
-              {savedChange ? <CheckIcon /> : <SaveIcon />}
-            </Button>
-
-            {loading && <CircularProgress size={68} className={classes.buttonProgress} />}
-          </Grid>
-        </Grid>
+          {buttonText}
+          {savedChange ? <CheckIcon /> : <SaveIcon />}
+        </Button>
       </form>
-
-      {preferedIndustries && (
-        <div>
-          <Typography variant="h5">Preferred Industries</Typography>
-          {preferedIndustries.map((industry) => (
-            <div key={industry.industry_id}>
-              <Typography>{industry.industry_name}</Typography>
-            </div>
-          ))}
-        </div>
-      )}
     </>
   );
 }
 
 export function LogInNeeded() {
-  return <>halla brur</>;
+  const { language } = useContext(LanguageContext);
+  const { log_in_needed_text, log_in_here, or, create_a_user, to_access_portfolio } = language;
+  return (
+    <>
+      <div
+        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}
+      >
+        <Card style={{ width: '40%', textAlign: 'center' }}>
+          <CardHeader title={log_in_needed_text} />
+          <CardContent>
+            <Typography>
+              <Link to={'/log_in'}>{log_in_here}</Link>, {or}
+              <Link to={'/register'}> {create_a_user} </Link> {to_access_portfolio}{' '}
+            </Typography>
+          </CardContent>
+        </Card>
+      </div>
+    </>
+  );
 }

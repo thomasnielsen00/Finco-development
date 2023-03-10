@@ -24,7 +24,8 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import { ThemeProvider } from '@emotion/react';
 import { MidlertidigTheme, useStyles } from '../styles';
-import { LanguageContext } from '../context';
+import { LanguageContext, UserContext } from '../context';
+import userService from '../user-service';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
@@ -36,6 +37,7 @@ export default function CompanyDetails() {
   const { company_id } = useParams();
   //@ts-ignore
   const { language } = useContext(LanguageContext);
+  const { user } = useContext(UserContext);
   const { calculated_stock_value, live_stock_value, difference } = language;
 
   const [company, setCompany] = useState<Company>();
@@ -69,7 +71,25 @@ export default function CompanyDetails() {
   };
 
   const handleBuy = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    alert('Not implemented');
+    const today: Date = new Date();
+    const year: number = today.getFullYear();
+    const month: number = today.getMonth() + 1;
+    const date: number = today.getDate();
+
+    const formattedDate: string = `${year}-${month.toString().padStart(2, '0')}-${date
+      .toString()
+      .padStart(2, '0')}`;
+
+    user
+      ? (userService.createUserInvestment(
+          sum / company.currentSharePrice,
+          company.currentSharePrice,
+          formattedDate,
+          user.user_id,
+          company?.company_id
+        ),
+        history.push('/portfolio/' + user.user_id))
+      : alert('Du må være logget inn');
   };
 
   function calculateDifference(cal_val: number | undefined, cur_stc: number | undefined) {
