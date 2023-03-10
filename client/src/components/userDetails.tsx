@@ -395,6 +395,7 @@ export function UserProfile() {
             <Autocomplete
               multiple
               id="tags-outlined"
+              disableClearable
               //Here i check if the option is already a part of preferedIndustries
               //and thus removing it from the options-dropDown menu
               options={allIndustries.filter(
