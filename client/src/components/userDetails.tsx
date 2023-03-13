@@ -231,6 +231,8 @@ export function UserProfile() {
       });
   }, [user_id]);
 
+  // const risk_option = ['Høy', 'Moderat', 'Lav'];
+
   return (
     <>
       {console.log(userData)}
@@ -323,9 +325,8 @@ export function UserProfile() {
                   required
                   id="savings_from"
                   name="savings_from"
-                  // label="From"
+                  type="number"
                   variant="outlined"
-                  // type="date"
                   value={userData?.savings_from}
                   onChange={handleChange}
                   fullWidth
@@ -360,6 +361,7 @@ export function UserProfile() {
                   id="savings_to"
                   name="savings_to"
                   variant="outlined"
+                  type="number"
                   value={userData?.savings_to}
                   onChange={handleChange}
                   fullWidth
@@ -393,6 +395,7 @@ export function UserProfile() {
             <Autocomplete
               multiple
               id="tags-outlined"
+              disableClearable
               //Here i check if the option is already a part of preferedIndustries
               //and thus removing it from the options-dropDown menu
               options={allIndustries.filter(
