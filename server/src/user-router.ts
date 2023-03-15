@@ -9,6 +9,10 @@ const router = express.Router();
 export const salt = bcrypt.genSaltSync(10);
 //trenger denne å eksporteres?
 
+router.get('/', (_request, response) => {
+  response.send('Hello world');
+});
+
 router.get('/users', (_request, response) => {
   userService
     .getAllUsers()
