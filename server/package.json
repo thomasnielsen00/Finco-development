@@ -2,6 +2,9 @@
   "name": "finco-server",
   "version": "1.0.0",
   "description": "Finco server",
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "start": "nodemon src/server.ts --exec \"npx babel-node -x .ts --require ./config\"",
     "test": "jest --setupFiles ./test/config.ts"
