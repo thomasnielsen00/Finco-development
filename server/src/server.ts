@@ -1,7 +1,6 @@
 /**
  * Web server entry point used in `npm start`.
  */
-
 import app from './app';
 import express from 'express';
 import path from 'path';
