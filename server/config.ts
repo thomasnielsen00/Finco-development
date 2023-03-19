@@ -6,4 +6,4 @@ process.env.CLOUD_SQL_CONNECTION_NAME = 'proven-aviary-378108:europe-north1:finc
 // process.env.INSTANCE_UNIX_SOCKET = 'proven-aviary-378108:europe-north1:finco-dev-db';
 
 // passord: l@XuS-G~$a$Mp)"C
-// remeber to Authorize network
+// remember to Authorize network IP 
