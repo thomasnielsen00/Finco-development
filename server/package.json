@@ -6,7 +6,7 @@
     "node": "18.x"
   },
   "scripts": {
-    "start": "nodemon api/server.ts --exec \"npx babel-node -x .ts --require ./config\"",
+    "start": "nodemon src/server.ts --exec \"npx babel-node -x .ts --require ./config\"",
     "test": "jest --setupFiles ./test/config.ts"
   },
   "browserslist": [
