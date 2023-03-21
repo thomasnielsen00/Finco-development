@@ -6,7 +6,7 @@ import express from 'express';
 import path from 'path';
 
 // Serve client files
-// app.use(express.static(path.join(__dirname, '/../../client/public')));
+app.use(express.static(path.join(__dirname, '/../../client/public')));
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
