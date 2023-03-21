@@ -40,7 +40,7 @@ export default function CompanyDetails() {
   const { user } = useContext(UserContext);
   const { calculated_stock_value, live_stock_value, difference } = language;
 
-  const [company, setCompany] = useState<Company>( );
+  const [company, setCompany] = useState<Company>();
   const [openAlert, setOpenAlert] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [sum, setSum] = useState<number>(0);
@@ -89,7 +89,7 @@ export default function CompanyDetails() {
           company?.company_id
         ),
         history.push('/portfolio/' + user.user_id))
-      : alert('Du må være logget inn');
+      : history.push('/log_in_needed');
   };
 
   function calculateDifference(cal_val: number | undefined, cur_stc: number | undefined) {

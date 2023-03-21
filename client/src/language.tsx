@@ -83,7 +83,6 @@ export type LanguageTextInfo = {
   sell_confirmation_confirm: string;
   //CALCULATIONS
   ebitda: string;
-
 };
 
 export const languageText = {
@@ -198,6 +197,7 @@ export const languageText = {
     watchlist: 'Add to watchlist',
     calculate: 'See calculations',
     search: 'Search',
+    //Burde det stå "Sort descending by"?
     sort_by: 'Sort by',
     no_sort: 'No sorting',
     //PORTFOLIO
