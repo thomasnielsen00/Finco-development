@@ -43,6 +43,7 @@ export default function CompanyDetails() {
   const [company, setCompany] = useState<Company>();
   const [openAlert, setOpenAlert] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  //Denne kan initieres til ingenting eller "" hvis man vil fjerne 0 når man skriver inn antall
   const [sum, setSum] = useState<number>(0);
   const [roi, setRoi] = useState<number>(0);
 
@@ -177,6 +178,7 @@ export default function CompanyDetails() {
                 </Grid>
 
                 <Grid item xs={12} sx={{ m: 2 }}>
+                  {/* This should maybe be toogled to english? */}
                   <Divider>NØKKELTALL</Divider>
                   <Box sx={{ m: 2 }}>
                     <Grid container justifyContent="space-between">
@@ -198,6 +200,7 @@ export default function CompanyDetails() {
                 </Grid>
 
                 <Grid item xs={12} sx={{ m: 2 }}>
+                  {/* This should maybe be toogled to english? */}
                   <Divider>KJØP AKSJE</Divider>
                   <Box sx={{ ml: 2, mr: 2 }}>
                     <Grid container justifyContent="space-between" alignItems="center">
@@ -231,6 +234,7 @@ export default function CompanyDetails() {
                           fullWidth
                           onClick={handleBuy}
                         >
+                          {/* This should maybe be toogled to english? */}
                           KJØP
                         </Button>
                       </Grid>
