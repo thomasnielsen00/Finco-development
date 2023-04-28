@@ -221,6 +221,8 @@ export function Portfolio() {
                               </DialogTitle>
                               <DialogContent>
                                 <DialogContentText id="alert-dialog-description">
+                                  {/* NB!! DENNE FUNGERER IKKE HELT. VISER IKKE KORREKT INFORMASJON
+                                 NÅR DET ER FLERE INVESTERINGER INNENFOR SAMME SELSKAP */}
                                   {sell_confirmation_body_first_part}{' '}
                                   {Number(row.amount).toFixed(1)}{' '}
                                   {sell_confirmation_body_second_part} {row.company_name}{' '}

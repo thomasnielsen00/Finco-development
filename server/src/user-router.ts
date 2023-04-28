@@ -94,6 +94,7 @@ router.put('/users/:user_id', (request, response) => {
     data.savings_from >= 0 &&
     typeof data.savings_to == 'number' &&
     data.savings_to >= 0 &&
+    data.savings_to >= data.savings_from &&
     typeof data.risk_willingness == 'string' &&
     data.risk_willingness.length != 0 &&
     typeof user_id == 'number' &&

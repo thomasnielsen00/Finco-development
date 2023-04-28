@@ -180,7 +180,14 @@ export function UserProfile() {
   const buttonText = savedChange ? button_saved : button_save;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUserData({ ...userData, [event.target.name]: event.target.value });
+    const value = event.target.value;
+    const name = event.target.name;
+
+    setUserData((prevState) => ({
+      ...prevState,
+      [name]: parseFloat(value),
+    }));
+
     //Every time there is a change of input the button is reset to "Save changes"
     setSavedChange(false);
   };
